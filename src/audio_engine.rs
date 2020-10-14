@@ -21,42 +21,42 @@ impl AudioEngineRef {
     pub fn attach(&self, node: &AudioNodeRef) {
         unsafe { msg_send![self, attach: node] }
     }
-    // pub fn detach(&self, node: AVAudioNode) {
+    // pub fn detach(&self, node: &AudioNodeRef) {
     //    unsafe {
     //      msg_send![self, detach]
     //    }
     //}
-    // pub fn connect(&self, node1: AVAudioNode, to node2: AVAudioNode, fromBus bus1: AVAudioNodeBus, toBus bus2: AVAudioNodeBus, format: AVAudioFormat?) {
+    // pub fn connect(&self, node1: &AudioNodeRef, to node2: &AudioNodeRef, fromBus bus1: &AudioNodeRefBus, toBus bus2: &AudioNodeRefBus, format: AVAudioFormat?) {
     //    unsafe {
     //      msg_send![self, connect]
     //    }
     //}
-    // pub fn connect(&self, node1: AVAudioNode, to node2: AVAudioNode, format: AVAudioFormat?) {
+    // pub fn connect(&self, node1: &AudioNodeRef, to node2: &AudioNodeRef, format: AVAudioFormat?) {
     //    unsafe {
     //      msg_send![self, connect]
     //    }
     //}
-    // pub fn connect(&self, sourceNode: AVAudioNode, to destNodes: [AVAudioConnectionPoint], fromBus sourceBus: AVAudioNodeBus, format: AVAudioFormat?) {
+    // pub fn connect(&self, sourceNode: &AudioNodeRef, to destNodes: [AVAudioConnectionPoint], fromBus sourceBus: &AudioNodeRefBus, format: AVAudioFormat?) {
     //    unsafe {
     //      msg_send![self, connect]
     //    }
     //}
-    // pub fn disconnect_node_input(&self, node: AVAudioNode, bus: AVAudioNodeBus) {
+    // pub fn disconnect_node_input(&self, node: &AudioNodeRef, bus: &AudioNodeRefBus) {
     //    unsafe {
     //      msg_send![self, disconnectNodeInput]
     //    }
     //}
-    // pub fn disconnect_node_input(&self, node: AVAudioNode) {
+    // pub fn disconnect_node_input(&self, node: &AudioNodeRef) {
     //    unsafe {
     //      msg_send![self, disconnectNodeInput]
     //    }
     //}
-    // pub fn disconnect_node_output(&self, node: AVAudioNode, bus: AVAudioNodeBus) {
+    // pub fn disconnect_node_output(&self, node: &AudioNodeRef, bus: &AudioNodeRefBus) {
     //    unsafe {
     //      msg_send![self, disconnectNodeOutput]
     //    }
     //}
-    // pub fn disconnect_node_output(&self, node: AVAudioNode) {
+    // pub fn disconnect_node_output(&self, node: &AudioNodeRef) {
     //    unsafe {
     //      msg_send![self, disconnectNodeOutput]
     //    }
@@ -82,12 +82,12 @@ impl AudioEngineRef {
         unsafe { msg_send![self, stop] }
     }
 
-    // pub fn input_connection_point(for node: AVAudioNode, inputBus bus: AVAudioNodeBus) -> AVAudioConnectionPoint? {
+    // pub fn input_connection_point(for node: &AudioNodeRef, inputBus bus: &AudioNodeRefBus) -> AVAudioConnectionPoint? {
     //    unsafe {
     //      msg_send![self, inputConnectionPoint]
     //    }
     //}
-    // pub fn output_connection_points(for node: AVAudioNode, outputBus bus: AVAudioNodeBus) -> [AVAudioConnectionPoint] {
+    // pub fn output_connection_points(for node: &AudioNodeRef, outputBus bus: &AudioNodeRefBus) -> [AVAudioConnectionPoint] {
     //    unsafe {
     //      msg_send![self, outputConnectionPoints]
     //    }
@@ -109,7 +109,7 @@ impl AudioEngineRef {
         }
     }
     // open var isAutoShutdownEnabled: Bool
-    // open var attachedNodes: Set<AVAudioNode> { get }
+    // open var attachedNodes: Set<&AudioNodeRef> { get }
 
     // pub fn enable_manual_rendering_mode(&self, mode: AVAudioEngineManualRenderingMode, format pcmFormat: AVAudioFormat, maximumFrameCount: AVAudioFrameCount) throws {
     //    unsafe {
@@ -153,22 +153,22 @@ impl AudioEngineRef {
     // @available(OSX 10.13, *)
     // open var manualRenderingSampleTime: AVAudioFramePosition { get }
 
-    // pub fn connect_midi(&self, sourceNode: AVAudioNode, to destinationNode: AVAudioNode, format: AVAudioFormat?, block tapBlock: AUMIDIOutputEventBlock? = nil) {
+    // pub fn connect_midi(&self, sourceNode: &AudioNodeRef, to destinationNode: &AudioNodeRef, format: AVAudioFormat?, block tapBlock: AUMIDIOutputEventBlock? = nil) {
     //    unsafe {
     //      msg_send![self, connectMidi]
     //    }
     //}
-    // pub fn connect_midi(&self, sourceNode: AVAudioNode, to destinationNodes: [AVAudioNode], format: AVAudioFormat?, block tapBlock: AUMIDIOutputEventBlock? = nil) {
+    // pub fn connect_midi(&self, sourceNode: &AudioNodeRef, to destinationNodes: [&AudioNodeRef], format: AVAudioFormat?, block tapBlock: AUMIDIOutputEventBlock? = nil) {
     //    unsafe {
     //      msg_send![self, connectMidi]
     //    }
     //}
-    // pub fn disconnect_midi(&self, sourceNode: AVAudioNode, from destinationNode: AVAudioNode) {
+    // pub fn disconnect_midi(&self, sourceNode: &AudioNodeRef, from destinationNode: &AudioNodeRef) {
     //    unsafe {
     //      msg_send![self, disconnectMidi]
     //    }
     //}
-    // pub fn disconnect_midi(&self, sourceNode: AVAudioNode, from destinationNodes: [AVAudioNode]) {
+    // pub fn disconnect_midi(&self, sourceNode: &AudioNodeRef, from destinationNodes: [&AudioNodeRef]) {
     //    unsafe {
     //      msg_send![self, disconnectMidi]
     //    }
