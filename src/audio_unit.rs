@@ -21,13 +21,19 @@ impl AudioUnitRef {
     //  unsafe { msg_send![self, auAudioUnit] }
     // }
 
-    // pub fn name(&self) -> String {
-    //  unsafe { msg_send![self, name] }
-    // }
+    pub fn name(&self) -> &str {
+        unsafe {
+            let name = msg_send![self, name];
+            crate::nsstring_as_str(name)
+        }
+    }
 
-    // pub fn manufacturer_name(&self) -> String {
-    //  unsafe { msg_send![self, manufacturerName] }
-    // }
+    pub fn manufacturer_name(&self) -> &str {
+        unsafe {
+            let name = msg_send![self, manufacturerName];
+            crate::nsstring_as_str(name)
+        }
+    }
 
     pub fn version(&self) -> i64 {
         unsafe { msg_send![self, version] }

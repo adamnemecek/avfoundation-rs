@@ -23,7 +23,7 @@ impl AudioNodeRef {
     }
 
     pub fn input_format(&self, bus: AudioNodeBus) -> AudioFormat {
-        unsafe { msg_send![self, inputFormat: bus.inner] }
+        unsafe { msg_send![self, inputFormatForBus: bus.inner] }
     }
 
     // pub fn output_format(&self, forBus bus: AudioNodeBus) -> AVAudioFormat {
@@ -32,17 +32,19 @@ impl AudioNodeRef {
     //}
     //}
 
-    // pub fn name(&self, forInputBus bus: AudioNodeBus) -> String? {
-    //    unsafe {
-    //      msg_send![self, name]
-    //}
-    //}
+    pub fn name_for_input_bus(&self, input_bus: AudioNodeBus) -> &str {
+        unsafe {
+            let name = msg_send![self, nameForInputBus: input_bus.inner];
+            crate::nsstring_as_str(name)
+        }
+    }
 
-    // pub fn name(&self, forOutputBus bus: AudioNodeBus) -> String? {
-    //    unsafe {
-    //      msg_send![self, name]
-    //}
-    //}
+    pub fn name_for_output_bus(&self, output_bus: AudioNodeBus) -> &str {
+        unsafe {
+            let name = msg_send![self, nameForOutputBus: output_bus.inner];
+            crate::nsstring_as_str(name)
+        }
+    }
 
     // pub fn install_tap(&self, onBus bus: AudioNodeBus, bufferSize: AVAudioFrameCount, format: AVAudioFormat?, block tapBlock: @escaping AVAudioNodeTapBlock) {
     //    unsafe {
@@ -55,6 +57,22 @@ impl AudioNodeRef {
     }
 
     pub fn number_of_inputs(&self) -> i64 {
+        unsafe { msg_send![self, numberOfInputs] }
+    }
+
+    pub fn number_of_outputs(&self) -> i64 {
         unsafe { msg_send![self, numberOfOutputs] }
+    }
+
+    pub fn last_render_time(&self) {
+        unsafe {
+            // msg_send![self, latency]
+        }
+    }
+
+    pub fn latency(&self) {
+        unsafe {
+            // msg_send![self, latency]
+        }
     }
 }
