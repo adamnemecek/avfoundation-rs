@@ -1,3 +1,5 @@
+use crate::{AudioFormat, AudioNodeBus};
+
 pub enum AVAudioNode {}
 
 foreign_obj_type! {
@@ -16,13 +18,42 @@ impl AudioNode {
 }
 
 impl AudioNodeRef {
-// open func reset()
-// open func inputFormat(forBus bus: AVAudioNodeBus) -> AVAudioFormat
-// open func outputFormat(forBus bus: AVAudioNodeBus) -> AVAudioFormat
-// open func name(forInputBus bus: AVAudioNodeBus) -> String?
-// open func name(forOutputBus bus: AVAudioNodeBus) -> String?
-// open func installTap(onBus bus: AVAudioNodeBus, bufferSize: AVAudioFrameCount, format: AVAudioFormat?, block tapBlock: @escaping AVAudioNodeTapBlock)
-// open func removeTap(onBus bus: AVAudioNodeBus)
+    pub fn reset(&self) {
+        unsafe { msg_send![self, reset] }
+    }
+
+    pub fn input_format(&self, bus: AudioNodeBus) -> AudioFormat {
+        unsafe { msg_send![self, inputFormat: bus.inner] }
+    }
+
+    // pub fn output_format(&self, forBus bus: AudioNodeBus) -> AVAudioFormat {
+    //    unsafe {
+    //      msg_send![self, outputFormat]
+    //}
+    //}
+
+    // pub fn name(&self, forInputBus bus: AudioNodeBus) -> String? {
+    //    unsafe {
+    //      msg_send![self, name]
+    //}
+    //}
+
+    // pub fn name(&self, forOutputBus bus: AudioNodeBus) -> String? {
+    //    unsafe {
+    //      msg_send![self, name]
+    //}
+    //}
+
+    // pub fn install_tap(&self, onBus bus: AudioNodeBus, bufferSize: AVAudioFrameCount, format: AVAudioFormat?, block tapBlock: @escaping AVAudioNodeTapBlock) {
+    //    unsafe {
+    //      msg_send![self, installTap]
+    //}
+    //}
+
+    pub fn remove_tap(&self, bus: AudioNodeBus) {
+        unsafe { msg_send![self, removeTap: bus.inner] }
+    }
+
     pub fn number_of_inputs(&self) -> i64 {
         unsafe { msg_send![self, numberOfOutputs] }
     }

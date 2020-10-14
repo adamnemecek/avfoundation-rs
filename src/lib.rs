@@ -128,6 +128,9 @@ pub use audio_format::*;
 mod audio_node;
 pub use audio_node::*;
 
+mod audio_node_bus;
+pub use audio_node_bus::*;
+
 mod audio_unit;
 pub use audio_unit::*;
 
