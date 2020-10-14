@@ -1,6 +1,7 @@
-use avfoundation::AudioNode;
+use avfoundation::{AudioEngine, AudioNode};
 
 fn main() {
+    let engine = AudioEngine::new();
     let node = AudioNode::new();
     let z = node.number_of_inputs();
     println!("{:?}", z);
