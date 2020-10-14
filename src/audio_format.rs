@@ -15,7 +15,6 @@ foreign_obj_type! {
     pub struct AudioFormatRef;
 }
 
-
 impl AudioFormatRef {
     pub fn is_standard(&self) -> bool {
         unsafe {
@@ -28,28 +27,26 @@ impl AudioFormatRef {
     }
 
     pub fn common_format(&self) -> AudioCommonFormat {
-        unsafe {
-            msg_send![self, commonFormat]
-        }
+        unsafe { msg_send![self, commonFormat] }
     }
 
     pub fn channel_count(&self) -> u32 {
-        unsafe {
-            msg_send![self, channelCount]
-        }
+        unsafe { msg_send![self, channelCount] }
     }
 
-    // pub fn sample_rate: Double { get } {
-    //     unsafe {
-    //         msg_send![self, sampleRate];
-    //     }
-    // }
+    pub fn sample_rate(&self) -> f64 {
+        unsafe { msg_send![self, sampleRate] }
+    }
 
-    // pub fn is_interleaved: Bool { get } {
-    //     unsafe {
-    //         msg_send![self, isInterleaved];
-    //     }
-    // }
+    pub fn is_interleaved(&self) -> bool {
+        unsafe {
+            match msg_send![self, isInterleaved] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
     // pub fn stream_description: UnsafePointer<AudioStreamBasicDescription> { get } {
     //     unsafe {
@@ -80,5 +77,4 @@ impl AudioFormatRef {
     //         msg_send![self, formatDescription];
     //     }
     // }
-
 }
