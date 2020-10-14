@@ -1,5 +1,10 @@
 use crate::AudioNodeRef;
 use objc::runtime::{BOOL, NO, YES};
+
+pub enum AudioEngineManualRenderingMode {
+    Offline,
+    RealTime,
+}
 pub enum AVAudioEngine {}
 
 foreign_obj_type! {
@@ -26,7 +31,7 @@ impl AudioEngineRef {
         unsafe { msg_send![self, detach: node] }
     }
 
-    // pub fn connect(&self, node1: &AudioNodeRef, to node2: &AudioNodeRef, fromBus bus1: &AudioNodeRefBus, toBus bus2: &AudioNodeRefBus, format: AVAudioFormat?) {
+    // pub fn connect(&self, node1: &AudioNodeRef, to node2: &AudioNodeRef, fromBus bus1: &AudioNodeBusRef, toBus bus2: &AudioNodeBusRef, format: AVAudioFormat?) {
     //    unsafe {
     //      msg_send![self, connect]
     //    }
@@ -36,12 +41,12 @@ impl AudioEngineRef {
     //      msg_send![self, connect]
     //    }
     //}
-    // pub fn connect(&self, sourceNode: &AudioNodeRef, to destNodes: [AVAudioConnectionPoint], fromBus sourceBus: &AudioNodeRefBus, format: AVAudioFormat?) {
+    // pub fn connect(&self, sourceNode: &AudioNodeRef, to destNodes: [AVAudioConnectionPoint], fromBus sourceBus: &AudioNodeBusRef, format: AVAudioFormat?) {
     //    unsafe {
     //      msg_send![self, connect]
     //    }
     //}
-    // pub fn disconnect_node_input(&self, node: &AudioNodeRef, bus: &AudioNodeRefBus) {
+    // pub fn disconnect_node_input(&self, node: &AudioNodeRef, bus: &AudioNodeBusRef) {
     //    unsafe {
     //      msg_send![self, disconnectNodeInput]
     //    }
@@ -51,7 +56,7 @@ impl AudioEngineRef {
     //      msg_send![self, disconnectNodeInput]
     //    }
     //}
-    // pub fn disconnect_node_output(&self, node: &AudioNodeRef, bus: &AudioNodeRefBus) {
+    // pub fn disconnect_node_output(&self, node: &AudioNodeRef, bus: &AudioNodeBusRef) {
     //    unsafe {
     //      msg_send![self, disconnectNodeOutput]
     //    }
@@ -82,12 +87,12 @@ impl AudioEngineRef {
         unsafe { msg_send![self, stop] }
     }
 
-    // pub fn input_connection_point(for node: &AudioNodeRef, inputBus bus: &AudioNodeRefBus) -> AVAudioConnectionPoint? {
+    // pub fn input_connection_point(for node: &AudioNodeRef, inputBus bus: &AudioNodeBusRef) -> AVAudioConnectionPoint? {
     //    unsafe {
     //      msg_send![self, inputConnectionPoint]
     //    }
     //}
-    // pub fn output_connection_points(for node: &AudioNodeRef, outputBus bus: &AudioNodeRefBus) -> [AVAudioConnectionPoint] {
+    // pub fn output_connection_points(for node: &AudioNodeRef, outputBus bus: &AudioNodeBusRef) -> [AVAudioConnectionPoint] {
     //    unsafe {
     //      msg_send![self, outputConnectionPoints]
     //    }
