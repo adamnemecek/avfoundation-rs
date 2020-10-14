@@ -1,5 +1,4 @@
-
-use crate::{AudioNodeRef};
+use crate::AudioNodeRef;
 
 pub enum AVAudioIONode {}
 
