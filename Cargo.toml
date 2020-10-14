@@ -3,6 +3,12 @@ name = "avfoundation"
 version = "0.1.0"
 authors = ["Adam Nemecek <adamnemecek@gmail.com>"]
 edition = "2018"
+description = "Rust bindings for AVFounation"
+homepage = "https://github.com/adamnemecek/avfoundation-rs"
+repository = "https://github.com/adamnemecek/avfoundation-rs"
+readme = "README.md"
+keywords = ["audio", "macos", "bindings"]
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
