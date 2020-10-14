@@ -21,11 +21,11 @@ impl AudioEngineRef {
     pub fn attach(&self, node: &AudioNodeRef) {
         unsafe { msg_send![self, attach: node] }
     }
-    // pub fn detach(&self, node: &AudioNodeRef) {
-    //    unsafe {
-    //      msg_send![self, detach]
-    //    }
-    //}
+
+    pub fn detach(&self, node: &AudioNodeRef) {
+        unsafe { msg_send![self, detach: node] }
+    }
+
     // pub fn connect(&self, node1: &AudioNodeRef, to node2: &AudioNodeRef, fromBus bus1: &AudioNodeRefBus, toBus bus2: &AudioNodeRefBus, format: AVAudioFormat?) {
     //    unsafe {
     //      msg_send![self, connect]
@@ -56,11 +56,11 @@ impl AudioEngineRef {
     //      msg_send![self, disconnectNodeOutput]
     //    }
     //}
-    // pub fn disconnect_node_output(&self, node: &AudioNodeRef) {
-    //    unsafe {
-    //      msg_send![self, disconnectNodeOutput]
-    //    }
-    //}
+
+    pub fn disconnect_node_output(&self, node: &AudioNodeRef) {
+        unsafe { msg_send![self, disconnectNodeOutput: node] }
+    }
+
     pub fn prepare(&self) {
         unsafe { msg_send![self, prepare] }
     }
@@ -100,15 +100,28 @@ impl AudioEngineRef {
     // open var mainMixerNode: AVAudioMixerNode { get }
     pub fn is_running(&self) -> bool {
         unsafe {
-            let res: BOOL = msg_send![self, isRunning];
-            match res {
+            match msg_send![self, isRunning] {
                 YES => true,
                 NO => false,
                 _ => unreachable!(),
             }
         }
     }
+
     // open var isAutoShutdownEnabled: Bool
+    pub fn is_auto_shutdown_enabled(&self) -> bool {
+        unsafe {
+            match msg_send![self, isAutoShutdownEnabled] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
+
+    pub fn set_auto_shutdown_enabled(&self, value: bool) {
+        todo!()
+    }
     // open var attachedNodes: Set<&AudioNodeRef> { get }
 
     // pub fn enable_manual_rendering_mode(&self, mode: AVAudioEngineManualRenderingMode, format pcmFormat: AVAudioFormat, maximumFrameCount: AVAudioFrameCount) throws {
@@ -116,9 +129,11 @@ impl AudioEngineRef {
     //      msg_send![self, enableManualRenderingMode]
     //    }
     //}
+
     pub fn disable_manual_rendering_mode(&self) {
         unsafe { msg_send![self, disableManualRenderingMode] }
     }
+
     // pub fn render_offline(&self, numberOfFrames: AVAudioFrameCount, to buffer: AVAudioPCMBuffer) throws -> AVAudioEngineManualRenderingStatus {
     //    unsafe {
     //      msg_send![self, renderOffline]
@@ -130,6 +145,15 @@ impl AudioEngineRef {
 
     // @available(OSX 10.13, *)
     // open var isInManualRenderingMode: Bool { get }
+    pub fn is_in_manual_rendering_mode(&self) -> bool {
+        unsafe {
+            match msg_send![self, isInManualRenderingMode] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
     // @available(OSX 10.13, *)
     // open var manualRenderingMode: AVAudioEngineManualRenderingMode { get }
