@@ -1,17 +1,17 @@
-
-#[macro_use]
-extern crate bitflags;
-#[macro_use]
-extern crate log;
+#![link(name = "AVFoundation", kind = "framework")]
+// #[macro_use]
+// extern crate bitflags;
+// #[macro_use]
+// extern crate log;
 #[macro_use]
 extern crate objc;
 #[macro_use]
 extern crate foreign_types;
 
-use std::borrow::{Borrow, ToOwned};
-use std::marker::PhantomData;
-use std::mem;
-use std::ops::Deref;
+// use std::borrow::{Borrow, ToOwned};
+// use std::marker::PhantomData;
+// use std::mem;
+// use std::ops::Deref;
 use std::os::raw::c_void;
 
 use cocoa_foundation::foundation::NSUInteger;
@@ -48,12 +48,17 @@ fn nsstring_from_str(string: &str) -> *mut objc::runtime::Object {
     }
 }
 
-
 #[inline]
 fn obj_drop<T>(p: *mut T) {
     unsafe { msg_send![(p as *mut Object), release] }
 }
 
+#[inline]
+fn obj_clone<T: 'static>(p: *mut T) -> *mut T {
+    unsafe { msg_send![(p as *mut Object), retain] }
+}
+
+#[macro_use]
 macro_rules! foreign_obj_type {
     {type CType = $raw_ident:ident;
     pub struct $owned_ident:ident;
@@ -108,10 +113,26 @@ macro_rules! foreign_obj_type {
     };
 }
 
-pub enum AudioNode {}
+mod audio_buffer;
+pub use audio_buffer::*;
 
-// foreign_obj_type! {
-//     type CType = AVAudioNode;
-//     pub struct AudioNode;
-//     pub struct AudioNodeRef;
-// }
+mod audio_engine;
+pub use audio_engine::*;
+
+mod audio_file;
+pub use audio_file::*;
+
+mod audio_format;
+pub use audio_format::*;
+
+mod audio_node;
+pub use audio_node::*;
+
+mod audio_unit;
+pub use audio_unit::*;
+
+mod audio_unit_component;
+pub use audio_unit_component::*;
+
+mod audio_unit_component_manager;
+pub use audio_unit_component_manager::*;
