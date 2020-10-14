@@ -4,5 +4,5 @@ fn main() {
     let engine = AudioEngine::new();
     let node = AudioNode::new();
     let z = node.number_of_inputs();
-    println!("{:?}", z);
+    println!("{:?}", engine.is_running());
 }
