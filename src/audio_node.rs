@@ -17,8 +17,6 @@ impl AudioNode {
 
 impl AudioNodeRef {
     pub fn number_of_inputs(&self) -> i64 {
-        unsafe {
-            msg_send![self, numberOfOutputs]
-        }
+        unsafe { msg_send![self, numberOfOutputs] }
     }
 }

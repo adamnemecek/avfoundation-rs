@@ -1,6 +1,4 @@
-
 use avfoundation::AudioNode;
-
 
 fn main() {
     let node = AudioNode::new();
