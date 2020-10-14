@@ -1,3 +1,4 @@
+use crate::AudioChannelLayoutRef;
 use objc::runtime::{NO, YES};
 pub enum AudioCommonFormat {
     OtherFormat,
@@ -54,11 +55,9 @@ impl AudioFormatRef {
     //     }
     // }
 
-    // pub fn channel_layout: AVAudioChannelLayout? { get } {
-    //     unsafe {
-    //         msg_send![self, channelLayout];
-    //     }
-    // }
+    pub fn channel_layout(&self) -> Option<&AudioChannelLayoutRef> {
+        unsafe { msg_send![self, channelLayout] }
+    }
 
     // pub fn magic_cookie: Data? {
     //     unsafe {

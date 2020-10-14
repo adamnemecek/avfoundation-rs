@@ -116,6 +116,9 @@ macro_rules! foreign_obj_type {
 mod audio_buffer;
 pub use audio_buffer::*;
 
+mod audio_channel_layout;
+pub use audio_channel_layout::*;
+
 mod audio_engine;
 pub use audio_engine::*;
 
