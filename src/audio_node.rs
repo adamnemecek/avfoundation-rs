@@ -1,14 +1,14 @@
-use crate::{AudioFormat, AudioNodeBus};
+use crate::{AVAudioFormat, AudioNodeBus};
 
-pub enum AVAudioNode {}
+pub enum AVAudioNodeNative {}
 
 foreign_obj_type! {
-    type CType = AVAudioNode;
-    pub struct AudioNode;
-    pub struct AudioNodeRef;
+    type CType = AVAudioNodeNative;
+    pub struct AVAudioNode;
+    pub struct AVAudioNodeRef;
 }
 
-impl AudioNode {
+impl AVAudioNode {
     pub fn new() -> Self {
         unsafe {
             let class = class!(AVAudioNode);
@@ -17,12 +17,12 @@ impl AudioNode {
     }
 }
 
-impl AudioNodeRef {
+impl AVAudioNodeRef {
     pub fn reset(&self) {
         unsafe { msg_send![self, reset] }
     }
 
-    pub fn input_format(&self, bus: AudioNodeBus) -> AudioFormat {
+    pub fn input_format_for_bus(&self, bus: AudioNodeBus) -> AVAudioFormat {
         unsafe { msg_send![self, inputFormatForBus: bus.inner] }
     }
 
@@ -66,7 +66,7 @@ impl AudioNodeRef {
 
     pub fn last_render_time(&self) {
         unsafe {
-            // msg_send![self, latency]
+            // msg_send![self, lastRenderTime]
         }
     }
 

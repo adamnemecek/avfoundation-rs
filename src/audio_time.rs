@@ -1,14 +1,14 @@
 // use crate::{AudioFormat, AudioNodeBus};
 use objc::runtime::{NO, YES};
-pub enum AVAudioTime {}
+pub enum AVAudioTimeNative {}
 
 foreign_obj_type! {
-    type CType = AVAudioTime;
-    pub struct AudioTime;
-    pub struct AudioTimeRef;
+    type CType = AVAudioTimeNative;
+    pub struct AVAudioTime;
+    pub struct AVAudioTimeRef;
 }
 
-impl AudioTimeRef {
+impl AVAudioTimeRef {
     pub fn is_host_time_valid(&self) -> bool {
         unsafe {
             match msg_send![self, isHostTimeValid] {

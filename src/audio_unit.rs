@@ -1,14 +1,14 @@
-use crate::AudioNodeRef;
-pub enum AVAudioUnit {}
+use crate::AVAudioNodeRef;
+pub enum AVAudioUnitNative {}
 
 foreign_obj_type! {
-    type CType = AVAudioUnit;
-    pub struct AudioUnit;
-    pub struct AudioUnitRef;
-    type ParentType = AudioNodeRef;
+    type CType = AVAudioUnitNative;
+    pub struct AVAudioUnit;
+    pub struct AVAudioUnitRef;
+    type ParentType = AVAudioNodeRef;
 }
 
-impl AudioUnitRef {
+impl AVAudioUnitRef {
     // pub fn audio_component_description(&self) -> AudioComponentDescription {
     //  unsafe { msg_send![self, audioComponentDescription] }
     // }

@@ -8,15 +8,15 @@ pub enum AudioCommonFormat {
     PcmFormatInt32,
 }
 
-pub enum AVAudioFormat {}
+pub enum AVAudioFormatNative {}
 
 foreign_obj_type! {
-    type CType = AVAudioFormat;
-    pub struct AudioFormat;
-    pub struct AudioFormatRef;
+    type CType = AVAudioFormatNative;
+    pub struct AVAudioFormat;
+    pub struct AVAudioFormatRef;
 }
 
-impl AudioFormatRef {
+impl AVAudioFormatRef {
     pub fn is_standard(&self) -> bool {
         unsafe {
             match msg_send![self, isStandard] {

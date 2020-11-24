@@ -1,12 +1,12 @@
-use crate::AudioIONodeRef;
+use crate::AVAudioIONodeRef;
 
-pub enum AVAudioOutputNode {}
+pub enum AVAudioOutputNodeNative {}
 
 foreign_obj_type! {
-    type CType = AVAudioOutputNode;
-    pub struct AudioOutputNode;
-    pub struct AudioOutputNodeRef;
-    type ParentType = AudioIONodeRef;
+    type CType = AVAudioOutputNodeNative;
+    pub struct AVAudioOutputNode;
+    pub struct AVAudioOutputNodeRef;
+    type ParentType = AVAudioIONodeRef;
 }
 
-impl AudioOutputNodeRef {}
+impl AVAudioOutputNodeRef {}
