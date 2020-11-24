@@ -1,4 +1,4 @@
-use crate::{AVAudioUnitComponent, AVAudioUnitComponentRef};
+use crate::{AVAudioUnitComponent, AVAudioUnitComponentRef, AudioComponentDescription};
 use block::Block;
 use cocoa_foundation::foundation::NSUInteger;
 use objc::runtime::{Object, BOOL, NO, YES};
@@ -56,6 +56,16 @@ impl AVAudioUnitComponentManagerRef {
 
         unsafe {
             let array: *const Object = msg_send![self, componentsPassingTest: block];
+            crate::nsarray_to_vec(array)
+        }
+    }
+
+    pub fn components_matching_description(
+        &self,
+        desc: AudioComponentDescription,
+    ) -> Vec<AVAudioUnitComponent> {
+        unsafe {
+            let array: *const Object = msg_send![self, componentsMatchingDescription: desc];
             crate::nsarray_to_vec(array)
         }
     }
