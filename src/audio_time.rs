@@ -1,9 +1,9 @@
 // use crate::{AudioFormat, AudioNodeBus};
 use objc::runtime::{NO, YES};
-pub enum AVAudioTimeNative {}
+pub enum AVAudioTimeFFI {}
 
 foreign_obj_type! {
-    type CType = AVAudioTimeNative;
+    type CType = AVAudioTimeFFI;
     pub struct AVAudioTime;
     pub struct AVAudioTimeRef;
 }

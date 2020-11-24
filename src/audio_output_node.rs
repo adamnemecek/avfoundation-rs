@@ -1,9 +1,9 @@
 use crate::AVAudioIONodeRef;
 
-pub enum AVAudioOutputNodeNative {}
+pub enum AVAudioOutputNodeFFI {}
 
 foreign_obj_type! {
-    type CType = AVAudioOutputNodeNative;
+    type CType = AVAudioOutputNodeFFI;
     pub struct AVAudioOutputNode;
     pub struct AVAudioOutputNodeRef;
     type ParentType = AVAudioIONodeRef;

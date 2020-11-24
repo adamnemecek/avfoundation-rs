@@ -1,9 +1,10 @@
 fn u32_to_string(a: u32) -> String {
     let mut s: [char; 4] = [' ', ' ', ' ', ' '];
-    s[3] = (a as u8) as char;
-    s[2] = ((a >> 8) as u8) as char;
-    s[1] = ((a >> 16) as u8) as char;
     s[0] = ((a >> 24) as u8) as char;
+    s[1] = ((a >> 16) as u8) as char;
+    s[2] = ((a >> 8) as u8) as char;
+    s[3] = (a as u8) as char;
+
     s.iter().collect()
 }
 
@@ -54,10 +55,10 @@ impl std::fmt::Debug for AudioComponentDescription {
 }
 
 use objc::runtime::{NO, YES};
-pub enum AVAudioUnitComponentNative {}
+pub enum AVAudioUnitComponentFFI {}
 
 foreign_obj_type! {
-    type CType = AVAudioUnitComponentNative;
+    type CType = AVAudioUnitComponentFFI;
     pub struct AVAudioUnitComponent;
     pub struct AVAudioUnitComponentRef;
 }

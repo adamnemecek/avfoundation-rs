@@ -5,10 +5,11 @@ pub enum AudioEngineManualRenderingMode {
     Offline,
     RealTime,
 }
-pub enum AVAudioEngineNative {}
+
+pub enum AVAudioEngineFFI {}
 
 foreign_obj_type! {
-    type CType = AVAudioEngineNative;
+    type CType = AVAudioEngineFFI;
     pub struct AVAudioEngine;
     pub struct AVAudioEngineRef;
 }

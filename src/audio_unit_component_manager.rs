@@ -3,10 +3,10 @@ use block::Block;
 use cocoa_foundation::foundation::NSUInteger;
 use objc::runtime::{Object, BOOL, NO, YES};
 
-pub enum AVAudioUnitComponentManagerNative {}
+pub enum AVAudioUnitComponentManagerFFI {}
 
 foreign_obj_type! {
-    type CType = AVAudioUnitComponentManagerNative;
+    type CType = AVAudioUnitComponentManagerFFI;
     pub struct AVAudioUnitComponentManager;
     pub struct AVAudioUnitComponentManagerRef;
 }

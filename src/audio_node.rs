@@ -1,9 +1,9 @@
 use crate::{AVAudioFormat, AudioNodeBus};
 
-pub enum AVAudioNodeNative {}
+pub enum AVAudioNodeFFI {}
 
 foreign_obj_type! {
-    type CType = AVAudioNodeNative;
+    type CType = AVAudioNodeFFI;
     pub struct AVAudioNode;
     pub struct AVAudioNodeRef;
 }

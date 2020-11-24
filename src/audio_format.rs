@@ -8,10 +8,10 @@ pub enum AudioCommonFormat {
     PcmFormatInt32,
 }
 
-pub enum AVAudioFormatNative {}
+pub enum AVAudioFormatFFI {}
 
 foreign_obj_type! {
-    type CType = AVAudioFormatNative;
+    type CType = AVAudioFormatFFI;
     pub struct AVAudioFormat;
     pub struct AVAudioFormatRef;
 }
