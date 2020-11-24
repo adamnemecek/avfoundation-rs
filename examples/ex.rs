@@ -1,4 +1,4 @@
-use avfoundation::{AVAudioEngine, AVAudioUnitComponentManager, AVAudioNode};
+use avfoundation::{AVAudioEngine, AVAudioNode, AVAudioUnitComponentManager};
 
 fn main() {
     let engine = AVAudioEngine::new();
@@ -6,5 +6,6 @@ fn main() {
     let z = node.number_of_inputs();
 
     let manager = AVAudioUnitComponentManager::shared();
+    let components = manager.components_passing_test();
     println!("{:?}", engine.is_in_manual_rendering_mode());
 }
