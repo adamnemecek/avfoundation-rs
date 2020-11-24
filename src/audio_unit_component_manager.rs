@@ -1,6 +1,6 @@
 use crate::{AVAudioUnitComponent, AVAudioUnitComponentRef};
 use block::Block;
-use objc::runtime::{Object};
+use objc::runtime::{Object, BOOL, YES};
 use cocoa_foundation::foundation::NSUInteger;
 
 pub enum AVAudioUnitComponentManagerNative {}
@@ -29,10 +29,12 @@ impl AVAudioUnitComponentManagerRef {
     pub fn components_passing_test(&self) -> Vec<AVAudioUnitComponent> {
         // let mut vec = vec![];
 
-        let block = block::ConcreteBlock::new(move |component: &AVAudioUnitComponentRef, stop: *mut bool| -> bool {
+        let block = block::ConcreteBlock::new(move |component: &AVAudioUnitComponentRef, stop: *mut BOOL| -> BOOL {
             // println!("{}", buffer.label());
-            true
-        });
+            println!("stuff");
+            YES
+        }).copy();
+        println!("1");
 
         unsafe {
             let array: *const Object = msg_send![self, componentsPassingTest: block];
