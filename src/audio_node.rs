@@ -1,4 +1,4 @@
-use crate::{AVAudioFormat, AudioNodeBus};
+use crate::{AVAudioFormat, AVAudioTimeRef, AudioNodeBus};
 
 pub enum AVAudioNodeFFI {}
 
@@ -64,15 +64,11 @@ impl AVAudioNodeRef {
         unsafe { msg_send![self, numberOfOutputs] }
     }
 
-    pub fn last_render_time(&self) {
-        unsafe {
-            // msg_send![self, lastRenderTime]
-        }
+    pub fn last_render_time(&self) -> &AVAudioTimeRef {
+        unsafe { msg_send![self, lastRenderTime] }
     }
 
-    pub fn latency(&self) {
-        unsafe {
-            // msg_send![self, latency]
-        }
+    pub fn latency(&self) -> f64 {
+        unsafe { msg_send![self, latency] }
     }
 }

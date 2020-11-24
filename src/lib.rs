@@ -48,6 +48,19 @@ fn nsstring_from_str(string: &str) -> *mut objc::runtime::Object {
     }
 }
 
+unsafe fn nsarray_to_vec<T: 'static>(array: *const Object) -> Vec<T> {
+    let count: NSUInteger = msg_send![array, count];
+    let ret = (0..count)
+        .map(|i| msg_send![array, objectAtIndex: i])
+        // The elements of this array are references---we convert them to owned references
+        // (which just means that we increment the reference count here, and it is
+        // decremented in the `Drop` impl for `Device`)
+        .map(|unit: *mut Object| msg_send![unit, retain])
+        .collect();
+    let () = msg_send![array, release];
+    ret
+}
+
 #[inline]
 fn obj_drop<T>(p: *mut T) {
     unsafe { msg_send![(p as *mut Object), release] }
