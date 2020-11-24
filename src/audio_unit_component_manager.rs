@@ -18,7 +18,7 @@ pub enum ShouldStop {
     Continue,
 }
 
-type AudioUnitPredicate<'a> = Block<(&'a AVAudioUnitComponentRef, *mut bool), bool>;
+// type AudioUnitPredicate<'a> = Block<(&'a AVAudioUnitComponentRef, *mut bool), bool>;
 
 impl AVAudioUnitComponentManager {
     pub fn shared() -> Self {

@@ -9,9 +9,10 @@ fn main() {
     let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
     for c in components {
         println!(
-            "manufacturer: {:?}, name: {:?}",
+            "manufacturer: {:?}, name: {:?}, description: {:?}",
             c.manufacturer_name(),
-            c.name()
+            c.name(),
+            c.audio_component_description(),
         );
     }
     println!("{:?}", engine.is_in_manual_rendering_mode());
