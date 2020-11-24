@@ -44,5 +44,4 @@ impl AVAudioTimeRef {
     // pub fn audioTimeStamp(&self) -> AudioTimeStamp {
     //     unsafe { msg_send![self, audioTimeStamp] }
     //  }
-
 }
