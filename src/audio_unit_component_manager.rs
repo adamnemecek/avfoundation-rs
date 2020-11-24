@@ -1,7 +1,7 @@
 use crate::{AVAudioUnitComponent, AVAudioUnitComponentRef};
 use block::Block;
-use objc::runtime::{Object, BOOL, YES};
 use cocoa_foundation::foundation::NSUInteger;
+use objc::runtime::{Object, BOOL, NO, YES};
 
 pub enum AVAudioUnitComponentManagerNative {}
 
@@ -13,8 +13,12 @@ foreign_obj_type! {
 
 // BOOL (^)(AVAudioUnitComponent *comp, BOOL *stop)
 
-type AudioUnitPredicate<'a> = Block<(&'a AVAudioUnitComponentRef, *mut bool), bool>;
+pub enum ShouldStop {
+    Stop,
+    Continue,
+}
 
+type AudioUnitPredicate<'a> = Block<(&'a AVAudioUnitComponentRef, *mut bool), bool>;
 
 impl AVAudioUnitComponentManager {
     pub fn shared() -> Self {
@@ -26,15 +30,34 @@ impl AVAudioUnitComponentManager {
 }
 
 impl AVAudioUnitComponentManagerRef {
-    pub fn components_passing_test(&self) -> Vec<AVAudioUnitComponent> {
+    // first return value is accept, second is stop
+    pub fn components_passing_test(
+        &self,
+        test: fn(&AVAudioUnitComponentRef) -> (bool, ShouldStop),
+    ) -> Vec<AVAudioUnitComponent> {
         // let mut vec = vec![];
 
-        let block = block::ConcreteBlock::new(move |component: &AVAudioUnitComponentRef, stop: *mut BOOL| -> BOOL {
-            // println!("{}", buffer.label());
-            println!("stuff");
-            YES
-        }).copy();
-        println!("1");
+        let block = block::ConcreteBlock::new(
+            move |component: &AVAudioUnitComponentRef, stop: *mut BOOL| -> BOOL {
+                // println!("{}", buffer.label());
+
+                let (accept, stop_test) = test(component);
+                unsafe {
+                    *stop = match stop_test {
+                        ShouldStop::Continue => NO,
+                        ShouldStop::Stop => YES,
+                    };
+
+                    if accept {
+                        YES
+                    } else {
+                        NO
+                    }
+                }
+            },
+        )
+        .copy();
+        // println!("1");
 
         unsafe {
             let array: *const Object = msg_send![self, componentsPassingTest: block];
