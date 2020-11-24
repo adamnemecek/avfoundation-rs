@@ -47,17 +47,16 @@ impl AVAudioUnitComponentManagerRef {
                         ShouldStop::Continue => NO,
                         ShouldStop::Stop => YES,
                     };
+                }
 
-                    if accept {
-                        YES
-                    } else {
-                        NO
-                    }
+                if accept {
+                    YES
+                } else {
+                    NO
                 }
             },
         )
         .copy();
-        // println!("1");
 
         unsafe {
             let array: *const Object = msg_send![self, componentsPassingTest: block];

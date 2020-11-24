@@ -7,5 +7,12 @@ fn main() {
 
     let manager = AVAudioUnitComponentManager::shared();
     let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
+    for c in components {
+        println!(
+            "manufacturer: {:?}, name: {:?}",
+            c.manufacturer_name(),
+            c.name()
+        );
+    }
     println!("{:?}", engine.is_in_manual_rendering_mode());
 }

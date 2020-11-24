@@ -16,4 +16,18 @@ foreign_obj_type! {
 
 impl AVAudioUnitComponentRef {
     // fn audio_component(&self) -> AudioCOmpo
+
+    pub fn name(&self) -> &str {
+        unsafe {
+            let s = msg_send![self, name];
+            crate::nsstring_as_str(s)
+        }
+    }
+
+    pub fn manufacturer_name(&self) -> &str {
+        unsafe {
+            let s = msg_send![self, manufacturerName];
+            crate::nsstring_as_str(s)
+        }
+    }
 }
