@@ -1,5 +1,8 @@
 use crate::AudioChannelLayoutRef;
-use objc::runtime::{NO, YES};
+use objc::runtime::{
+    NO,
+    YES,
+};
 pub enum AudioCommonFormat {
     OtherFormat,
     PcmFormatFloat32,

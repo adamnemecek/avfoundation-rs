@@ -1,5 +1,8 @@
 use crate::AVAudioNodeRef;
-use objc::runtime::{NO, YES};
+use objc::runtime::{
+    NO,
+    YES,
+};
 
 pub enum AudioEngineManualRenderingMode {
     Offline,

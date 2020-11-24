@@ -1,7 +1,16 @@
-use crate::{AVAudioUnitComponent, AVAudioUnitComponentRef, AudioComponentDescription};
+use crate::{
+    AVAudioUnitComponent,
+    AVAudioUnitComponentRef,
+    AudioComponentDescription,
+};
 use block::Block;
 use cocoa_foundation::foundation::NSUInteger;
-use objc::runtime::{Object, BOOL, NO, YES};
+use objc::runtime::{
+    Object,
+    BOOL,
+    NO,
+    YES,
+};
 
 pub enum AVAudioUnitComponentManagerFFI {}
 

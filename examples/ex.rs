@@ -1,6 +1,12 @@
-use avfoundation::{AVAudioEngine, AVAudioNode, AVAudioUnitComponentManager, ShouldStop};
+use avfoundation::{
+    AVAudioEngine,
+    AVAudioNode,
+    AVAudioSession,
+    AVAudioUnitComponentManager,
+    ShouldStop,
+};
 
-fn main() {
+fn main1() {
     let engine = AVAudioEngine::new();
     let node = AVAudioNode::new();
     let z = node.number_of_inputs();
@@ -18,3 +24,5 @@ fn main() {
     }
     println!("{:?}", engine.is_in_manual_rendering_mode());
 }
+
+fn main() {}

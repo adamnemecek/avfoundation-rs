@@ -54,7 +54,10 @@ impl std::fmt::Debug for AudioComponentDescription {
     }
 }
 
-use objc::runtime::{NO, YES};
+use objc::runtime::{
+    NO,
+    YES,
+};
 pub enum AVAudioUnitComponentFFI {}
 
 foreign_obj_type! {

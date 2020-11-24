@@ -16,7 +16,11 @@ use std::os::raw::c_void;
 
 use cocoa_foundation::foundation::NSUInteger;
 use foreign_types::ForeignType;
-use objc::runtime::{Object, NO, YES};
+use objc::runtime::{
+    Object,
+    NO,
+    YES,
+};
 
 fn nsstring_as_str(nsstr: &objc::runtime::Object) -> &str {
     let bytes = unsafe {
@@ -143,6 +147,9 @@ pub use audio_format::*;
 
 mod audio_io_node;
 pub use audio_io_node::*;
+
+mod audio_session;
+pub use audio_session::*;
 
 mod audio_node_bus;
 pub use audio_node_bus::*;

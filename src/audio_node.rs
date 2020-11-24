@@ -1,4 +1,8 @@
-use crate::{AVAudioFormat, AVAudioTimeRef, AudioNodeBus};
+use crate::{
+    AVAudioFormat,
+    AVAudioTimeRef,
+    AudioNodeBus,
+};
 
 pub enum AVAudioNodeFFI {}
 

@@ -1,5 +1,8 @@
 // use crate::{AudioFormat, AudioNodeBus};
-use objc::runtime::{NO, YES};
+use objc::runtime::{
+    NO,
+    YES,
+};
 pub enum AVAudioTimeFFI {}
 
 foreign_obj_type! {
