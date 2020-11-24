@@ -19,12 +19,27 @@ pub struct AudioComponentDescription {
 impl std::fmt::Debug for AudioComponentDescription {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // write!(f, "hello");
-        f.write_str(&format!("component_type: {}\n", u32_to_string(self.component_type)))?;
-        f.write_str(&format!("component_sub_type: {}\n", u32_to_string(self.component_sub_type)))?;
-        f.write_str(&format!("component_manufacturer: {}\n", u32_to_string(self.component_manufacturer)))?;
-        f.write_str(&format!("component_flags: {}\n", u32_to_string(self.component_flags)))?;
-        f.write_str(&format!("component_flags_mask: {}", self.component_flags_mask))
-// write!(f, format!("component_flags_mask: {}", self.component_flags_mask));
+        f.write_str(&format!(
+            "component_type: {}\n",
+            u32_to_string(self.component_type)
+        ))?;
+        f.write_str(&format!(
+            "component_sub_type: {}\n",
+            u32_to_string(self.component_sub_type)
+        ))?;
+        f.write_str(&format!(
+            "component_manufacturer: {}\n",
+            u32_to_string(self.component_manufacturer)
+        ))?;
+        f.write_str(&format!(
+            "component_flags: {}\n",
+            u32_to_string(self.component_flags)
+        ))?;
+        f.write_str(&format!(
+            "component_flags_mask: {}",
+            self.component_flags_mask
+        ))
+        // write!(f, format!("component_flags_mask: {}", self.component_flags_mask));
         // std::fmt::Result::Ok(())
         // f.debug_struct("AudioComponentDescription")
         //     .field("component_type: {}", u32_to_string(&self.component_type))
@@ -38,6 +53,7 @@ impl std::fmt::Debug for AudioComponentDescription {
     }
 }
 
+use objc::runtime::{NO, YES};
 pub enum AVAudioUnitComponentNative {}
 
 foreign_obj_type! {
@@ -65,5 +81,42 @@ impl AVAudioUnitComponentRef {
 
     pub fn audio_component_description(&self) -> AudioComponentDescription {
         unsafe { msg_send![self, audioComponentDescription] }
+    }
+
+    pub fn type_name(&self) -> &str {
+        unsafe {
+            let s = msg_send![self, typeName];
+            crate::nsstring_as_str(s)
+        }
+    }
+
+    pub fn has_midi_output(&self) -> bool {
+        unsafe {
+            match msg_send![self, hasMIDIOutput] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
+
+    pub fn has_midi_input(&self) -> bool {
+        unsafe {
+            match msg_send![self, hasMIDIInput] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
+
+    pub fn has_custom_view(&self) -> bool {
+        unsafe {
+            match msg_send![self, hasCustomView] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
     }
 }
