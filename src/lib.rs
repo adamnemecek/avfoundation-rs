@@ -130,47 +130,47 @@ macro_rules! foreign_obj_type {
     };
 }
 
-mod audio_buffer;
-pub use audio_buffer::*;
+mod av_audio_buffer;
+pub use av_audio_buffer::*;
 
-mod audio_channel_layout;
-pub use audio_channel_layout::*;
+mod av_audio_channel_layout;
+pub use av_audio_channel_layout::*;
 
-mod audio_engine;
-pub use audio_engine::*;
+mod av_audio_engine;
+pub use av_audio_engine::*;
 
-mod audio_file;
-pub use audio_file::*;
+mod av_audio_file;
+pub use av_audio_file::*;
 
-mod audio_format;
-pub use audio_format::*;
+mod av_audio_format;
+pub use av_audio_format::*;
 
-mod audio_io_node;
-pub use audio_io_node::*;
+mod av_audio_io_node;
+pub use av_audio_io_node::*;
 
-mod audio_node_bus;
-pub use audio_node_bus::*;
+mod av_audio_node_bus;
+pub use av_audio_node_bus::*;
 
-mod audio_node;
-pub use audio_node::*;
+mod av_audio_node;
+pub use av_audio_node::*;
 
-mod audio_output_node;
-pub use audio_output_node::*;
+mod av_audio_output_node;
+pub use av_audio_output_node::*;
 
-mod audio_session;
-pub use audio_session::*;
+mod av_audio_session;
+pub use av_audio_session::*;
 
-mod audio_time;
-pub use audio_time::*;
+mod av_audio_time;
+pub use av_audio_time::*;
 
-mod audio_unit_component_manager;
-pub use audio_unit_component_manager::*;
+mod av_audio_unit_component_manager;
+pub use av_audio_unit_component_manager::*;
 
-mod audio_unit_component;
-pub use audio_unit_component::*;
+mod av_audio_unit_component;
+pub use av_audio_unit_component::*;
 
-mod audio_unit;
-pub use audio_unit::*;
+mod av_audio_unit;
+pub use av_audio_unit::*;
 
-mod midi_player;
-pub use midi_player::*;
+mod av_midi_player;
+pub use av_midi_player::*;
