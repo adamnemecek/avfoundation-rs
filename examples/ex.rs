@@ -1,6 +1,7 @@
 use avfoundation::{
     AVAudioEngine,
     AVAudioNode,
+    AVAudioPlayerNode,
     AVAudioSession,
     AVAudioUnitComponentManager,
     ShouldStop,
@@ -10,22 +11,31 @@ fn main1() {
     let engine = AVAudioEngine::new();
     let node = AVAudioNode::new();
     let z = node.number_of_inputs();
+    println!("{:?}", z);
+    // let au = node.au_audio_unit();
+    // let desc = au.component_description();
+    // println!("thing {:?}", desc);
+    let player = AVAudioPlayerNode::new();
 
-    let manager = AVAudioUnitComponentManager::shared();
-    let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
-    for c in components {
-        println!(
-            "manufacturer: {:?}, name: {:?}, description: {:?}, type_name {:?}",
-            c.manufacturer_name(),
-            c.name(),
-            c.audio_component_description(),
-            c.type_name(),
-        );
-    }
-    println!("{:?}", engine.is_in_manual_rendering_mode());
+    // let manager = AVAudioUnitComponentManager::shared();
+    // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
+    // for c in components {
+    //     println!(
+    //         "manufacturer: {:?}, name: {:?}, description: {:?}, type_name {:?}",
+    //         c.manufacturer_name(),
+    //         c.name(),
+    //         c.audio_component_description(),
+    //         c.type_name(),
+    //     );
+    // }
+    // println!("{:?}", engine.is_in_manual_rendering_mode());
+}
+
+fn main2() {
+    let session = AVAudioSession::shared();
+    println!("{:?}", session.record_permission());
 }
 
 fn main() {
-    let session = AVAudioSession::shared();
-    println!("{:?}", session.record_permission());
+    main1()
 }

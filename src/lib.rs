@@ -1,4 +1,6 @@
 #![link(name = "AVFoundation", kind = "framework")]
+#![link(name = "AudioToolbox", kind = "framework")]
+
 // #[macro_use]
 // extern crate bitflags;
 // #[macro_use]
@@ -130,6 +132,9 @@ macro_rules! foreign_obj_type {
     };
 }
 
+mod au_audio_unit;
+pub use au_audio_unit::*;
+
 mod av_audio_buffer;
 pub use av_audio_buffer::*;
 
@@ -174,3 +179,6 @@ pub use av_audio_unit::*;
 
 mod av_midi_player;
 pub use av_midi_player::*;
+
+mod av_audio_player_node;
+pub use av_audio_player_node::*;

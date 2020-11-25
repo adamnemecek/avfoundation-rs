@@ -1,4 +1,5 @@
 use crate::{
+    AUAudioUnit,
     AVAudioFormat,
     AVAudioTimeRef,
     AudioNodeBus,
@@ -70,6 +71,10 @@ impl AVAudioNodeRef {
 
     pub fn last_render_time(&self) -> &AVAudioTimeRef {
         unsafe { msg_send![self, lastRenderTime] }
+    }
+
+    pub fn au_audio_unit(&self) -> &AUAudioUnit {
+        unsafe { msg_send![self, AUAudioUnit] }
     }
 
     pub fn latency(&self) -> f64 {
