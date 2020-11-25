@@ -19,8 +19,10 @@ fn main1() {
     // let player = AVAudioPlayerNode::new();
     // let au = player.au_audio_unit();
     let sequencer = AVAudioSequencer::with_engine(&engine);
-    println!("{:?}", sequencer.is_playing());
-
+    // println!("{:?}", sequencer.is_playing());
+    let tracks = sequencer.tracks();
+    // println!("tracks: {:?}", tracks);
+    println!("tracks: {:?}", sequencer.tempo_track());
     // let manager = AVAudioUnitComponentManager::shared();
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
     // for c in components {

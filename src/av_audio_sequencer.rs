@@ -1,4 +1,4 @@
-use crate::AVAudioEngineRef;
+use crate::{AVAudioChannelLayoutFFI, AVAudioEngineRef};
 use objc::runtime::{
     Object,
     NO,
@@ -31,6 +31,32 @@ impl AVAudioSequencerRef {
                 NO => false,
                 _ => unreachable!(),
             }
+        }
+    }
+
+    pub fn prepare_to_play(&self) {
+        unsafe {
+            let _: () = msg_send![self, prepareToPlay];
+        }
+    }
+
+    pub fn stop(&self) {
+        unsafe {
+            let _: () = msg_send![self, stop];
+        }
+    }
+
+    pub fn tempo_track(&self) -> Option<&AVMusicTrackRef> {
+        unsafe {
+            let ret: *const AVMusicTrackRef = msg_send![self, tempoTrack];
+            ret.as_ref()
+        }
+    }
+
+    pub fn tracks(&self) -> Vec<AVMusicTrack> {
+        unsafe {
+            let array: *const Object = msg_send![self, tracks];
+            crate::nsarray_to_vec(array)
         }
     }
 }
