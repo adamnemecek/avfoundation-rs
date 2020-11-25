@@ -182,3 +182,6 @@ pub use av_midi_player::*;
 
 mod av_audio_player_node;
 pub use av_audio_player_node::*;
+
+mod av_audio_sequencer;
+pub use av_audio_sequencer::*;

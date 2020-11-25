@@ -2,6 +2,7 @@ use avfoundation::{
     AVAudioEngine,
     AVAudioNode,
     AVAudioPlayerNode,
+    AVAudioSequencer,
     AVAudioSession,
     AVAudioUnitComponentManager,
     ShouldStop,
@@ -15,9 +16,10 @@ fn main1() {
     // let au = node.au_audio_unit();
     // let desc = au.component_description();
     // println!("thing {:?}", desc);
-    let player = AVAudioPlayerNode::new();
+    // let player = AVAudioPlayerNode::new();
     // let au = player.au_audio_unit();
-    println!("{:?}", player.is_playing());
+    let sequencer = AVAudioSequencer::with_engine(&engine);
+    println!("{:?}", sequencer.is_playing());
 
     // let manager = AVAudioUnitComponentManager::shared();
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
