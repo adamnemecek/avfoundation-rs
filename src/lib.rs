@@ -185,3 +185,6 @@ pub use av_audio_player_node::*;
 
 mod av_audio_sequencer;
 pub use av_audio_sequencer::*;
+
+mod au_parameters;
+pub use au_parameters::*;

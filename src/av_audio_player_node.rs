@@ -1,4 +1,4 @@
-use crate::AVAudioNode;
+use crate::AVAudioNodeRef;
 use objc::runtime::{
     NO,
     YES,
@@ -10,7 +10,7 @@ foreign_obj_type! {
     type CType = AVAudioPlayerNodeFFI;
     pub struct AVAudioPlayerNode;
     pub struct AVAudioPlayerNodeRef;
-    type ParentType = AVAudioNode;
+    type ParentType = AVAudioNodeRef;
 }
 
 impl AVAudioPlayerNode {

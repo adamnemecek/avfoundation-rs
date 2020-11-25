@@ -1,4 +1,4 @@
-use crate::{AVAudioChannelLayoutFFI, AVAudioEngineRef};
+use crate::AVAudioEngineRef;
 use objc::runtime::{
     Object,
     NO,
@@ -24,6 +24,14 @@ impl AVAudioSequencer {
 }
 
 impl AVAudioSequencerRef {
+    pub fn current_position_in_seconds(&self) -> f64 {
+        unsafe { msg_send![self, currentPositionInSeconds] }
+    }
+
+    pub fn rate(&self) -> f32 {
+        unsafe { msg_send![self, rate] }
+    }
+
     pub fn is_playing(&self) -> bool {
         unsafe {
             match msg_send![self, isPlaying] {
