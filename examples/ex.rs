@@ -16,6 +16,8 @@ fn main1() {
     // let desc = au.component_description();
     // println!("thing {:?}", desc);
     let player = AVAudioPlayerNode::new();
+    // let au = player.au_audio_unit();
+    println!("{:?}", player.is_playing());
 
     // let manager = AVAudioUnitComponentManager::shared();
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));

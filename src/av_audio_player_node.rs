@@ -1,4 +1,8 @@
 use crate::AVAudioNode;
+use objc::runtime::{
+    NO,
+    YES,
+};
 
 pub enum AVAudioPlayerNodeFFI {}
 
@@ -18,4 +22,14 @@ impl AVAudioPlayerNode {
     }
 }
 
-impl AVAudioPlayerNodeRef {}
+impl AVAudioPlayerNodeRef {
+    pub fn is_playing(&self) -> bool {
+        unsafe {
+            match msg_send![self, isPlaying] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
+}

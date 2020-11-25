@@ -1,9 +1,9 @@
-pub enum AVAudioChannelLayout {}
+pub enum AVAudioChannelLayoutFFI {}
 
 foreign_obj_type! {
-    type CType = AVAudioChannelLayout;
-    pub struct AudioChannelLayout;
-    pub struct AudioChannelLayoutRef;
+    type CType = AVAudioChannelLayoutFFI;
+    pub struct AVAudioChannelLayout;
+    pub struct AVAudioChannelLayoutRef;
 }
 
-impl AudioChannelLayoutRef {}
+impl AVAudioChannelLayoutRef {}

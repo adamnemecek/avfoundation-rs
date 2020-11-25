@@ -1,4 +1,4 @@
-use crate::AudioChannelLayoutRef;
+use crate::AVAudioChannelLayoutRef;
 use objc::runtime::{
     NO,
     YES,
@@ -58,7 +58,7 @@ impl AVAudioFormatRef {
     //     }
     // }
 
-    pub fn channel_layout(&self) -> Option<&AudioChannelLayoutRef> {
+    pub fn channel_layout(&self) -> Option<&AVAudioChannelLayoutRef> {
         unsafe { msg_send![self, channelLayout] }
     }
 
