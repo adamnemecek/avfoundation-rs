@@ -25,4 +25,7 @@ fn main1() {
     println!("{:?}", engine.is_in_manual_rendering_mode());
 }
 
-fn main() {}
+fn main() {
+    let session = AVAudioSession::shared();
+    println!("{:?}", session.record_permission());
+}

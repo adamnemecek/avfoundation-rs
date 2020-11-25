@@ -148,9 +148,6 @@ pub use audio_format::*;
 mod audio_io_node;
 pub use audio_io_node::*;
 
-mod audio_session;
-pub use audio_session::*;
-
 mod audio_node_bus;
 pub use audio_node_bus::*;
 
@@ -159,6 +156,9 @@ pub use audio_node::*;
 
 mod audio_output_node;
 pub use audio_output_node::*;
+
+mod audio_session;
+pub use audio_session::*;
 
 mod audio_time;
 pub use audio_time::*;
@@ -171,3 +171,6 @@ pub use audio_unit_component::*;
 
 mod audio_unit;
 pub use audio_unit::*;
+
+mod midi_player;
+pub use midi_player::*;

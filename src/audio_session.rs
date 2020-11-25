@@ -21,3 +21,11 @@ impl AVAudioSession {
         }
     }
 }
+
+impl AVAudioSessionRef {
+    pub fn record_permission(&self) -> AVAudioSessionRecordPermission {
+        unsafe { msg_send![self, recordPermission] }
+    }
+
+    // pub fn requestRecordPermission(&self, )
+}
