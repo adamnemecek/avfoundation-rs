@@ -8,11 +8,17 @@ pub type AVAudioNodeCompletionHandler = block::Block<(), ()>;
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct AVAudioNodeBus {
-    pub(crate) inner: i64,
+    pub(crate) inner: u64,
 }
 
 impl AVAudioNodeBus {
-    pub(crate) fn new(inner: i64) -> Self {
+    pub fn new(inner: u64) -> Self {
         Self { inner }
+    }
+}
+
+impl From<u64> for AVAudioNodeBus {
+    fn from(a: u64) -> Self {
+        Self::new(a)
     }
 }

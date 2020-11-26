@@ -6,6 +6,8 @@ use avfoundation::{
     AVAudioSession,
     AVAudioUnitComponentManager,
     ShouldStop,
+    AVAudioNodeBus,
+    AVAudioConnectionPoint,
 };
 
 fn main1() {
@@ -21,8 +23,11 @@ fn main1() {
     let sequencer = AVAudioSequencer::with_engine(&engine);
     // println!("{:?}", sequencer.is_playing());
     let tracks = sequencer.tracks();
+
+    let point = AVAudioConnectionPoint::with_node(&node, 1.into());
+    println!("point {:?}", point.bus());
     // println!("tracks: {:?}", tracks);
-    println!("tracks: {:?}", sequencer.tempo_track());
+    // println!("tracks: {:?}", sequencer.tempo_track());
     // let manager = AVAudioUnitComponentManager::shared();
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
     // for c in components {
