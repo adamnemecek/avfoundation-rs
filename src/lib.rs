@@ -153,9 +153,6 @@ pub use av_audio_format::*;
 mod av_audio_io_node;
 pub use av_audio_io_node::*;
 
-mod av_audio_node_bus;
-pub use av_audio_node_bus::*;
-
 mod av_audio_node;
 pub use av_audio_node::*;
 
