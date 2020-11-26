@@ -188,3 +188,18 @@ pub use au_parameters::*;
 
 mod av_audio_types;
 pub use av_audio_types::*;
+
+mod av_audio_sink_node;
+pub use av_audio_sink_node::*;
+
+mod av_audio_settings;
+pub use av_audio_settings::*;
+
+mod av_audio_mixing;
+pub use av_audio_mixing::*;
+
+mod av_audio_mixer_node;
+pub use av_audio_mixer_node::*;
+
+mod av_audio_source_node;
+pub use av_audio_source_node::*;
