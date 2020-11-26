@@ -1,13 +1,13 @@
 use avfoundation::{
+    AVAudioConnectionPoint,
     AVAudioEngine,
     AVAudioNode,
+    AVAudioNodeBus,
     AVAudioPlayerNode,
     AVAudioSequencer,
     AVAudioSession,
     AVAudioUnitComponentManager,
     ShouldStop,
-    AVAudioNodeBus,
-    AVAudioConnectionPoint,
 };
 
 fn main1() {

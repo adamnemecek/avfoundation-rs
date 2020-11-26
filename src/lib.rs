@@ -201,6 +201,9 @@ pub use av_audio_mixing::*;
 mod av_audio_mixer_node;
 pub use av_audio_mixer_node::*;
 
+mod av_audio_recorder;
+pub use av_audio_recorder::*;
+
 mod av_audio_source_node;
 pub use av_audio_source_node::*;
 
