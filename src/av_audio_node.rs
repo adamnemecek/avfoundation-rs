@@ -1,9 +1,13 @@
 use crate::{
     AUAudioUnit,
     AVAudioFormat,
+    AVAudioNodeBus,
+    AVAudioPCMBuffer,
     AVAudioTimeRef,
-    AudioNodeBus,
 };
+
+// pub type AVAudioNodeTapBlock
+type AVAudioNodeTapBlock<'a> = block::Block<(&'a AVAudioPCMBuffer,), ()>;
 
 pub enum AVAudioNodeFFI {}
 
@@ -27,7 +31,7 @@ impl AVAudioNodeRef {
         unsafe { msg_send![self, reset] }
     }
 
-    pub fn input_format_for_bus(&self, bus: AudioNodeBus) -> AVAudioFormat {
+    pub fn input_format_for_bus(&self, bus: AVAudioNodeBus) -> AVAudioFormat {
         unsafe { msg_send![self, inputFormatForBus: bus.inner] }
     }
 
@@ -37,14 +41,14 @@ impl AVAudioNodeRef {
     //}
     //}
 
-    pub fn name_for_input_bus(&self, input_bus: AudioNodeBus) -> &str {
+    pub fn name_for_input_bus(&self, input_bus: AVAudioNodeBus) -> &str {
         unsafe {
             let name = msg_send![self, nameForInputBus: input_bus.inner];
             crate::nsstring_as_str(name)
         }
     }
 
-    pub fn name_for_output_bus(&self, output_bus: AudioNodeBus) -> &str {
+    pub fn name_for_output_bus(&self, output_bus: AVAudioNodeBus) -> &str {
         unsafe {
             let name = msg_send![self, nameForOutputBus: output_bus.inner];
             crate::nsstring_as_str(name)
@@ -57,7 +61,7 @@ impl AVAudioNodeRef {
     //}
     //}
 
-    pub fn remove_tap(&self, bus: AudioNodeBus) {
+    pub fn remove_tap(&self, bus: AVAudioNodeBus) {
         unsafe { msg_send![self, removeTap: bus.inner] }
     }
 

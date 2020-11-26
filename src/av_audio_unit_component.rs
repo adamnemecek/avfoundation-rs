@@ -1,8 +1,8 @@
 use objc::runtime::{
-    NO,
-    YES,
     Object,
     BOOL,
+    NO,
+    YES,
 };
 
 fn u32_to_string(a: u32) -> String {
@@ -61,7 +61,6 @@ impl std::fmt::Debug for AudioComponentDescription {
     }
 }
 
-
 pub enum AVAudioUnitComponentFFI {}
 
 foreign_obj_type! {
@@ -80,6 +79,15 @@ impl AVAudioUnitComponentRef {
         }
     }
 
+    pub fn type_name(&self) -> &str {
+        unsafe {
+            let s = msg_send![self, typeName];
+            crate::nsstring_as_str(s)
+        }
+    }
+
+    // localizedTypeName
+
     pub fn manufacturer_name(&self) -> &str {
         unsafe {
             let s = msg_send![self, manufacturerName];
@@ -87,15 +95,13 @@ impl AVAudioUnitComponentRef {
         }
     }
 
+    //version
+    //versionstring
+    //sandboxsafe
+    // audiocomponent
+
     pub fn audio_component_description(&self) -> AudioComponentDescription {
         unsafe { msg_send![self, audioComponentDescription] }
-    }
-
-    pub fn type_name(&self) -> &str {
-        unsafe {
-            let s = msg_send![self, typeName];
-            crate::nsstring_as_str(s)
-        }
     }
 
     pub fn has_midi_output(&self) -> bool {
@@ -128,7 +134,6 @@ impl AVAudioUnitComponentRef {
         }
     }
 }
-
 
 pub enum AVAudioUnitComponentManagerFFI {}
 

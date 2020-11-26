@@ -1,8 +1,8 @@
-pub struct AudioNodeBus {
+pub struct AVAudioNodeBus {
     pub(crate) inner: i64,
 }
 
-impl AudioNodeBus {
+impl AVAudioNodeBus {
     pub(crate) fn new(inner: i64) -> Self {
         Self { inner }
     }
