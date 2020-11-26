@@ -1,5 +1,5 @@
 use crate::AVAudioNodeRef;
-pub enum AVAudioSinkNodeFFI { }
+pub enum AVAudioSinkNodeFFI {}
 
 foreign_obj_type! {
     type CType = AVAudioSinkNodeFFI;
@@ -7,3 +7,5 @@ foreign_obj_type! {
     pub struct AVAudioSinkNodeRef;
     type ParentType = AVAudioNodeRef;
 }
+
+impl AVAudioSinkNodeRef {}

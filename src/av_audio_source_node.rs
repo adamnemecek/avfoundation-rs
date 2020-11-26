@@ -1,5 +1,5 @@
 use crate::AVAudioNodeRef;
-pub enum AVAudioSourceNodeFFI { }
+pub enum AVAudioSourceNodeFFI {}
 
 foreign_obj_type! {
     type CType = AVAudioSourceNodeFFI;
