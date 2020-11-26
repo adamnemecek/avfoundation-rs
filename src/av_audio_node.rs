@@ -1,13 +1,14 @@
 use crate::{
     AUAudioUnit,
     AVAudioFormat,
+    AVAudioFrameCount,
     AVAudioNodeBus,
-    AVAudioPCMBuffer,
+    AVAudioPCMBufferRef,
     AVAudioTimeRef,
 };
 
 // pub type AVAudioNodeTapBlock
-type AVAudioNodeTapBlock<'a> = block::Block<(&'a AVAudioPCMBuffer,), ()>;
+pub type AVAudioNodeTapBlock<'a> = block::Block<(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef), ()>;
 
 pub enum AVAudioNodeFFI {}
 
@@ -55,11 +56,18 @@ impl AVAudioNodeRef {
         }
     }
 
-    // pub fn install_tap(&self, onBus bus: AudioNodeBus, bufferSize: AVAudioFrameCount, format: AVAudioFormat?, block tapBlock: @escaping AVAudioNodeTapBlock) {
-    //    unsafe {
-    //      msg_send![self, installTap]
-    //}
-    //}
+    pub fn install_tap(
+        &self,
+        bus: AVAudioNodeBus,
+        bufferSize: AVAudioFrameCount,
+        format: Option<AVAudioFormat>,
+        block: AVAudioNodeTapBlock,
+    ) {
+        todo!()
+        //    unsafe {
+        //      msg_send![self, installTap]
+        //}
+    }
 
     pub fn remove_tap(&self, bus: AVAudioNodeBus) {
         unsafe { msg_send![self, removeTap: bus.inner] }

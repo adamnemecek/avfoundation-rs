@@ -188,3 +188,6 @@ pub use av_audio_sequencer::*;
 
 mod au_parameters;
 pub use au_parameters::*;
+
+mod av_audio_types;
+pub use av_audio_types::*;
