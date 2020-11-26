@@ -6,6 +6,15 @@ foreign_obj_type! {
     pub struct AUParameterNodeRef;
 }
 
+pub enum AUParameterFFI {}
+
+foreign_obj_type! {
+    type CType = AUParameterFFI;
+    pub struct AUParameter;
+    pub struct AUParameterRef;
+    type ParentType = AUParameterNodeRef;
+}
+
 pub enum AUParameterGroupFFI {}
 
 foreign_obj_type! {
@@ -13,7 +22,6 @@ foreign_obj_type! {
     pub struct AUParameterGroup;
     pub struct AUParameterGroupRef;
     type ParentType = AUParameterNodeRef;
-
 }
 
 pub enum AUParameterTreeFFI {}
