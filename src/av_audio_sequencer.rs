@@ -17,7 +17,7 @@ impl AVAudioSequencer {
     pub fn with_engine(engine: &AVAudioEngineRef) -> Self {
         unsafe {
             let class = class!(AVAudioSequencer);
-            let alloc: *const Object = msg_send![class, alloc];
+            let alloc: *const AVAudioSequencerFFI = msg_send![class, alloc];
             msg_send![alloc, initWithAudioEngine: engine]
         }
     }
