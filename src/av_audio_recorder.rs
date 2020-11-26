@@ -3,7 +3,9 @@ use objc::runtime::{
     YES,
 };
 
-pub trait AVAudioRecorderDelegate: objc::Message + Sized {}
+pub trait AVAudioRecorderDelegate: objc::Message + Sized {
+    // audioRecorderdidfinishrecording
+}
 
 pub enum AVAudioRecorderFFI {}
 
@@ -36,6 +38,10 @@ impl AVAudioRecorderRef {
         }
     }
 
+    // recordattime
+    // recordforduration
+    // recordattime
+
     pub fn pause(&self) {
         unsafe { msg_send![self, pause] }
     }
@@ -53,6 +59,27 @@ impl AVAudioRecorderRef {
             }
         }
     }
+
+    pub fn is_recoring(&self) -> bool {
+        unsafe {
+            match msg_send![self, isRecording] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
+
+    // url
+    // settings
+    // format
+    // delegate
+    // currenttime
+    // devicecurrenttime
+    // meteringenabled
+    // peakpowerforchannel
+    // averagepowerforchannel
+    // channelassignments
 }
 
 #[cfg(target_os = "ios")]
