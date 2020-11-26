@@ -203,3 +203,6 @@ pub use av_audio_mixer_node::*;
 
 mod av_audio_source_node;
 pub use av_audio_source_node::*;
+
+mod av_audio_connection_point;
+pub use av_audio_connection_point::*;

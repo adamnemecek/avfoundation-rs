@@ -1,20 +1,20 @@
 use crate::{
+    AVAudioConnectionPointRef,
     AVAudioNodeBus,
     AVAudioNodeRef,
 };
-use objc::{
-    runtime::Object,
-    Message,
-};
-pub trait AVAudioMixing {
-    fn destination_for_mixer(
-        &self,
-        mixer: &AVAudioNodeRef,
-        bus: AVAudioNodeBus,
-    ) -> Option<&AVAudioMixingDestinationRef>;
+// use objc::{
+//     runtime::Object,
+//     Message,
+// };
+
+pub trait AVAudioStereoMixing: objc::Message + Sized {
+    fn pan(&self) -> f32 {
+        unsafe { msg_send![self, pan] }
+    }
 }
 
-impl<T: objc::Message> AVAudioMixing for T {
+pub trait AVAudioMixing: AVAudioStereoMixing {
     fn destination_for_mixer(
         &self,
         mixer: &AVAudioNodeRef,
@@ -28,6 +28,20 @@ impl<T: objc::Message> AVAudioMixing for T {
     }
 }
 
+// impl<T: objc::Message> AVAudioMixing for T {
+//     fn destination_for_mixer(
+//         &self,
+//         mixer: &AVAudioNodeRef,
+//         bus: AVAudioNodeBus,
+//     ) -> Option<&AVAudioMixingDestinationRef> {
+//         unsafe {
+//             let obj: *const AVAudioMixingDestinationRef =
+//                 msg_send![self, destinationForMixer: mixer bus: bus];
+//             obj.as_ref()
+//         }
+//     }
+// }
+
 pub enum AVAudioMixingDestinationFFI {}
 
 foreign_obj_type! {
@@ -35,4 +49,14 @@ foreign_obj_type! {
     pub struct AVAudioMixingDestination;
     pub struct AVAudioMixingDestinationRef;
     // type ParentType = AUParameterNodeRef;
+}
+
+impl AVAudioStereoMixing for AVAudioMixingDestinationRef {}
+
+impl AVAudioMixing for AVAudioMixingDestinationRef {}
+
+impl AVAudioMixingDestinationRef {
+    pub fn connection_point(&self) -> &AVAudioConnectionPointRef {
+        unsafe { msg_send![self, connectionPoint] }
+    }
 }

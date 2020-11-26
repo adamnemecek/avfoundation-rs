@@ -59,7 +59,7 @@ impl AVAudioNodeRef {
     pub fn install_tap(
         &self,
         bus: AVAudioNodeBus,
-        bufferSize: AVAudioFrameCount,
+        buffer_size: AVAudioFrameCount,
         format: Option<AVAudioFormat>,
         block: AVAudioNodeTapBlock,
     ) {
