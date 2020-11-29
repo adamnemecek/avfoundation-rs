@@ -326,19 +326,25 @@ impl AUParameterRef {
     /// The parameter's minimum value.
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUValue minValue;
     pub fn min_value(&self) -> AUValue {
-        todo!()
+        unsafe {
+            msg_send![self, minValue]
+        }
     }
 
     /// The parameter's maximum value.
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUValue maxValue;
 
     pub fn max_value(&self) -> AUValue {
-        todo!()
+        unsafe {
+            msg_send![self, maxValue]
+        }
     }
     /// The parameter's unit of measurement.
     // @property (NS_NONATOMIC_IOSONLY, readonly) AudioUnitParameterUnit unit;
-    pub fn unit(&self) -> AUValue {
-        todo!()
+    pub fn unit(&self) -> crate::AudioUnitParameterUnit {
+        unsafe {
+            msg_send![self, unit]
+        }
     }
 
     /// A localized name for the parameter's unit. Supplied by the AU if kAudioUnitParameterUnit_CustomUnit; else by the framework.
@@ -366,8 +372,8 @@ impl AUParameterRef {
         todo!()
     }
 
-    ///      @brief        Parameters whose values may change as a side effect of this parameter's value
-    ///                changing.
+    ///    @brief        Parameters whose values may change as a side effect of this parameter's value
+    ///                  changing.
     ///    @discussion
     ///        Each array value is an NSNumber representing AUParameterAddress.
 
@@ -383,14 +389,14 @@ impl AUParameterRef {
     }
 
     ///
-    ///      @brief    Set the parameter's value, avoiding redundant notifications to the originator.
+    ///    @brief    Set the parameter's value, avoiding redundant notifications to the originator.
     ///    @discussion
     ///            Bridged to the v2 function AudioUnitSetParameter.
 
     // - (void)setValue:(AUValue)value originator:(AUParameterObserverToken __nullable)originator;
     pub fn set_value(&self) {}
 
-    ///      @brief    Convenience for setValue:originator:atHostTime:eventType:
+    ///    @brief    Convenience for setValue:originator:atHostTime:eventType:
     ///    @discussion
     ///            Bridged to the v2 function AudioUnitSetParameter.
 
@@ -399,7 +405,7 @@ impl AUParameterRef {
         todo!()
     }
 
-    ///      @brief    Set the parameter's value, preserving the host time of the gesture that initiated the
+    ///    @brief    Set the parameter's value, preserving the host time of the gesture that initiated the
     ///            change, and associating an event type such as touch/release.
     ///    @discussion
     ///        In general, this method should only be called from a user interface. It initiates a change
@@ -417,7 +423,7 @@ impl AUParameterRef {
         todo!()
     }
 
-    ///      @brief Get a textual representation of a value for the parameter. Use value==nil to use the
+    ///    @brief Get a textual representation of a value for the parameter. Use value==nil to use the
     ///           current value. Bridged to the v2 property kAudioUnitProperty_ParameterStringFromValue.
     ///    @discussion
     ///        This is currently only supported for parameters whose flags include
@@ -428,11 +434,13 @@ impl AUParameterRef {
         todo!()
     }
 
-    ///      @brief Convert a textual representation of a value to a numeric one.
+    ///    @brief Convert a textual representation of a value to a numeric one.
     ///    @discussion
     ///        This is currently only supported for parameters whose flags include
     ///        kAudioUnitParameterFlag_ValuesHaveStrings.
-
     // - (AUValue)valueFromString:(NSString *)string;
-    pub fn value_for_string() {}
+    pub fn value_for_string(&self, string: &str) -> &str {
+        let s = crate::nsstring_from_str(string);
+        unsafe { crate::nsstring_as_str(msg_send![self, valueForString: s]) }
+    }
 }
