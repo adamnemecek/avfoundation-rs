@@ -1,23 +1,23 @@
 open class AVAudioUnit : AVAudioNode {
 
     
-    /**	@method	instantiateWithComponentDescription:options:completionHandler:
-    	@abstract Asynchronously create an instance of an audio unit component, wrapped in an AVAudioUnit.
-    	@param audioComponentDescription
-    		The component to instantiate.
-    	@param options
-    		Instantiation options.
-    	@param completionHandler
-    		Called in an arbitrary thread/queue context when instantiation is complete. The client
-    		should retain the provided AVAudioUnit.
-    	@discussion
-    		Components whose flags include kAudioComponentFlag_RequiresAsyncInstantiation must be 
-    		instantiated asynchronously, via this method if they are to be used with AVAudioEngine.
-    		See the discussion of this flag in AudioToolbox/AudioComponent.h.
-    		
-    		The returned AVAudioUnit instance normally will be of a subclass (AVAudioUnitEffect,
-    		AVAudioUnitGenerator, AVAudioUnitMIDIInstrument, or AVAudioUnitTimeEffect), selected
-    		according to the component's type.
+    /**    @method    instantiateWithComponentDescription:options:completionHandler:
+        @abstract Asynchronously create an instance of an audio unit component, wrapped in an AVAudioUnit.
+        @param audioComponentDescription
+            The component to instantiate.
+        @param options
+            Instantiation options.
+        @param completionHandler
+            Called in an arbitrary thread/queue context when instantiation is complete. The client
+            should retain the provided AVAudioUnit.
+        @discussion
+            Components whose flags include kAudioComponentFlag_RequiresAsyncInstantiation must be 
+            instantiated asynchronously, via this method if they are to be used with AVAudioEngine.
+            See the discussion of this flag in AudioToolbox/AudioComponent.h.
+            
+            The returned AVAudioUnit instance normally will be of a subclass (AVAudioUnitEffect,
+            AVAudioUnitGenerator, AVAudioUnitMIDIInstrument, or AVAudioUnitTimeEffect), selected
+            according to the component's type.
     */
     @available(OSX 10.11, *)
     open class func instantiate(with audioComponentDescription: AudioComponentDescription, options: AudioComponentInstantiationOptions = [], completionHandler: @escaping (AVAudioUnit?, Error?) -> Void)
@@ -27,7 +27,7 @@ open class AVAudioUnit : AVAudioNode {
         @abstract Load an audio unit preset.
         @param url
             NSURL of the .aupreset file.
-    	@param outError
+        @param outError
             A pointer to a NSError object
         @discussion
             If the .aupreset file cannot be successfully loaded, an error is returned.
