@@ -1,8 +1,8 @@
 #![link(name = "AVFoundation", kind = "framework")]
 #![link(name = "AudioToolbox", kind = "framework")]
 
-// #[macro_use]
-// extern crate bitflags;
+#[macro_use]
+extern crate bitflags;
 // #[macro_use]
 // extern crate log;
 #[macro_use]
