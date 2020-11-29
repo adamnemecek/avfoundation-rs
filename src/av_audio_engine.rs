@@ -1,5 +1,12 @@
-use crate::AVAudioNodeRef;
+use crate::{
+    AVAudioConnectionPoint,
+    AVAudioConnectionPointRef,
+    AVAudioFormatRef,
+    AVAudioNodeBus,
+    AVAudioNodeRef,
+};
 use objc::runtime::{
+    Object,
     NO,
     YES,
 };
@@ -123,19 +130,19 @@ pub enum AudioEngineManualRenderingMode {
 pub type AVAudioEngineManualRenderingBlock = block::Block<(), ()>;
 
 ///    @class AVAudioEngine
-///    
+///
 ///    An AVAudioEngine contains a group of connected AVAudioNodes ("nodes"), each of which performs
 ///    an audio signal generation, processing, or input/output task.
-///    
+///
 ///    Nodes are created separately and attached to the engine.
-///    
+///
 ///    The engine supports dynamic connection, disconnection and removal of nodes while running,
 ///    with only minor limitations:
 ///    - all dynamic reconnections must occur upstream of a mixer
 ///    - while removals of effects will normally result in the automatic connection of the adjacent
 ///        nodes, removal of a node which has differing input vs. output channel counts, or which
 ///        is a mixer, is likely to result in a broken graph.
-///    
+///
 ///    By default, the engine is connected to an audio device and automatically renders in realtime.
 ///    It can also be configured to operate in manual rendering mode, i.e. not connected to an
 ///    audio device and rendering in response to requests from the client, normally at or
@@ -225,22 +232,77 @@ impl AVAudioEngineRef {
 
     // - (void)connect:(AVAudioNode *)node1 to:(AVAudioNode *)node2 fromBus:(AVAudioNodeBus)bus1 toBus:(AVAudioNodeBus)bus2 format:(AVAudioFormat * __nullable)format;
 
-    // pub fn connect(&self, node1: &AVAudioNodeRef, to node2: &AVAudioNodeRef, fromBus bus1: &AudioNodeBusRef, toBus bus2: &AudioNodeBusRef, format: AVAudioFormat?) {
-    //    unsafe {
-    //      msg_send![self, connect]
-    //    }
-    //}
+    pub fn connect(
+        &self,
+        from: &AVAudioNodeRef,
+        to: &AVAudioNodeRef,
+        from_bus: AVAudioNodeBus,
+        to_bus: AVAudioNodeBus,
+        format: Option<&AVAudioFormatRef>,
+    ) {
+        unsafe {
+            msg_send![self, connect: from to: to fromBus: from_bus toBus: to_bus format: format]
+        }
+    }
+
+    ///    @method connect:to:format:
+    ///    @abstract
+    ///        Establish a connection between two nodes
+    ///
+    ///    This calls connect:to:fromBus:toBus:format: using bus 0 on the source node,
+    ///    and bus 0 on the destination node, except in the case of a destination which is a mixer,
+    ///    in which case the destination is the mixer's nextAvailableInputBus.
+
+    // - (void)connect:(AVAudioNode *)node1 to:(AVAudioNode *)node2 format:(AVAudioFormat * __nullable)format;
     // pub fn connect(&self, node1: &AVAudioNodeRef, to node2: &AVAudioNodeRef, format: AVAudioFormat?) {
     //    unsafe {
     //      msg_send![self, connect]
     //    }
     //}
-    // pub fn connect(&self, sourceNode: &AVAudioNodeRef, to destNodes: [AVAudioConnectionPoint], fromBus sourceBus: &AudioNodeBusRef, format: AVAudioFormat?) {
+
+    ///    @method connect:toConnectionPoints:fromBus:format:
+    ///    @abstract
+    ///        Establish connections between a source node and multiple destination nodes.
+    ///    @param sourceNode
+    ///        The source node
+    ///    @param destNodes
+    ///        An array of AVAudioConnectionPoint objects specifying destination
+    ///        nodes and busses
+    ///    @param sourceBus
+    ///        The output bus on source node
+    ///    @param format
+    ///        If non-nil, the format of the source node's output bus is set to this
+    ///        format. In all cases, the format of the destination nodes' input bus is set to
+    ///        match that of the source node's output bus
+    ///
+    ///    Use this method to establish connections from a source node to multiple destination nodes.
+    ///    Connections made using this method are either one-to-one (when a single destination
+    ///    connection is specified) or one-to-many (when multiple connections are specified), but
+    ///    never many-to-one.
+    ///
+    ///    To incrementally add a new connection to a source node, use this method with an array
+    ///    of AVAudioConnectionPoint objects comprising of pre-existing connections (obtained from
+    ///    `outputConnectionPointsForNode:outputBus:`) and the new connection.
+    ///
+    ///    Note that any pre-existing connection involving the destination's input bus will be
+    ///    broken. And, any pre-existing connection on source node which is not a part of the
+    ///    specified destination connection array will also be broken.
+    ///
+    ///    Also note that when the output of a node is split into multiple paths, all the paths
+    ///    must render at the same rate until they reach a common mixer.
+    ///    In other words, starting from the split node until the common mixer node where all split
+    ///    paths terminate, you cannot have:
+    ///        - any AVAudioUnitTimeEffect
+    ///        - any sample rate conversion
+
+    // fn dummy(&self) {}
+    // - (void)connect:(AVAudioNode *)sourceNode toConnectionPoints:(NSArray<AVAudioConnectionPoint *> *)destNodes fromBus:(AVAudioNodeBus)sourceBus format:(AVAudioFormat * __nullable)format API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0));
+    // pub fn connect(&self, sourceNode: &AVAudioNodeRef, to destNodes: [AVAudioConnectionPoint], fromBus sourceBus: AVAudioNodeBus, format: AVAudioFormat?) {
     //    unsafe {
     //      msg_send![self, connect]
     //    }
     //}
-    // pub fn disconnect_node_input(&self, node: &AVAudioNodeRef, bus: &AudioNodeBusRef) {
+    // pub fn disconnect_node_input(&self, node: &AVAudioNodeRef, bus: AVAudioNodeBus) {
     //    unsafe {
     //      msg_send![self, disconnectNodeInput]
     //    }
@@ -250,7 +312,7 @@ impl AVAudioEngineRef {
     //      msg_send![self, disconnectNodeInput]
     //    }
     //}
-    // pub fn disconnect_node_output(&self, node: &AVAudioNodeRef, bus: &AudioNodeBusRef) {
+    // pub fn disconnect_node_output(&self, node: &AVAudioNodeRef, bus: AVAudioNodeBus) {
     //    unsafe {
     //      msg_send![self, disconnectNodeOutput]
     //    }
@@ -260,6 +322,12 @@ impl AVAudioEngineRef {
         unsafe { msg_send![self, disconnectNodeOutput: node] }
     }
 
+    ///    @method prepare
+    ///    @abstract
+    ///        Prepare the engine for starting.
+    ///
+    ///    This method preallocates many of the resources the engine requires in order to start.
+    ///    It can be used to be able to start more responsively.
     pub fn prepare(&self) {
         unsafe { msg_send![self, prepare] }
     }
@@ -269,34 +337,101 @@ impl AVAudioEngineRef {
         unsafe { msg_send![self, start] }
     }
 
+    ///    @method pause
+    ///    @abstract
+    ///        Pause the engine.
+    ///
+    ///    When the engine is rendering to/from an audio device, stops the audio hardware and the flow
+    ///    of audio through the engine. When operating in this mode, it is recommended that the engine
+    ///    be paused or stopped (as applicable) when not in use, to minimize power consumption.
+    ///
+    ///    Pausing the engine does not deallocate the resources allocated by prepare. Resume the
+    ///    engine by invoking start again.
     pub fn pause(&self) {
         unsafe { msg_send![self, pause] }
     }
 
+    ///    @method reset
+    ///    @abstract reset
+    ///        Reset all of the nodes in the engine.
+    ///
+    ///    This will reset all of the nodes in the engine. This is useful, for example, for silencing
+    ///    reverb and delay tails.
+    ///
+    ///    In manual rendering mode, the render timeline is reset to a sample time of zero.
     pub fn reset(&self) {
         unsafe { msg_send![self, reset] }
     }
 
+    ///    @method stop
+    ///    @abstract
+    ///        When the engine is rendering to/from an audio device, stops the audio hardware and the
+    ///        engine. When operating in this mode, it is recommended that the engine be paused or stopped
+    ///         (as applicable) when not in use, to minimize power consumption.
+    ///
+    ///        Stopping the engine releases the resources allocated by prepare.
     pub fn stop(&self) {
         unsafe { msg_send![self, stop] }
     }
 
-    // pub fn input_connection_point(for node: &AVAudioNodeRef, inputBus bus: &AudioNodeBusRef) -> AVAudioConnectionPoint? {
-    //    unsafe {
-    //      msg_send![self, inputConnectionPoint]
-    //    }
-    //}
-    // pub fn output_connection_points(for node: &AVAudioNodeRef, outputBus bus: &AudioNodeBusRef) -> [AVAudioConnectionPoint] {
-    //    unsafe {
-    //      msg_send![self, outputConnectionPoints]
-    //    }
-    //}
+    ///    @method inputConnectionPointForNode:inputBus:
+    ///    @abstract
+    ///        Get connection information on a node's input bus.
+    ///    @param node
+    ///        The node whose input connection is being queried.
+    ///    @param bus
+    ///        The node's input bus on which the connection is being queried.
+    ///    @return
+    ///        An AVAudioConnectionPoint object with connection information on the node's
+    ///        specified input bus.
+    ///
+    ///    Connections are always one-to-one or one-to-many, never many-to-one.
+    ///
+    ///    Returns nil if there is no connection on the node's specified input bus.
+
+    pub fn input_connection_point_for_node(
+        &self,
+        node: &AVAudioNodeRef,
+        input_bus: AVAudioNodeBus,
+    ) -> Option<&AVAudioConnectionPointRef> {
+        unsafe { msg_send![self, inputConnectionPointForNode: node inputBus: input_bus] }
+    }
+
+    ///    @method outputConnectionPointsForNode:outputBus:
+    ///    @abstract
+    ///        Get connection information on a node's output bus.
+    ///    @param node
+    ///        The node whose output connections are being queried.
+    ///    @param bus
+    ///        The node's output bus on which connections are being queried.
+    ///    @return
+    ///        An array of AVAudioConnectionPoint objects with connection information on the node's
+    ///        specified output bus.
+    ///
+    ///    Connections are always one-to-one or one-to-many, never many-to-one.
+    ///
+    ///
+    pub fn output_connection_points_for_node(
+        &self,
+        node: &AVAudioNodeRef,
+        output_bus: AVAudioNodeBus,
+    ) -> Vec<AVAudioConnectionPoint> {
+        unsafe {
+            let array: *const Object =
+                msg_send![self, outputConnectionPointsForNode: node outputBus: output_bus];
+            crate::nsarray_to_vec(array)
+        }
+    }
 
     // open var musicSequence: MusicSequence?
 
     //     @available(OSX 10.10, *)
     // open var inputNode: AVAudioInputNode { get }
     // open var mainMixerNode: AVAudioMixerNode { get }
+
+    ///    @property running
+    ///    @abstract
+    ///        The engine's running state.
     pub fn is_running(&self) -> bool {
         unsafe {
             match msg_send![self, isRunning] {
