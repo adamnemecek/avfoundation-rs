@@ -29,7 +29,7 @@ impl AVAudioConnectionPoint {
     /// @param node the source or destination node
     /// @param bus the output or input bus on the node
     /// @discussion
-    /// 	If the node is nil, this method fails (returns nil).
+    ///     If the node is nil, this method fails (returns nil).
     // - (instancetype)initWithNode:(AVAudioNode *)node bus:(AVAudioNodeBus)bus NS_DESIGNATED_INITIALIZER;
     pub fn with_node(node: &AVAudioNodeRef, bus: AVAudioNodeBus) -> Self {
         unsafe {
