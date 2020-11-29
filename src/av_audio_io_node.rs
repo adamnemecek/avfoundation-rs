@@ -5,6 +5,8 @@ use crate::{
     AVAudioStereoMixing,
 };
 
+pub type NSTimeInterval = f64;
+
 use objc::runtime::{
     NO,
     YES,
@@ -19,19 +21,30 @@ foreign_obj_type! {
     type ParentType = AVAudioNodeRef;
 }
 
-impl AVAudioIONodeRef {}
+impl AVAudioIONodeRef {
+    /// @property presentationLatency
+    /// @abstract
+    /// 	The presentation or hardware latency, applicable when the engine is rendering to/from an
+    /// 	audio device.
+    /// @discussion
+    /// 	This corresponds to kAudioDevicePropertyLatency and kAudioStreamPropertyLatency.
+    /// 	See <CoreAudio/AudioHardwareBase.h>.
+    pub fn presentation_latency(&self) -> NSTimeInterval {
+        unsafe { msg_send![self, presentationLatency] }
+    }
+
+    // @property audioUnit
+    // @abstract
+    // 	The node's underlying AudioUnit, if any.
+    // @discussion
+    // 	This is only necessary for certain advanced usages.
+    // pub fn audio_unit(&self) -> AudioUnit {
+    //     todo!()
+    // }
+}
 
 /// todo:
 pub type AVAudioIONodeInputBlock = block::Block<(), ()>;
-pub enum AVAudioInputNodeFFI {}
-
-foreign_obj_type! {
-    type CType = AVAudioInputNode;
-    pub struct AVAudioInputNode;
-    pub struct AVAudioInputNodeRef;
-    type ParentType = AVAudioNodeRef;
-}
-
 /// @class AVAudioInputNode
 /// 	@abstract
 /// 		A node that performs audio input in the engine.
@@ -53,6 +66,15 @@ foreign_obj_type! {
 ///
 /// 		In the manual rendering mode, the format of the output scope is initially the same as that
 /// 		of the input, but you may set it to a different format, in which case the node will convert.
+
+pub enum AVAudioInputNodeFFI {}
+
+foreign_obj_type! {
+    type CType = AVAudioInputNode;
+    pub struct AVAudioInputNode;
+    pub struct AVAudioInputNodeRef;
+    type ParentType = AVAudioNodeRef;
+}
 
 impl AVAudioInputNodeRef {
     /// @method setManualRenderingInputPCMFormat:inputBlock:
