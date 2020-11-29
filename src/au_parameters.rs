@@ -234,15 +234,11 @@ impl AUParameterNodeRef {
     fn thing3() {}
 }
 
-pub enum AUParameterFFI {}
-
-foreign_obj_type! {
-    type CType = AUParameterFFI;
-    pub struct AUParameter;
-    pub struct AUParameterRef;
-    type ParentType = AUParameterNodeRef;
-}
-
+///    @class    AUParameterGroup
+///    @brief    A group of related parameters.
+///    @discussion
+///        A parameter group is KVC-compliant for its children; e.g. valueForKey:@"volume" will
+///
 pub enum AUParameterGroupFFI {}
 
 foreign_obj_type! {
@@ -252,6 +248,34 @@ foreign_obj_type! {
     type ParentType = AUParameterNodeRef;
 }
 
+impl AUParameterGroupRef {
+    /// The group's child nodes (AUParameterGroupNode).
+    pub fn children(&self) -> Vec<AUParameterNode> {
+        todo!()
+    }
+    // @property (NS_NONATOMIC_IOSONLY, readonly) NSArray<AUParameterNode *> *children;
+
+    /// Returns a flat array of all parameters in the group, including those in child groups.
+    // @property (NS_NONATOMIC_IOSONLY, readonly) NSArray<AUParameter *> *allParameters;
+    pub fn all_parameters(&self) -> Vec<AUParameter> {
+        todo!()
+    }
+}
+
+///    @class    AUParameterTree
+///    @brief    The top level group node, representing all of an audio unit's parameters.
+///    @discussion
+///        An audio unit's parameters are organized into a tree containing groups and parameters.
+///        Groups may be nested.
+///
+///        The tree is KVO-compliant. For example, if the tree contains a group named "LFO" ,
+///        containing a parameter named rate, then "LFO.rate" refers to that parameter object, and
+///        "LFO.rate.value" refers to that parameter's value.
+///
+///        An audio unit may choose to dynamically rearrange the tree. When doing so, it must
+///        issue a KVO notification on the audio unit's parameterTree property. The tree's elements are
+///        mostly immutable (except for values and implementor hooks); the only way to modify them
+///        is to publish a new tree.
 pub enum AUParameterTreeFFI {}
 
 foreign_obj_type! {
@@ -260,3 +284,14 @@ foreign_obj_type! {
     pub struct AUParameterTreeRef;
     type ParentType = AUParameterGroupRef;
 }
+
+
+pub enum AUParameterFFI {}
+
+foreign_obj_type! {
+    type CType = AUParameterFFI;
+    pub struct AUParameter;
+    pub struct AUParameterRef;
+    type ParentType = AUParameterNodeRef;
+}
+
