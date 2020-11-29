@@ -4,6 +4,31 @@ use objc::runtime::{
     YES,
 };
 
+///    @enum AVAudioEngineManualRenderingError
+///    @abstract
+///        Error codes that could be returned from AVAudioEngine manual rendering mode methods,
+///        e.g. `enableManualRenderingMode:format:maximumFrameCount:error:` and
+///        `renderOffline:toBuffer:error:`.
+///        Note that this is not a comprehensive list, and the underlying audio units could
+///        return other error codes (e.g. see kAudioUnitErr_* in AudioToolbox/AUComponent.h) from these
+///        methods as applicable.
+///
+///        AVAudioEngineManualRenderingErrorInvalidMode
+///            The operation cannot be performed because the engine is either not in manual
+///            rendering mode or the right variant of it.
+///
+///        AVAudioEngineManualRenderingErrorInitialized
+///            The operation cannot be performed because the engine is initialized (i.e. not stopped).
+///
+///         AVAudioEngineManualRenderingErrorNotRunning
+///            The operation cannot be performed because the engine is not running (i.e. not started).
+
+// typedef NS_ENUM(OSStatus, AVAudioEngineManualRenderingError) {
+//     AVAudioEngineManualRenderingErrorInvalidMode = -80800,
+//     AVAudioEngineManualRenderingErrorInitialized = -80801,
+//     AVAudioEngineManualRenderingErrorNotRunning  = -80802
+// }  API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+
 pub enum AudioEngineManualRenderingMode {
     Offline,
     RealTime,
