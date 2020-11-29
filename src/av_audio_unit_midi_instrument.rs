@@ -1,6 +1,6 @@
-use crate::{AVAudioNodeRef};
+use crate::AVAudioNodeRef;
 
-pub enum AVAudioUnitMIDIInstrumentFFI { }
+pub enum AVAudioUnitMIDIInstrumentFFI {}
 
 foreign_obj_type! {
     type CType = AVAudioUnitMIDIInstrumentFFI;
@@ -8,6 +8,5 @@ foreign_obj_type! {
     pub struct AVAudioUnitMIDIInstrumentRef;
     type ParentType = AVAudioNodeRef;
 }
-
 
 // impl MIXING for AVAudioUnitMIDIInstrumentRef {}

@@ -1,4 +1,4 @@
-use crate::{AVAudioFormat};
+use crate::AVAudioFormat;
 pub enum AVAudioBufferFFI {}
 
 foreign_obj_type! {
@@ -15,7 +15,6 @@ impl AVAudioBufferRef {
     // mutableaudiobufferlist
 }
 
-
 pub enum AVAudioPCMBufferFFI {}
 
 foreign_obj_type! {
@@ -25,7 +24,6 @@ foreign_obj_type! {
     type ParentType = AVAudioBufferRef;
 }
 
-
 pub enum AVAudioCompressedBufferFFI {}
 
 foreign_obj_type! {
@@ -34,4 +32,3 @@ foreign_obj_type! {
     pub struct AVAudioCompressedBufferRef;
     type ParentType = AVAudioBufferRef;
 }
-

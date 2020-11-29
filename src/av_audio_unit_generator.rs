@@ -1,6 +1,6 @@
-use crate::{AVAudioNodeRef};
+use crate::AVAudioNodeRef;
 
-pub enum AVAudioUnitGeneratorFFI { }
+pub enum AVAudioUnitGeneratorFFI {}
 
 foreign_obj_type! {
     type CType = AVAudioUnitGeneratorFFI;
@@ -8,5 +8,3 @@ foreign_obj_type! {
     pub struct AVAudioUnitGeneratorRef;
     type ParentType = AVAudioNodeRef;
 }
-
-

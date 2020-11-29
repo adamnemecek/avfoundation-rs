@@ -25,7 +25,10 @@ impl AVAudioSourceNode {
         }
     }
 
-    pub fn with_format_and_render_block(format: AVAudioFormat, render_block: AVAudioSourceNodeRenderBlock) -> Self {
+    pub fn with_format_and_render_block(
+        format: AVAudioFormat,
+        render_block: AVAudioSourceNodeRenderBlock,
+    ) -> Self {
         unsafe {
             let class = class!(AVAudioSourceNode);
             let alloc: *const AVAudioSourceNodeRef = msg_send![class, alloc];

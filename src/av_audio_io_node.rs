@@ -9,8 +9,16 @@ foreign_obj_type! {
     type ParentType = AVAudioNodeRef;
 }
 
+impl AVAudioIONodeRef {}
 
+pub enum AVAudioInputNodeFFI {}
 
+foreign_obj_type! {
+    type CType = AVAudioInputNode;
+    pub struct AVAudioInputNode;
+    pub struct AVAudioInputNodeRef;
+    type ParentType = AVAudioNodeRef;
+}
 
 pub enum AVAudioOutputNodeFFI {}
 
@@ -21,6 +29,4 @@ foreign_obj_type! {
     type ParentType = AVAudioIONodeRef;
 }
 
-impl AVAudioOutputNodeRef {
-    
-}
+impl AVAudioOutputNodeRef {}
