@@ -17,12 +17,7 @@ extern crate foreign_types;
 use std::os::raw::c_void;
 
 use cocoa_foundation::foundation::NSUInteger;
-use foreign_types::ForeignType;
-use objc::runtime::{
-    Object,
-    NO,
-    YES,
-};
+use objc::runtime::Object;
 
 fn nsstring_as_str(nsstr: &objc::runtime::Object) -> &str {
     let bytes = unsafe {
