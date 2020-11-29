@@ -231,7 +231,9 @@ impl AVAudioPlayerNodeRef {
     ///		the engine or the underlying hardware. The engine must be explicitly paused or stopped for
     ///		the hardware to stop.
     ///
-    // - (void)stop;
+    pub fn stop(&self) {
+        unsafe { msg_send![self, stop] }
+    }
 
     /// @method prepareWithFrameCount:
     ///	@abstract Prepares previously scheduled file regions or buffers for playback.
@@ -245,7 +247,9 @@ impl AVAudioPlayerNodeRef {
     ///	@discussion
     ///		equivalent to playAtTime:nil
     ///
-    // - (void)play;
+    pub fn play(&self) {
+        unsafe { msg_send![self, play] }
+    }
 
     ///	@method playAtTime:
     ///	@abstract Start or resume playback at a specific time.
@@ -274,6 +278,9 @@ impl AVAudioPlayerNodeRef {
     // </pre>
     ///
     // - (void)playAtTime:(AVAudioTime * __nullable)when;
+    pub fn play_at_time(&self, when: Option<&AVAudioTimeRef>) {
+        unsafe { msg_send![self, playAtTime: when] }
+    }
 
     /// @method pause
     ///	@abstract Pause playback.
@@ -284,7 +291,9 @@ impl AVAudioPlayerNodeRef {
     ///		the engine or the underlying hardware. The engine must be explicitly paused or stopped for
     ///		the hardware to stop.
     ///
-    // - (void)pause;
+    pub fn pause(&self) {
+        unsafe { msg_send![self, pause] }
+    }
 
     ///	@method nodeTimeForPlayerTime:
     ///	@abstract
