@@ -9,6 +9,7 @@ use crate::{
 
 // pub type AVAudioNodeTapBlock
 pub type AVAudioNodeTapBlock<'a> = block::Block<(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef), ()>;
+pub type AVAudioNodeTapFn<'a> = std::rc::Rc<dyn Fn(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef) -> ()>;
 
 pub enum AVAudioNodeFFI {}
 
@@ -56,13 +57,15 @@ impl AVAudioNodeRef {
         }
     }
 
-    pub fn install_tap(
+    pub fn install_tap<F>(
         &self,
         bus: AVAudioNodeBus,
         buffer_size: AVAudioFrameCount,
         format: Option<AVAudioFormat>,
-        block: AVAudioNodeTapBlock,
-    ) {
+        // block: AVAudioNodeTapBlock,
+        f: F,
+    ) where F: FnMut(&AVAudioPCMBufferRef, &AVAudioTimeRef) -> () {
+        // let block = block::Block
         todo!()
         //    unsafe {
         //      msg_send![self, installTap]
