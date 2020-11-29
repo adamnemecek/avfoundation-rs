@@ -1,3 +1,5 @@
+use crate::prelude::*;
+
 ///    @typedef    AUValue
 ///    @brief      A value of an audio unit parameter.
 
@@ -285,6 +287,32 @@ foreign_obj_type! {
     type ParentType = AUParameterGroupRef;
 }
 
+impl AUParameterTreeRef {
+    ///    @method    parameterWithAddress:
+    ///    @brief    Search a tree for a parameter with a specific address.
+    ///    @return
+    ///        The parameter corresponding to the supplied address, or nil if no such parameter exists.
+    pub fn parameter_with_address(&self, address: AUParameterAddress) -> Option<&AUParameterRef> {
+        unsafe {
+            msg_send![self, parameterWithAddress: address]
+        }
+    }
+
+    ///    @method    parameterWithID:scope:element:
+    ///    @brief    Search a tree for a specific v2 audio unit parameter.
+    ///    @discussion
+    ///        V2 audio units publish parameters identified by a parameter ID, scope, and element.
+    ///        A host that knows that it is dealing with a v2 unit can locate parameters using this method,
+    ///        for example, for the Apple-supplied system audio units.
+    ///    @return
+    ///        The parameter corresponding to the supplied ID/scope/element, or nil if no such parameter
+    ///        exists, or if the audio unit is not a v2 unit.
+    pub fn parameter_with_id(&self, address: AudioUnitParameterID) -> Option<&AUParameterRef> {
+        unsafe {
+            msg_send![self, parameterWithAddress: address]
+        }
+    }
+}
 
 pub enum AUParameterFFI {}
 
@@ -294,4 +322,3 @@ foreign_obj_type! {
     pub struct AUParameterRef;
     type ParentType = AUParameterNodeRef;
 }
-

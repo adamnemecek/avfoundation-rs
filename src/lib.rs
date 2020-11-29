@@ -126,6 +126,10 @@ macro_rules! foreign_obj_type {
         }
     };
 }
+mod prelude;
+
+mod au_component;
+pub use au_component::*;
 
 mod au_audio_unit;
 pub use au_audio_unit::*;
