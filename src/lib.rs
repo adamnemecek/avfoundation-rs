@@ -156,9 +156,6 @@ pub use av_audio_io_node::*;
 mod av_audio_node;
 pub use av_audio_node::*;
 
-mod av_audio_output_node;
-pub use av_audio_output_node::*;
-
 mod av_audio_session;
 pub use av_audio_session::*;
 
@@ -209,3 +206,9 @@ pub use av_audio_source_node::*;
 
 mod av_audio_connection_point;
 pub use av_audio_connection_point::*;
+
+mod av_audio_unit_generator;
+pub use av_audio_unit_generator::*;
+
+mod av_audio_unit_midi_instrument;
+pub use av_audio_unit_midi_instrument::*;

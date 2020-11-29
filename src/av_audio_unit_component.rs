@@ -153,7 +153,7 @@ pub enum ShouldStop {
 // type AudioUnitPredicate<'a> = Block<(&'a AVAudioUnitComponentRef, *mut bool), bool>;
 
 impl AVAudioUnitComponentManager {
-    pub fn shared() -> Self {
+    pub fn shared<'a>() -> &'a AVAudioUnitComponentManagerRef {
         unsafe {
             let class = class!(AVAudioUnitComponentManager);
             msg_send![class, sharedAudioUnitComponentManager]
