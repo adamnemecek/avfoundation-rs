@@ -9,7 +9,8 @@ use crate::{
 
 // pub type AVAudioNodeTapBlock
 pub type AVAudioNodeTapBlock<'a> = block::Block<(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef), ()>;
-pub type AVAudioNodeTapFn<'a> = std::rc::Rc<dyn Fn(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef) -> ()>;
+pub type AVAudioNodeTapFn<'a> =
+    std::rc::Rc<dyn Fn(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef) -> ()>;
 
 pub enum AVAudioNodeFFI {}
 
@@ -64,7 +65,9 @@ impl AVAudioNodeRef {
         format: Option<AVAudioFormat>,
         // block: AVAudioNodeTapBlock,
         f: F,
-    ) where F: FnMut(&AVAudioPCMBufferRef, &AVAudioTimeRef) -> () {
+    ) where
+        F: FnMut(&AVAudioPCMBufferRef, &AVAudioTimeRef) -> (),
+    {
         // let block = block::Block
         todo!()
         //    unsafe {
