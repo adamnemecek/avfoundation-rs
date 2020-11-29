@@ -293,9 +293,7 @@ impl AUParameterTreeRef {
     ///    @return
     ///        The parameter corresponding to the supplied address, or nil if no such parameter exists.
     pub fn parameter_with_address(&self, address: AUParameterAddress) -> Option<&AUParameterRef> {
-        unsafe {
-            msg_send![self, parameterWithAddress: address]
-        }
+        unsafe { msg_send![self, parameterWithAddress: address] }
     }
 
     ///    @method    parameterWithID:scope:element:
@@ -308,11 +306,12 @@ impl AUParameterTreeRef {
     ///        The parameter corresponding to the supplied ID/scope/element, or nil if no such parameter
     ///        exists, or if the audio unit is not a v2 unit.
     pub fn parameter_with_id(&self, address: AudioUnitParameterID) -> Option<&AUParameterRef> {
-        unsafe {
-            msg_send![self, parameterWithAddress: address]
-        }
+        unsafe { msg_send![self, parameterWithAddress: address] }
     }
 }
+
+///    @class    AUParameter
+///    @brief    A node representing a single parameter.
 
 pub enum AUParameterFFI {}
 
@@ -321,4 +320,119 @@ foreign_obj_type! {
     pub struct AUParameter;
     pub struct AUParameterRef;
     type ParentType = AUParameterNodeRef;
+}
+
+impl AUParameterRef {
+    /// The parameter's minimum value.
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AUValue minValue;
+    pub fn min_value(&self) -> AUValue {
+        todo!()
+    }
+
+    /// The parameter's maximum value.
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AUValue maxValue;
+
+    pub fn max_value(&self) -> AUValue {
+        todo!()
+    }
+    /// The parameter's unit of measurement.
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AudioUnitParameterUnit unit;
+    pub fn unit(&self) -> AUValue {
+        todo!()
+    }
+
+    /// A localized name for the parameter's unit. Supplied by the AU if kAudioUnitParameterUnit_CustomUnit; else by the framework.
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *unitName;
+    pub fn unit_name(&self) -> AUValue {
+        todo!()
+    }
+
+    /// Various details of the parameter.
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AudioUnitParameterOptions flags;
+    pub fn flags(&self) -> AUValue {
+        todo!()
+    }
+
+    /// The parameter's address.
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AUParameterAddress address;
+    pub fn address(&self) -> AUValue {
+        todo!()
+    }
+
+    /// For parameters with kAudioUnitParameterUnit_Indexed, localized strings corresponding
+    ///    to the values.
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<NSString *> *valueStrings;
+    pub fn value_strings(&self) -> AUValue {
+        todo!()
+    }
+
+    ///      @brief        Parameters whose values may change as a side effect of this parameter's value
+    ///                changing.
+    ///    @discussion
+    ///        Each array value is an NSNumber representing AUParameterAddress.
+
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<NSNumber *> *dependentParameters;
+    pub fn dependent_parameters(&self) -> AUValue {
+        todo!()
+    }
+
+    /// The parameter's current value.
+    // @property (NS_NONATOMIC_IOSONLY) AUValue value;
+    pub fn value(&self) -> AUValue {
+        todo!()
+    }
+
+    ///
+    ///      @brief    Set the parameter's value, avoiding redundant notifications to the originator.
+    ///    @discussion
+    ///            Bridged to the v2 function AudioUnitSetParameter.
+
+    // - (void)setValue:(AUValue)value originator:(AUParameterObserverToken __nullable)originator;
+    pub fn set_value(&self) {}
+
+    ///      @brief    Convenience for setValue:originator:atHostTime:eventType:
+    ///    @discussion
+    ///            Bridged to the v2 function AudioUnitSetParameter.
+
+    // - (void)setValue:(AUValue)value originator:(AUParameterObserverToken __nullable)originator atHostTime:(uint64_t)hostTime;
+    pub fn originator(&self) -> AUValue {
+        todo!()
+    }
+
+    ///      @brief    Set the parameter's value, preserving the host time of the gesture that initiated the
+    ///            change, and associating an event type such as touch/release.
+    ///    @discussion
+    ///        In general, this method should only be called from a user interface. It initiates a change
+    ///        to a parameter in a way that captures the gesture such that it can be recorded later --
+    ///        any AUParameterAutomationObservers will receive the host time and event type associated
+    ///        with the parameter change.
+    ///
+    ///        From an audio playback engine, a host should schedule automated parameter changes through
+    ///        AUAudioUnit's scheduleParameterBlock.
+    ///
+    ///        Bridged to the v2 function AudioUnitSetParameter.
+
+    // - (void)setValue:(AUValue)value originator:(AUParameterObserverToken __nullable)originator atHostTime:(uint64_t)hostTime eventType:(AUParameterAutomationEventType)eventType API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
+    pub fn set_value_at(&self) {
+        todo!()
+    }
+
+    ///      @brief Get a textual representation of a value for the parameter. Use value==nil to use the
+    ///           current value. Bridged to the v2 property kAudioUnitProperty_ParameterStringFromValue.
+    ///    @discussion
+    ///        This is currently only supported for parameters whose flags include
+    ///        kAudioUnitParameterFlag_ValuesHaveStrings.
+
+    // - (NSString *)stringFromValue:(const AUValue *__nullable)value;
+    pub fn string_for_value(&self) {
+        todo!()
+    }
+
+    ///      @brief Convert a textual representation of a value to a numeric one.
+    ///    @discussion
+    ///        This is currently only supported for parameters whose flags include
+    ///        kAudioUnitParameterFlag_ValuesHaveStrings.
+
+    // - (AUValue)valueFromString:(NSString *)string;
+    pub fn value_for_string() {}
 }

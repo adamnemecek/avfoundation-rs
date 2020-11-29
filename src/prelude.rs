@@ -1,3 +1,1 @@
-pub use crate::{
-    AudioUnitParameterID,
-};
+pub use crate::AudioUnitParameterID;
