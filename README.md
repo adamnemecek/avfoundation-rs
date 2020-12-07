@@ -1,4 +1,4 @@
 # avfoundation
 
-AVFoundatino bindings for Rust.
+AVFoundation bindings for Rust.
 
