@@ -1,13 +1,14 @@
+use cocoa_foundation::foundation::NSUInteger;
+use objc::runtime::{
+    NO,
+    YES,
+};
+
 use crate::{
     AVAudioNodeCompletionHandler,
     AVAudioNodeRef,
     AVAudioPCMBufferRef,
     AVAudioTimeRef,
-};
-use cocoa_foundation::foundation::NSUInteger;
-use objc::runtime::{
-    NO,
-    YES,
 };
 
 bitflags! {

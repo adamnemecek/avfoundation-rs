@@ -326,25 +326,19 @@ impl AUParameterRef {
     /// The parameter's minimum value.
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUValue minValue;
     pub fn min_value(&self) -> AUValue {
-        unsafe {
-            msg_send![self, minValue]
-        }
+        unsafe { msg_send![self, minValue] }
     }
 
     /// The parameter's maximum value.
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUValue maxValue;
 
     pub fn max_value(&self) -> AUValue {
-        unsafe {
-            msg_send![self, maxValue]
-        }
+        unsafe { msg_send![self, maxValue] }
     }
     /// The parameter's unit of measurement.
     // @property (NS_NONATOMIC_IOSONLY, readonly) AudioUnitParameterUnit unit;
     pub fn unit(&self) -> crate::AudioUnitParameterUnit {
-        unsafe {
-            msg_send![self, unit]
-        }
+        unsafe { msg_send![self, unit] }
     }
 
     /// A localized name for the parameter's unit. Supplied by the AU if kAudioUnitParameterUnit_CustomUnit; else by the framework.

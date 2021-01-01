@@ -1,4 +1,8 @@
-use crate::AVAudioFormatRef;
+use crate::{
+    AVAudioFormatRef,
+    AVAudioFrameCount,
+};
+use cocoa_foundation::foundation::NSUInteger;
 pub enum AVAudioBufferFFI {}
 
 foreign_obj_type! {
@@ -51,7 +55,7 @@ foreign_obj_type! {
     type ParentType = AVAudioBufferRef;
 }
 
-impl AVAudioPCMBufferRef {
+impl AVAudioPCMBuffer {
     //     /*!    @method initWithPCMFormat:frameCapacity:
     //     @abstract Initialize a buffer that is to contain PCM audio samples.
     //     @param format
@@ -68,6 +72,19 @@ impl AVAudioPCMBufferRef {
     // */
     // - (nullable instancetype)initWithPCMFormat:(AVAudioFormat *)format frameCapacity:(AVAudioFrameCount)frameCapacity NS_DESIGNATED_INITIALIZER;
 
+    pub fn new_with_pcm_format(
+        format: &AVAudioFormatRef,
+        frame_capacity: AVAudioFrameCount,
+    ) -> Self {
+        // unsafe {
+        //     let class = class!(AVAudioPCMBuffer);
+        //     msg_send![class, new]
+        // }
+        todo!()
+    }
+}
+
+impl AVAudioPCMBufferRef {
     // /*! @property frameCapacity
     //     @abstract
     //         The buffer's capacity, in audio sample frames.
@@ -84,6 +101,9 @@ impl AVAudioPCMBufferRef {
     //         the size of one channel's worth of audio samples.
     // */
     // @property (nonatomic) AVAudioFrameCount frameLength;
+    pub fn frame_length(&self) -> AVAudioFrameCount {
+        unsafe { msg_send![self, frameLength] }
+    }
 
     // /*!    @property stride
     //     @abstract The buffer's number of interleaved channels.
@@ -91,6 +111,9 @@ impl AVAudioPCMBufferRef {
     //         Useful in conjunction with floatChannelData etc.
     // */
     // @property (nonatomic, readonly) NSUInteger stride;
+    pub fn stride(&self) -> NSUInteger {
+        unsafe { msg_send![self, stride] }
+    }
 
     // /*! @property floatChannelData
     //     @abstract Access the buffer's float audio samples.
