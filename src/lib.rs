@@ -16,7 +16,7 @@ extern crate foreign_types;
 // use std::ops::Deref;
 use std::os::raw::c_void;
 
-use cocoa_foundation::foundation::NSUInteger;
+pub use cocoa_foundation::foundation::NSUInteger;
 use objc::runtime::Object;
 
 fn nsstring_as_str(nsstr: &objc::runtime::Object) -> &str {

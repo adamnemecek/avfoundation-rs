@@ -1,10 +1,12 @@
 use crate::{
     AUAudioUnit,
+    AVAudioEngineRef,
     AVAudioFormat,
     AVAudioFrameCount,
     AVAudioNodeBus,
     AVAudioPCMBufferRef,
     AVAudioTimeRef,
+    NSUInteger,
 };
 
 //    @typedef AVAudioNodeTapBlock
@@ -53,6 +55,9 @@ impl AVAudioNode {
 }
 
 impl AVAudioNodeRef {
+    /// /*! @method reset
+    /// 	@abstract Clear a unit's previous processing state.
+    /// */
     pub fn reset(&self) {
         unsafe { msg_send![self, reset] }
     }
@@ -61,11 +66,9 @@ impl AVAudioNodeRef {
         unsafe { msg_send![self, inputFormatForBus: bus.inner] }
     }
 
-    // pub fn output_format(&self, forBus bus: AudioNodeBus) -> AVAudioFormat {
-    //    unsafe {
-    //      msg_send![self, outputFormat]
-    //}
-    //}
+    pub fn output_format_for_bus(&self, bus: AVAudioNodeBus) -> AVAudioFormat {
+        unsafe { msg_send![self, outputFormatForBus: bus.inner] }
+    }
 
     pub fn name_for_input_bus(&self, input_bus: AVAudioNodeBus) -> &str {
         unsafe {
@@ -102,14 +105,24 @@ impl AVAudioNodeRef {
         unsafe { msg_send![self, removeTap: bus.inner] }
     }
 
-    pub fn number_of_inputs(&self) -> i64 {
+    pub fn engine(&self) -> &AVAudioEngineRef {
+        unsafe { msg_send![self, engine] }
+    }
+
+    pub fn number_of_inputs(&self) -> NSUInteger {
         unsafe { msg_send![self, numberOfInputs] }
     }
 
-    pub fn number_of_outputs(&self) -> i64 {
+    pub fn number_of_outputs(&self) -> NSUInteger {
         unsafe { msg_send![self, numberOfOutputs] }
     }
 
+    /// /*! @property lastRenderTime
+    /// 	@abstract Obtain the time for which the node most recently rendered.
+    /// 	@discussion
+    /// 		Will return nil if the engine is not running or if the node is not connected to an input or
+    /// 		output node.
+    /// */
     pub fn last_render_time(&self) -> &AVAudioTimeRef {
         unsafe { msg_send![self, lastRenderTime] }
     }
