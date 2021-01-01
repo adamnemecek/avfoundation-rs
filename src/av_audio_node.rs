@@ -2,6 +2,7 @@ use crate::{
     AUAudioUnit,
     AVAudioEngineRef,
     AVAudioFormat,
+    AVAudioFormatRef,
     AVAudioFrameCount,
     AVAudioNodeBus,
     AVAudioPCMBufferRef,
@@ -85,21 +86,27 @@ impl AVAudioNodeRef {
         }
     }
 
+	        // - (void)installTapOnBus:(AVAudioNodeBus)bus bufferSize:(AVAudioFrameCount)bufferSize format:(AVAudioFormat * __nullable)format block:(AVAudioNodeTapBlock)tapBlock;
     pub fn install_tap<F>(
         &self,
         bus: AVAudioNodeBus,
         buffer_size: AVAudioFrameCount,
-        format: Option<AVAudioFormat>,
+        format: Option<&AVAudioFormatRef>,
         // block: AVAudioNodeTapBlock,
         f: F,
     ) where
-        F: FnMut(&AVAudioPCMBufferRef, &AVAudioTimeRef) -> (),
+        F: 'static + Fn(&AVAudioPCMBufferRef, &AVAudioTimeRef) -> (),
     {
-        // let block = block::Block
-        todo!()
-        //    unsafe {
-        //      msg_send![self, installTap]
-        //}
+        let block = block::ConcreteBlock::new(
+            move |buffer: &AVAudioPCMBufferRef, time_ref: &AVAudioTimeRef| {
+                f(buffer, time_ref);
+            },
+        )
+        .copy();
+
+        unsafe {
+            msg_send![self, installTapOnBus: bus.inner bufferSize: buffer_size format: format block: block]
+        }
     }
 
     pub fn remove_tap(&self, bus: AVAudioNodeBus) {
