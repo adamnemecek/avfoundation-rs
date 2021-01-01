@@ -109,7 +109,6 @@ impl AVAudioSequencerRef {
         }
     }
 
-
     // /*!	@property tempoTrack
     // 	@abstract The tempo track
     // 	 @discussion
@@ -162,8 +161,6 @@ impl AVAudioSequencerRef {
             let _: () = msg_send![self, stop];
         }
     }
-
-
 }
 
 pub enum AVMusicTrackFFI {}

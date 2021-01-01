@@ -7,13 +7,36 @@ use crate::{
     AVAudioTimeRef,
 };
 
-// pub type AVAudioNodeTapBlock
+//	@typedef AVAudioNodeTapBlock
+//	@abstract A block that receives copies of the output of an AVAudioNode.
+//	@param buffer
+//		a buffer of audio captured from the output of an AVAudioNode
+//	@param when
+//		the time at which the buffer was captured
+//	@discussion
+//		CAUTION: This callback may be invoked on a thread other than the main thread.
+
 pub type AVAudioNodeTapBlock<'a> = block::Block<(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef), ()>;
 pub type AVAudioNodeTapFn<'a> =
     std::rc::Rc<dyn Fn(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef) -> ()>;
 
 pub enum AVAudioNodeFFI {}
 
+// @class AVAudioNode
+// @abstract Base class for an audio generation, processing, or I/O block.
+// @discussion
+//     `AVAudioEngine` objects contain instances of various AVAudioNode subclasses. This
+//     base class provides certain common functionality.
+//
+//     Nodes have input and output busses, which can be thought of as connection points.
+//     For example, an effect typically has one input bus and one output bus. A mixer
+//     typically has multiple input busses and one output bus.
+//
+//     Busses have formats, expressed in terms of sample rate and channel count. When making
+//     connections between nodes, often the format must match exactly. There are exceptions
+//     (e.g. `AVAudioMixerNode` and `AVAudioOutputNode`).
+//
+//     Nodes do not currently provide useful functionality until attached to an engine.
 foreign_obj_type! {
     type CType = AVAudioNodeFFI;
     pub struct AVAudioNode;
