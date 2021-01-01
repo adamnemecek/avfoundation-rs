@@ -64,11 +64,11 @@ impl AVAudioNodeRef {
         unsafe { msg_send![self, reset] }
     }
 
-    pub fn input_format_for_bus(&self, bus: AVAudioNodeBus) -> AVAudioFormat {
+    pub fn input_format_for_bus(&self, bus: AVAudioNodeBus) -> &AVAudioFormatRef {
         unsafe { msg_send![self, inputFormatForBus: bus.inner] }
     }
 
-    pub fn output_format_for_bus(&self, bus: AVAudioNodeBus) -> AVAudioFormat {
+    pub fn output_format_for_bus(&self, bus: AVAudioNodeBus) -> &AVAudioFormatRef {
         unsafe { msg_send![self, outputFormatForBus: bus.inner] }
     }
 

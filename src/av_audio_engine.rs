@@ -3,6 +3,7 @@ use crate::{
     AVAudioConnectionPointRef,
     AVAudioFormatRef,
     AVAudioInputNodeRef,
+    AVAudioMixerNodeRef,
     AVAudioNodeBus,
     AVAudioNodeRef,
     AVAudioOutputNodeRef,
@@ -438,6 +439,10 @@ impl AVAudioEngineRef {
         todo!()
     }
 
+    pub fn set_music_sequence(&self) -> ! {
+        todo!()
+    }
+
     /// /*! @property outputNode
     /// 	@abstract
     /// 		The engine's singleton output node.
@@ -487,7 +492,7 @@ impl AVAudioEngineRef {
     //     @available(OSX 10.10, *)
     // open var inputNode: AVAudioInputNode { get }
     // open var mainMixerNode: AVAudioMixerNode { get }
-    pub fn main_mixer_node(&self) -> Option<&AVAudioOutputNodeRef> {
+    pub fn main_mixer_node(&self) -> Option<&AVAudioMixerNodeRef> {
         unsafe { msg_send![self, mainMixerNode] }
     }
 
@@ -519,6 +524,9 @@ impl AVAudioEngineRef {
         todo!()
     }
     // open var attachedNodes: Set<&AVAudioNodeRef> { get }
+    pub fn attached_nodes(&self) -> ! {
+        todo!()
+    }
 
     // pub fn enable_manual_rendering_mode(&self, mode: AVAudioEngineManualRenderingMode, format pcmFormat: AVAudioFormat, maximumFrameCount: AVAudioFrameCount) throws {
     //    unsafe {
