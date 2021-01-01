@@ -2,9 +2,13 @@ use crate::{
     AVAudioConnectionPoint,
     AVAudioConnectionPointRef,
     AVAudioFormatRef,
+    AVAudioInputNodeRef,
     AVAudioNodeBus,
     AVAudioNodeRef,
+    AVAudioOutputNodeRef,
 };
+
+pub struct MusicSequenceRef {}
 use objc::runtime::{
     Object,
     NO,
@@ -87,8 +91,8 @@ pub enum AVAudioEngineManualRenderingStatus {
 
 #[repr(i64)]
 pub enum AudioEngineManualRenderingMode {
-    Offline,
-    RealTime,
+    Offline = 0,
+    RealTime = 1,
 }
 
 ///    @typedef AVAudioEngineManualRenderingBlock
@@ -194,8 +198,8 @@ impl AVAudioEngineRef {
     ///    [_player release];
     ///    ```
 
-    pub fn attach(&self, node: &AVAudioNodeRef) {
-        unsafe { msg_send![self, attach: node] }
+    pub fn attach_node(&self, node: &AVAudioNodeRef) {
+        unsafe { msg_send![self, attachNode: node] }
     }
 
     ///    @method detachNode:
@@ -204,8 +208,8 @@ impl AVAudioEngineRef {
     ///
     ///    If necessary, the engine will safely disconnect the node before detaching it.
 
-    pub fn detach(&self, node: &AVAudioNodeRef) {
-        unsafe { msg_send![self, detach: node] }
+    pub fn detach_node(&self, node: &AVAudioNodeRef) {
+        unsafe { msg_send![self, detachNode: node] }
     }
     ///    @method connect:to:fromBus:toBus:format:
     ///    @abstract
@@ -333,8 +337,14 @@ impl AVAudioEngineRef {
     }
 
     // throws
-    pub fn start(&self) {
-        unsafe { msg_send![self, start] }
+    pub fn start_and_return_error(&self) -> bool {
+        unsafe {
+            match msg_send![self, startAndReturnError] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
     }
 
     ///    @method pause
@@ -424,10 +434,62 @@ impl AVAudioEngineRef {
     }
 
     // open var musicSequence: MusicSequence?
+    pub fn music_sequence(&self) -> ! {
+        todo!()
+    }
+
+    /// /*! @property outputNode
+    /// 	@abstract
+    /// 		The engine's singleton output node.
+    ///
+    /// 	Audio output is performed via an output node. The engine creates a singleton on demand when
+    /// 	this property is first accessed. Connect another node to the input of the output node, or
+    /// 	obtain a mixer that is connected there by default, using the "mainMixerNode" property.
+    ///
+    /// 	When the engine is rendering to/from an audio device, the AVAudioSesssion category and/or
+    /// 	availability of hardware determine whether an app can perform output. Check the output
+    /// 	format of output node (i.e. hardware format) for non-zero sample rate and channel count to
+    /// 	see if output is enabled.
+    /// 	Trying to perform output through the output node when it is not enabled or available will
+    /// 	cause the engine to throw an error (when possible) or an exception.
+    ///
+    /// 	In manual rendering mode, the output format of the output node will determine the
+    /// 	render format of the engine. It can be changed through
+    /// 	`enableManualRenderingMode:format:maximumFrameCount:error:`.
+    /// */
+    pub fn output_node(&self) -> Option<&AVAudioOutputNodeRef> {
+        unsafe { msg_send![self, outputNode] }
+    }
+
+    /// /*! @property inputNode
+    /// 	@abstract
+    /// 		The engine's singleton input node.
+    ///
+    /// 	Audio input is performed via an input node. The engine creates a singleton on demand when
+    /// 	this property is first accessed. To receive input, connect another node from the output of
+    /// 	the input node, or create a recording tap on it.
+    ///
+    /// 	When the engine is rendering to/from an audio device, the AVAudioSesssion category and/or
+    /// 	availability of hardware determine whether an app can perform input (e.g. input hardware is
+    /// 	not available on tvos). Check for the input node's input format (i.e. hardware format) for
+    /// 	non-zero sample rate and channel count to see if input is enabled.
+    /// 	Trying to perform input through the input node when it is not enabled or available will
+    /// 	cause the engine to throw an error (when possible) or an exception.
+    ///
+    /// 	In manual rendering mode, the input node can be used to synchronously supply data to
+    /// 	the engine while it is rendering (see
+    /// 	`AVAudioInputNode(setManualRenderingInputPCMFormat:inputBlock:)`.
+    /// */
+    pub fn input_node(&self) -> Option<&AVAudioInputNodeRef> {
+        unsafe { msg_send![self, inputNode] }
+    }
 
     //     @available(OSX 10.10, *)
     // open var inputNode: AVAudioInputNode { get }
     // open var mainMixerNode: AVAudioMixerNode { get }
+    pub fn main_mixer_node(&self) -> Option<&AVAudioOutputNodeRef> {
+        unsafe { msg_send![self, mainMixerNode] }
+    }
 
     ///    @property running
     ///    @abstract
