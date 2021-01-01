@@ -1,4 +1,7 @@
-use crate::AVAudioEngineRef;
+use crate::{
+    AVAudioEngineRef,
+    NSTimeInterval,
+};
 use objc::runtime::{
     Object,
     NO,
@@ -80,14 +83,17 @@ impl AVAudioSequencerRef {
     // 	@abstract Get the time in seconds for the given beat position (timestamp) in the track
     // */
     // - (NSTimeInterval)secondsForBeats:(AVMusicTimeStamp)beats;
-    pub fn beats(&self) -> AVMusicTimeStamp {
-        unsafe { msg_send![self, beats] }
+    pub fn seconds_for_beats(&self, beats: AVMusicTimeStamp) -> NSTimeInterval {
+        unsafe { msg_send![self, secondsForBeats: beats] }
     }
 
     // /*!	@method beatsForSeconds:
     // 	@abstract Get the beat position (timestamp) for the given time in the track
     // */
     // - (AVMusicTimeStamp)beatsForSeconds:(NSTimeInterval)seconds;
+    pub fn beats_for_seconds(&self, seconds: NSTimeInterval) -> AVMusicTimeStamp {
+        unsafe { msg_send![self, beatsForSeconds: seconds] }
+    }
 
     // /* properties */
     // /*!	@property tracks
@@ -96,6 +102,13 @@ impl AVAudioSequencerRef {
     // 		Track indices count from 0, and do not include the tempo track.
     // */
     // @property (nonatomic, readonly) NSArray<AVMusicTrack *> *tracks;
+    pub fn tracks(&self) -> Vec<AVMusicTrack> {
+        unsafe {
+            let array: *const Object = msg_send![self, tracks];
+            crate::nsarray_to_vec(array)
+        }
+    }
+
 
     // /*!	@property tempoTrack
     // 	@abstract The tempo track
@@ -106,6 +119,12 @@ impl AVAudioSequencerRef {
     // 		 are ignored.
     // */
     // @property (nonatomic, readonly) AVMusicTrack *tempoTrack;
+    pub fn tempo_track(&self) -> Option<&AVMusicTrackRef> {
+        unsafe {
+            let ret: *const AVMusicTrackRef = msg_send![self, tempoTrack];
+            ret.as_ref()
+        }
+    }
 
     // /*!	@property userInfo
     // 	@abstract A dictionary containing meta-data derived from a sequence
@@ -144,19 +163,7 @@ impl AVAudioSequencerRef {
         }
     }
 
-    pub fn tempo_track(&self) -> Option<&AVMusicTrackRef> {
-        unsafe {
-            let ret: *const AVMusicTrackRef = msg_send![self, tempoTrack];
-            ret.as_ref()
-        }
-    }
 
-    pub fn tracks(&self) -> Vec<AVMusicTrack> {
-        unsafe {
-            let array: *const Object = msg_send![self, tracks];
-            crate::nsarray_to_vec(array)
-        }
-    }
 }
 
 pub enum AVMusicTrackFFI {}
