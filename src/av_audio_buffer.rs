@@ -131,6 +131,9 @@ impl AVAudioPCMBufferRef {
     //         samples, each offset by 1 frame. "stride" is the number of interleaved channels.
     // */
     // @property (nonatomic, readonly) float * __nonnull const * __nullable floatChannelData;
+    pub fn float_channel_data(&self) -> *const f32 {
+        unsafe { msg_send!(self, floatChannelData) }
+    }
 
     // /*!    @property int16ChannelData
     //     @abstract Access the buffer's int16_t audio samples.
@@ -141,6 +144,9 @@ impl AVAudioPCMBufferRef {
     //         See the discussion of floatChannelData.
     // */
     // @property (nonatomic, readonly) int16_t * __nonnull const * __nullable int16ChannelData;
+    pub fn int16_channel_data(&self) -> *const i16 {
+        unsafe { msg_send!(self, int16ChannelData) }
+    }
 
     // /*!    @property int32ChannelData
     //     @abstract Access the buffer's int32_t audio samples.
@@ -151,6 +157,9 @@ impl AVAudioPCMBufferRef {
     //         See the discussion of floatChannelData.
     // */
     // @property (nonatomic, readonly) int32_t * __nonnull const * __nullable int32ChannelData;
+    pub fn int32_channel_data(&self) -> *const i32 {
+        unsafe { msg_send!(self, int32ChannelData) }
+    }
 }
 
 /// @class AVAudioCompressedBuffer
@@ -164,7 +173,7 @@ foreign_obj_type! {
     type ParentType = AVAudioBufferRef;
 }
 
-impl AVAudioCompressedBufferRef {
+impl AVAudioCompressedBuffer {
     //     /*!    @method initWithFormat:packetCapacity:maximumPacketSize:
     //     @abstract Initialize a buffer that is to contain compressed audio data.
     //     @param format
@@ -189,7 +198,9 @@ impl AVAudioCompressedBufferRef {
     //         This fails if the format is PCM or if the format has variable bytes per packet (format.streamDescription->mBytesPerPacket == 0).
     // */
     // - (instancetype)initWithFormat:(AVAudioFormat *)format packetCapacity:(AVAudioPacketCount)packetCapacity;
+}
 
+impl AVAudioCompressedBufferRef {
     // /*! @property packetCapacity
     //     @abstract
     //         The number of compressed packets the buffer can contain.
