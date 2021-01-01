@@ -1,6 +1,15 @@
-use crate::AVAudioNodeRef;
+pub struct AudioTimeStamp {}
+pub struct OSStatus {}
+pub struct AudioBufferList {}
+use crate::{
+    AVAudioFrameCount,
+    AVAudioNodeRef,
+};
 pub enum AVAudioSinkNodeFFI {}
 
+// typedef OSStatus (^AVAudioSinkNodeReceiverBlock)(const AudioTimeStamp *timestamp, AVAudioFrameCount frameCount, const AudioBufferList *inputData) API_AVAILABLE(macos(10.15), ios(13.0), tvos(13.0), watchos(6.0)) ;
+pub type AVAudioSinkNodeReceiverBlock =
+    block::Block<(*const AudioTimeStamp, AVAudioFrameCount, AudioBufferList), OSStatus>;
 foreign_obj_type! {
     type CType = AVAudioSinkNodeFFI;
     pub struct AVAudioSinkNode;

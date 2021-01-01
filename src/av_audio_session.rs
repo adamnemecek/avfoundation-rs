@@ -1,3 +1,4 @@
+// not present on macos
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum AVAudioSessionRecordPermission {
     Undetermined,

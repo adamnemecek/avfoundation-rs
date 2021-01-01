@@ -92,6 +92,7 @@ impl AVAudioInputNodeRef {
     ///     manual rendering mode.
     ///     Switching the engine to render to/from an audio device invalidates any previously set block,
     ///     and makes this method ineffective.
+    // - (BOOL)setManualRenderingInputPCMFormat:(AVAudioFormat *)format inputBlock:(AVAudioIONodeInputBlock)block API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
     pub fn set_manual_rendering_pcm_format(
         &self,
         format: &AVAudioFormatRef,
@@ -106,6 +107,44 @@ impl AVAudioInputNodeRef {
             }
         }
     }
+
+    // /*! @property voiceProcessingBypassed
+    //     @abstract
+    //        Bypass all processing done by the voice processing unit.
+    //     @discussion
+    //        Querying this property when voice processing is disabled will return false.
+    //  */
+    // @property (nonatomic, getter=isVoiceProcessingBypassed) BOOL voiceProcessingBypassed API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+    pub fn is_voice_processing_bypassed(&self) -> bool {
+        unsafe {
+            match msg_send![self, isVoiceProcessingBypassed] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
+
+    pub fn set_voice_processing_bypassed(&self, value: bool) {
+        unsafe { msg_send![self, setVoiceProcessingBypassed: value] }
+    }
+
+    // /*! @property voiceProcessingAGCEnabled
+    //     @abstract
+    //         Enable automatic gain control on the processed microphone/uplink
+    //         signal. Enabled by default.
+    //     @discussion
+    //         Querying this property when voice processing is disabled will return false.
+    //  */
+    // @property (nonatomic, getter=isVoiceProcessingAGCEnabled) BOOL voiceProcessingAGCEnabled API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+
+    // /*! @property voiceProcessingInputMuted
+    //     @abstract
+    //         Mutes the input of the voice processing unit.
+    //     @discussion
+    //         Querying this property when voice processing is disabled will return false.
+    //     */
+    // @property (nonatomic, getter=isVoiceProcessingInputMuted) BOOL voiceProcessingInputMuted API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
 }
 
 impl AVAudioStereoMixing for AVAudioInputNodeRef {}
