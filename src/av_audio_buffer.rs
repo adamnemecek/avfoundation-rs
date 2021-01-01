@@ -248,6 +248,10 @@ impl AVAudioCompressedBufferRef {
     // */
     // @property (nonatomic, readonly) uint32_t byteCapacity API_AVAILABLE(macosx(10.13), ios(11.0), watchos(4.0), tvos(11.0));
 
+    pub fn byte_capacity(&self) -> u32 {
+        unsafe { msg_send![self, byteCapacity] }
+    }
+
     // /*!
     //     @property byteLength
     //     @abstract The current number of valid bytes in the buffer.
@@ -255,6 +259,9 @@ impl AVAudioCompressedBufferRef {
     //         Can be changed as part of an operation that modifies the contents.
     // */
     // @property (nonatomic) uint32_t byteLength API_AVAILABLE(macosx(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    pub fn byte_length(&self) -> u32 {
+        unsafe { msg_send![self, byteLength] }
+    }
 
     // /*! @property packetDescriptions
     //     @abstract Access the buffer's array of packet descriptions, if any.
@@ -262,4 +269,9 @@ impl AVAudioCompressedBufferRef {
     //         If the format has constant bytes per packet (format.streamDescription->mBytesPerPacket != 0), then this will return nil.
     // */
     // @property (nonatomic, readonly, nullable) AudioStreamPacketDescription *packetDescriptions;
+
+    // pub fn packet_descriptions(&self) -> AudioStreamPacketDescription {
+    pub fn packet_descriptions(&self) -> ! {
+        unsafe { msg_send![self, packetDescriptions] }
+    }
 }
