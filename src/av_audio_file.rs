@@ -1,3 +1,7 @@
+use crate::{
+    AVAudioFormatRef,
+    AVAudioFramePosition,
+};
 ///    @class AVAudioFile
 ///    @abstract
 ///        An audio file opened for reading or writing.
@@ -18,11 +22,7 @@ foreign_obj_type! {
     pub struct AVAudioFileRef;
 }
 
-impl AVAudioFileRef {
-    // pub fn url(&self) -> id {
-    // todo!()
-    // }
-
+impl AVAudioFile {
     // /*! @method initForReading:error:
     //     @abstract Open a file for reading.
     //     @param fileURL
@@ -84,6 +84,11 @@ impl AVAudioFileRef {
     //         inferred from the file extension. Will overwrite a file at the specified URL if a file exists.
     // */
     // - (nullable instancetype)initForWriting:(NSURL *)fileURL settings:(NSDictionary<NSString *, id> *)settings commonFormat:(AVAudioCommonFormat)format interleaved:(BOOL)interleaved error:(NSError **)outError;
+}
+impl AVAudioFileRef {
+    // pub fn url(&self) -> id {
+    // todo!()
+    // }
 
     // /*! @method readIntoBuffer:error:
     //     @abstract Read an entire buffer.
@@ -139,6 +144,9 @@ impl AVAudioFileRef {
     //     @abstract The on-disk format of the file.
     // */
     // @property (nonatomic, readonly) AVAudioFormat *fileFormat;
+    pub fn file_format(&self) -> &AVAudioFormatRef {
+        unsafe { msg_send![self, fileFormat] }
+    }
 
     // /*! @property processingFormat
     //     @abstract The processing format of the file.
@@ -151,6 +159,9 @@ impl AVAudioFileRef {
     //          Note: this can be expensive to compute for the first time.
     // */
     // @property (nonatomic, readonly) AVAudioFramePosition length;
+    pub fn length(&self) -> &AVAudioFramePosition {
+        unsafe { msg_send![self, length] }
+    }
 
     // /*! @property framePosition
     //     @abstract The position in the file at which the next read or write will occur.
@@ -158,4 +169,7 @@ impl AVAudioFileRef {
     //         Set framePosition to perform a seek before a read or write. A read or write operation advances the frame position by the number of frames read or written.
     // */
     // @property (nonatomic) AVAudioFramePosition framePosition;
+    pub fn frame_position(&self) -> &AVAudioFramePosition {
+        unsafe { msg_send![self, framePosition] }
+    }
 }
