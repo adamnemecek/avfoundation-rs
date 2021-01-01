@@ -7,14 +7,14 @@ use crate::{
     AVAudioTimeRef,
 };
 
-//	@typedef AVAudioNodeTapBlock
-//	@abstract A block that receives copies of the output of an AVAudioNode.
-//	@param buffer
-//		a buffer of audio captured from the output of an AVAudioNode
-//	@param when
-//		the time at which the buffer was captured
-//	@discussion
-//		CAUTION: This callback may be invoked on a thread other than the main thread.
+//    @typedef AVAudioNodeTapBlock
+//    @abstract A block that receives copies of the output of an AVAudioNode.
+//    @param buffer
+//        a buffer of audio captured from the output of an AVAudioNode
+//    @param when
+//        the time at which the buffer was captured
+//    @discussion
+//        CAUTION: This callback may be invoked on a thread other than the main thread.
 
 pub type AVAudioNodeTapBlock<'a> = block::Block<(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef), ()>;
 pub type AVAudioNodeTapFn<'a> =
