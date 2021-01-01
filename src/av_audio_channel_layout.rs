@@ -3,6 +3,8 @@
 /// @discussion
 ///     This object is a thin wrapper for the AudioChannelLayout structure, described
 ///     in <CoreAudio/CoreAudioTypes.h>.
+use crate::{AVAudioChannelCount};
+
 pub enum AVAudioChannelLayoutFFI {}
 
 foreign_obj_type! {
@@ -11,7 +13,7 @@ foreign_obj_type! {
     pub struct AVAudioChannelLayoutRef;
 }
 
-impl AVAudioChannelLayoutRef {
+impl AVAudioChannelLayout {
     //  - (instancetype)init NS_UNAVAILABLE;
 
     // /*!    @method initWithLayoutTag:
@@ -33,7 +35,9 @@ impl AVAudioChannelLayoutRef {
     //         initializer attempts to convert it to a more specific tag.
     // */
     // - (instancetype)initWithLayout:(const AudioChannelLayout *)layout NS_DESIGNATED_INITIALIZER;
+}
 
+impl AVAudioChannelLayoutRef {
     // /*!    @method isEqual:
     //     @abstract Determine whether another AVAudioChannelLayout is exactly equal to this layout.
     //     @param object
@@ -56,6 +60,9 @@ impl AVAudioChannelLayoutRef {
     // /*!    @property layoutTag
     //     @abstract The layout's tag. */
     // @property (nonatomic, readonly) AudioChannelLayoutTag layoutTag;
+    pub fn layout_tag(&self) -> ! {
+        unsafe { msg_send![self, layoutTag] }
+    }
 
     // /*!    @property layout
     //     @abstract The underlying AudioChannelLayout. */
@@ -65,4 +72,7 @@ impl AVAudioChannelLayoutRef {
     //     @abstract The number of channels of audio data.
     // */
     // @property (nonatomic, readonly) AVAudioChannelCount channelCount;
+    pub fn channel_count(&self) -> AVAudioChannelCount {
+        unsafe { msg_send![self, channelCount] }
+    }
 }
