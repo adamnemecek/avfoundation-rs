@@ -1,8 +1,12 @@
 use crate::{
     AVAudioFormatRef,
     AVAudioFrameCount,
+    AVAudioPacketCount,
 };
-use cocoa_foundation::foundation::NSUInteger;
+use cocoa_foundation::foundation::{
+    NSInteger,
+    NSUInteger,
+};
 pub enum AVAudioBufferFFI {}
 
 foreign_obj_type! {
@@ -132,7 +136,7 @@ impl AVAudioPCMBufferRef {
     // */
     // @property (nonatomic, readonly) float * __nonnull const * __nullable floatChannelData;
     pub fn float_channel_data(&self) -> *const f32 {
-        unsafe { msg_send!(self, floatChannelData) }
+        unsafe { msg_send![self, floatChannelData] }
     }
 
     // /*!    @property int16ChannelData
@@ -145,7 +149,7 @@ impl AVAudioPCMBufferRef {
     // */
     // @property (nonatomic, readonly) int16_t * __nonnull const * __nullable int16ChannelData;
     pub fn int16_channel_data(&self) -> *const i16 {
-        unsafe { msg_send!(self, int16ChannelData) }
+        unsafe { msg_send![self, int16ChannelData] }
     }
 
     // /*!    @property int32ChannelData
@@ -158,7 +162,7 @@ impl AVAudioPCMBufferRef {
     // */
     // @property (nonatomic, readonly) int32_t * __nonnull const * __nullable int32ChannelData;
     pub fn int32_channel_data(&self) -> *const i32 {
-        unsafe { msg_send!(self, int32ChannelData) }
+        unsafe { msg_send![self, int32ChannelData] }
     }
 }
 
@@ -206,6 +210,9 @@ impl AVAudioCompressedBufferRef {
     //         The number of compressed packets the buffer can contain.
     // */
     // @property (nonatomic, readonly) AVAudioPacketCount packetCapacity;
+    pub fn packet_capacity(&self) -> AVAudioPacketCount {
+        unsafe { msg_send![self, packetCapacity] }
+    }
 
     // /*!    @property packetCount
     //     @abstract The current number of compressed packets in the buffer.
@@ -214,16 +221,26 @@ impl AVAudioCompressedBufferRef {
     //         The packetCount must be less than or equal to the packetCapacity.
     // */
     // @property (nonatomic) AVAudioPacketCount packetCount;
+    pub fn packet_count(&self) -> AVAudioPacketCount {
+        unsafe { msg_send![self, packetCount] }
+    }
 
     // /*!    @property maximumPacketSize
     //     @abstract The maximum size of a compressed packet in bytes.
     // */
     // @property (nonatomic, readonly) NSInteger maximumPacketSize;
+    pub fn maximum_packet_size(&self) -> NSInteger {
+        unsafe { msg_send![self, maximumPacketSize] }
+    }
 
     // /*! @property data
     //     @abstract Access the buffer's data bytes.
     // */
     // @property (nonatomic, readonly) void *data;
+
+    pub fn data(&self) -> *const std::ffi::c_void {
+        unsafe { msg_send![self, data] }
+    }
 
     // /*!
     //     @property byteCapacity
