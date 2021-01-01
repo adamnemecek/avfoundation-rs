@@ -7,7 +7,7 @@ use objc::runtime::{
     YES,
 }; //, BOOL, NO, SEL, nil};
    // use cocoa_foundation::foundation::NSURL;
-use crate::{NSTimeInterval};
+use crate::NSTimeInterval;
 
 pub enum AVMIDIPlayerFFI {}
 
