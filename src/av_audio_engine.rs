@@ -2,11 +2,13 @@ use crate::{
     AVAudioConnectionPoint,
     AVAudioConnectionPointRef,
     AVAudioFormatRef,
+    AVAudioFrameCount,
     AVAudioInputNodeRef,
     AVAudioMixerNodeRef,
     AVAudioNodeBus,
     AVAudioNodeRef,
     AVAudioOutputNodeRef,
+    AVAudioPCMBuffer,
 };
 
 pub struct MusicSequenceRef {}
@@ -538,11 +540,16 @@ impl AVAudioEngineRef {
         unsafe { msg_send![self, disableManualRenderingMode] }
     }
 
-    // pub fn render_offline(&self, numberOfFrames: AVAudioFrameCount, to buffer: AVAudioPCMBuffer) throws -> AVAudioEngineManualRenderingStatus {
-    //    unsafe {
-    //      msg_send![self, renderOffline]
-    //    }
-    //}
+    pub fn render_offline(
+        &self,
+        numberOfFrames: AVAudioFrameCount,
+        buffer: AVAudioPCMBuffer,
+    ) -> AVAudioEngineManualRenderingStatus {
+        //    unsafe {
+        //      msg_send![self, renderOffline]
+        //    }
+        todo!()
+    }
 
     // @available(OSX 10.13, *)
     // open var manualRenderingBlock: AVAudioEngineManualRenderingBlock { get }
