@@ -10,6 +10,14 @@
 // #if __has_include(<AVFAudio/AVAudioSession.h>)
 // #import <AVFAudio/AVAudioSession.h>
 // #endif
+use cocoa_foundation::foundation::{
+    NSTimeInterval,
+    NSUInteger,
+};
+use objc::runtime::{
+    NO,
+    YES,
+};
 
 pub enum AVAudioPlayerFFI {}
 foreign_obj_type! {
@@ -41,13 +49,28 @@ impl AVAudioPlayerRef {
     //
     // /* This method starts the audio hardware synchronously (if not already running), and triggers the sound playback which is streamed asynchronously. */
     // - (BOOL)play;
-    pub fn play(&self) {
-        unsafe { msg_send![self, play] }
+    pub fn play(&self) -> bool {
+        unsafe {
+            match msg_send![self, play] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
     }
     //
     // /* This method starts the audio hardware synchronously (if not already running), and triggers the sound playback which is streamed asynchronously at the specified time in the future.
     //  Time is an absolute time based on and greater than deviceCurrentTime. */
     // - (BOOL)playAtTime:(NSTimeInterval)time API_AVAILABLE(macos(10.7), ios(4.0), watchos(2.0), tvos(9.0));
+    pub fn play_at_time(&self, time: NSTimeInterval) -> bool {
+        unsafe {
+            match msg_send![self, playAtTime: time] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
     //
     // /* Pauses playback, but remains ready to play. */
     // - (void)pause;
@@ -66,8 +89,18 @@ impl AVAudioPlayerRef {
     //
     // @property(readonly, getter=isPlaying) BOOL playing; /* is it playing or not? */
     //
+    pub fn is_playing(&self) -> NSUInteger {
+        unsafe { msg_send![self, isPlaying] }
+    }
     // @property(readonly) NSUInteger numberOfChannels;
+    pub fn number_of_channels(&self) -> NSUInteger {
+        unsafe { msg_send![self, numberOfChannels] }
+    }
+
     // @property(readonly) NSTimeInterval duration; /* the duration of the sound. */
+    pub fn duration(&self) -> NSTimeInterval {
+        unsafe { msg_send![self, duration] }
+    }
     //
     // /* the UID of the current audio device (as a string) */
     // @property(copy, nullable) NSString *currentDevice API_AVAILABLE(macos(10.13)) API_UNAVAILABLE(ios, watchos, tvos);
