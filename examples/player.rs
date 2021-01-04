@@ -11,6 +11,7 @@ fn main() {
     println!("player {:?}", player.duration());
     player.set_rate(1.5);
     player.play(|| println!("done"));
-    let duration = std::time::Duration::from_secs(30);
+    let duration = std::time::Duration::from_secs(200);
+    player.set_current_position(30.0);
     std::thread::sleep(duration);
 }

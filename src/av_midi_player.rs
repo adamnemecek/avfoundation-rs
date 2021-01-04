@@ -175,4 +175,8 @@ impl AVMIDIPlayerRef {
     pub fn current_position(&self) -> NSTimeInterval {
         unsafe { msg_send![self, currentPosition] }
     }
+
+    pub fn set_current_position(&self, interval: NSTimeInterval) {
+        unsafe { msg_send![self, setCurrentPosition: interval] }
+    }
 }
