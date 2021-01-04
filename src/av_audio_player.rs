@@ -11,6 +11,7 @@
 // #import <AVFAudio/AVAudioSession.h>
 // #endif
 use cocoa_foundation::foundation::{
+    NSInteger,
     NSTimeInterval,
     NSUInteger,
 };
@@ -18,6 +19,8 @@ use objc::runtime::{
     NO,
     YES,
 };
+
+use crate::AVAudioFormatRef;
 
 pub enum AVAudioPlayerFFI {}
 foreign_obj_type! {
@@ -148,6 +151,9 @@ impl AVAudioPlayerRef {
     //
     // /* returns the current time associated with the output device */
     // @property(readonly) NSTimeInterval deviceCurrentTime API_AVAILABLE(macos(10.7), ios(4.0), watchos(2.0), tvos(9.0));
+    pub fn device_current_time(&self) -> NSTimeInterval {
+        unsafe { msg_send![self, deviceCurrentTime] }
+    }
     //
     // /* "numberOfLoops" is the number of times that the sound will return to the beginning upon reaching the end.
     // A value of zero means to play the sound just once.
@@ -155,21 +161,37 @@ impl AVAudioPlayerRef {
     // Any negative number will loop indefinitely until stopped.
     // */
     // @property NSInteger numberOfLoops;
+    pub fn number_of_loops(&self) -> NSInteger {
+        unsafe { msg_send![self, numberOfLoops] }
+    }
     //
     // /* settings */
     // @property(readonly) NSDictionary<NSString *, id> *settings API_AVAILABLE(macos(10.7), ios(4.0), watchos(2.0), tvos(9.0)); /* returns a settings dictionary with keys as described in AVAudioSettings.h */
     //
     // /* returns the format of the audio data */
     // @property(readonly) AVAudioFormat *format API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
+    pub fn format(&self) -> &AVAudioFormatRef {
+        unsafe { msg_send![self, format] }
+    }
     //
     // /* metering */
     //
     // @property(getter=isMeteringEnabled) BOOL meteringEnabled; /* turns level metering on or off. default is off. */
     //
     // - (void)updateMeters; /* call to refresh meter values */
+    pub fn update_meters(&self) {
+        unsafe { msg_send![self, updateMeters] }
+    }
     //
     // - (float)peakPowerForChannel:(NSUInteger)channelNumber; /* returns peak power in decibels for a given channel */
+    pub fn peak_power_for_channel(&self, channel_number: NSUInteger) -> f32 {
+        unsafe { msg_send![self, peakPowerForChannel: channel_number] }
+    }
+
     // - (float)averagePowerForChannel:(NSUInteger)channelNumber; /* returns average power in decibels for a given channel */
+    pub fn average_power_for_channel(&self, channel_number: NSUInteger) -> f32 {
+        unsafe { msg_send![self, averagePowerForChannel: channel_number] }
+    }
     //
     // /* The channels property lets you assign the output to play to specific channels as described by AVAudioSession's channels property */
     // /* This property is nil valued until set. */
