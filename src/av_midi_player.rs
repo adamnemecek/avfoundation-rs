@@ -32,25 +32,38 @@ impl AVMIDIPlayer {
             NSString,
             NSURL,
         };
-        let path_url = unsafe {
-            let string =
-                NSString::alloc(nil).init_str(&path.into_os_string().into_string().unwrap());
-            NSURL::alloc(nil).initWithString_(string)
-        };
+        use objc::runtime::Object;
 
-        let bank_url = unsafe {
-            let string =
-                NSString::alloc(nil).init_str(&bank.into_os_string().into_string().unwrap());
-            NSURL::alloc(nil).initWithString_(string)
-        };
+        fn path_to_url(path: std::path::PathBuf) -> id {
+            unsafe {
+                let string =
+                    NSString::alloc(nil).init_str(&path.into_os_string().into_string().unwrap());
+                NSURL::alloc(nil).initWithString_(string)
+            }
+        }
 
+        let path_url = path_to_url(path);
+        let bank_url = path_to_url(bank);
 
         unsafe {
-            let class = class!(AVMIDIPlayer);
-            msg_send![class, initWithContentsOfURL: path_url
-                                      soundBankURL: bank_url
-                                             error: nil]
+            let player: Self = msg_send![class!(AVMIDIPlayer), alloc];
+            let ptr: *mut Object = msg_send![player.as_ref(), initWithContentsOfURL: path_url
+                                                                       soundBankURL: bank_url
+                                                                              error: nil];
+            // if ptr.is_null() {
+            // None
+            // } else {
+            // Some(intersector)
+            // }
+            player
         }
+        // unsafe {
+        //     let class = class!(AVMIDIPlayer);
+        //     let id = class.alloc(nil);
+        //     msg_send![class, initWithContentsOfURL: path_url
+        //                               soundBankURL: bank_url
+        //                                      error: nil]
+        // }
     }
 
     // /*!    @method initWithData:soundBankURL:error:
@@ -80,9 +93,7 @@ impl AVMIDIPlayer {
                 NSString::alloc(nil).init_str(&bank.into_os_string().into_string().unwrap());
             NSURL::alloc(nil).initWithString_(string)
         };
-        unsafe {
-
-        }
+        unsafe {}
         // println!("path_string {:?}", );
         // let url = NSURL::URLWithString_();
         // let path = foundation::URL::
