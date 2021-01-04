@@ -113,16 +113,38 @@ impl AVAudioPlayerRef {
     // @property(readonly, nullable) NSData *data; /* returns nil if object was not created with a data object */
     //
     // @property float pan API_AVAILABLE(macos(10.7), ios(4.0), watchos(2.0), tvos(9.0)); /* set panning. -1.0 is left, 0.0 is center, 1.0 is right. */
+    pub fn pan(&self) -> f32 {
+        unsafe { msg_send![self, pan] }
+    }
+
     // @property float volume; /* The volume for the sound. The nominal range is from 0.0 to 1.0. */
+    pub fn volume(&self) -> f32 {
+        unsafe { msg_send![self, volume] }
+    }
     // - (void)setVolume:(float)volume fadeDuration:(NSTimeInterval)duration API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0)); /* fade to a new volume over a duration */
     //
     // @property BOOL enableRate API_AVAILABLE(macos(10.8), ios(5.0), watchos(2.0), tvos(9.0)); /* You must set enableRate to YES for the rate property to take effect. You must set this before calling prepareToPlay. */
+    pub fn enable_rate(&self) -> bool {
+        unsafe {
+            match msg_send![self, enableRate] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
     // @property float rate API_AVAILABLE(macos(10.8), ios(5.0), watchos(2.0), tvos(9.0)); /* See enableRate. The playback rate for the sound. 1.0 is normal, 0.5 is half speed, 2.0 is double speed. */
+    pub fn rate(&self) -> bool {
+        unsafe { msg_send![self, rate] }
+    }
     //
     //
     // /*  If the sound is playing, currentTime is the offset into the sound of the current playback position.
     // If the sound is not playing, currentTime is the offset into the sound where playing would start. */
     // @property NSTimeInterval currentTime;
+    pub fn current_time(&self) -> NSTimeInterval {
+        unsafe { msg_send![self, currentTime] }
+    }
     //
     // /* returns the current time associated with the output device */
     // @property(readonly) NSTimeInterval deviceCurrentTime API_AVAILABLE(macos(10.7), ios(4.0), watchos(2.0), tvos(9.0));
