@@ -9,6 +9,17 @@ use objc::runtime::{
    // use cocoa_foundation::foundation::NSURL;
 use crate::NSTimeInterval;
 
+fn path_to_url(path: std::path::PathBuf) -> id {
+    use cocoa_foundation::foundation::{
+        NSString,
+        NSURL,
+    };
+    unsafe {
+        let string = NSString::alloc(nil).init_str(&path.into_os_string().into_string().unwrap());
+        NSURL::alloc(nil).initWithString_(string)
+    }
+}
+
 pub enum AVMIDIPlayerFFI {}
 
 foreign_obj_type! {
@@ -28,19 +39,7 @@ impl AVMIDIPlayer {
     // - (nullable instancetype)initWithContentsOfURL:(NSURL *)inURL soundBankURL:(NSURL * __nullable)bankURL error:(NSError **)outError;
 
     pub fn with_url(path: std::path::PathBuf, bank: std::path::PathBuf) -> Self {
-        use cocoa_foundation::foundation::{
-            NSString,
-            NSURL,
-        };
         use objc::runtime::Object;
-
-        fn path_to_url(path: std::path::PathBuf) -> id {
-            unsafe {
-                let string =
-                    NSString::alloc(nil).init_str(&path.into_os_string().into_string().unwrap());
-                NSURL::alloc(nil).initWithString_(string)
-            }
-        }
 
         let path_url = path_to_url(path);
         let bank_url = path_to_url(bank);
@@ -75,29 +74,30 @@ impl AVMIDIPlayer {
     //  */
     // - (nullable instancetype)initWithData:(NSData *)data soundBankURL:(NSURL * __nullable)bankURL error:(NSError **)outError;
 
-    pub fn with_data(path: std::path::PathBuf, bank: std::path::PathBuf) -> Self {
+    pub fn with_data(data: &[u8], bank: std::path::PathBuf) -> Self {
         // use cocoa_foundation::
         // core_foundation::URL::new();
-        use cocoa_foundation::foundation::{
-            NSString,
-            NSURL,
-        };
-        let path_url = unsafe {
-            let string =
-                NSString::alloc(nil).init_str(&path.into_os_string().into_string().unwrap());
-            NSURL::alloc(nil).initWithString_(string)
-        };
+        todo!();
+        // use cocoa_foundation::foundation::{
+        //     NSString,
+        //     NSURL,
+        // };
+        // let path_url = unsafe {
+        //     let string =
+        //         NSString::alloc(nil).init_str(&path.into_os_string().into_string().unwrap());
+        //     NSURL::alloc(nil).initWithString_(string)
+        // };
 
-        let bank_url = unsafe {
-            let string =
-                NSString::alloc(nil).init_str(&bank.into_os_string().into_string().unwrap());
-            NSURL::alloc(nil).initWithString_(string)
-        };
-        unsafe {}
-        // println!("path_string {:?}", );
-        // let url = NSURL::URLWithString_();
-        // let path = foundation::URL::
-        todo!()
+        // let bank_url = unsafe {
+        //     let string =
+        //         NSString::alloc(nil).init_str(&bank.into_os_string().into_string().unwrap());
+        //     NSURL::alloc(nil).initWithString_(string)
+        // };
+        // unsafe {}
+        // // println!("path_string {:?}", );
+        // // let url = NSURL::URLWithString_();
+        // // let path = foundation::URL::
+        // todo!()
     }
 }
 
