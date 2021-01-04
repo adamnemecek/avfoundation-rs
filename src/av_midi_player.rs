@@ -111,9 +111,9 @@ impl AVMIDIPlayerRef {
     //         Happens automatically on play if it has not already been called, but may produce a delay in startup.
     //  */
     // - (void)prepareToPlay;
-    // pub fn prepare_to_play(&self) {
-
-    // }
+    pub fn prepare_to_play(&self) {
+        unsafe { msg_send![self, prepareToPlay] }
+    }
 
     // /*! @method play:
     //     @abstract Play the sequence.
@@ -127,6 +127,9 @@ impl AVMIDIPlayerRef {
     //     @abstract Stop playing the sequence.
     //  */
     // - (void)stop;
+    pub fn stop(&self) {
+        unsafe { msg_send![self, stop] }
+    }
 
     // /* properties */
     // /*! @property duration
