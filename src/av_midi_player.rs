@@ -101,6 +101,8 @@ impl AVMIDIPlayer {
     }
 }
 
+pub type AVMIDIPlayerCompletionHandler = block::Block<(), ()>;
+
 impl AVMIDIPlayerRef {
     // /* transport control */
     // /*! @method prepareToPlay
@@ -117,7 +119,10 @@ impl AVMIDIPlayerRef {
     //     @abstract Play the sequence.
     //  */
     // - (void)play:(AVMIDIPlayerCompletionHandler __nullable)completionHandler;
-
+    pub fn play(&self, completion_handler: impl Fn() -> ()) {
+        let block = block::ConcreteBlock::new(completion_handler);
+        unsafe { msg_send![self, play: block] }
+    }
     // /*! @method stop
     //     @abstract Stop playing the sequence.
     //  */
@@ -128,6 +133,9 @@ impl AVMIDIPlayerRef {
     //     @abstract The length of the currently loaded file in seconds.
     //  */
     // @property(nonatomic, readonly) NSTimeInterval duration;
+    pub fn duration(&self) -> NSTimeInterval {
+        unsafe { msg_send![self, duration] }
+    }
 
     // /*! @property playing
     //     @abstract Indicates whether or not the player is playing
@@ -151,6 +159,10 @@ impl AVMIDIPlayerRef {
     // @property (nonatomic) float rate;
     pub fn rate(&self) -> f32 {
         unsafe { msg_send![self, rate] }
+    }
+
+    pub fn set_rate(&mut self, rate: f32) {
+        unsafe { msg_send![self, setRate: rate] }
     }
 
     // /*! @property currentPosition
