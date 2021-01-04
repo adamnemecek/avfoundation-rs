@@ -27,6 +27,32 @@ impl AVMIDIPlayer {
     // */
     // - (nullable instancetype)initWithContentsOfURL:(NSURL *)inURL soundBankURL:(NSURL * __nullable)bankURL error:(NSError **)outError;
 
+    pub fn with_url(path: std::path::PathBuf, bank: std::path::PathBuf) -> Self {
+        use cocoa_foundation::foundation::{
+            NSString,
+            NSURL,
+        };
+        let path_url = unsafe {
+            let string =
+                NSString::alloc(nil).init_str(&path.into_os_string().into_string().unwrap());
+            NSURL::alloc(nil).initWithString_(string)
+        };
+
+        let bank_url = unsafe {
+            let string =
+                NSString::alloc(nil).init_str(&bank.into_os_string().into_string().unwrap());
+            NSURL::alloc(nil).initWithString_(string)
+        };
+
+
+        unsafe {
+            let class = class!(AVMIDIPlayer);
+            msg_send![class, initWithContentsOfURL: path_url
+                                      soundBankURL: bank_url
+                                             error: nil]
+        }
+    }
+
     // /*!    @method initWithData:soundBankURL:error:
     //     @abstract Create a player with the contents of the data object
     //     @discussion
@@ -36,16 +62,30 @@ impl AVMIDIPlayer {
     //  */
     // - (nullable instancetype)initWithData:(NSData *)data soundBankURL:(NSURL * __nullable)bankURL error:(NSError **)outError;
 
-    pub fn with_url(url: id, bank_url: id) -> Self {
-        unsafe {
-            let class = class!(AVMIDIPlayer);
-            msg_send![class, initWithContentsOfURL: url
-                                           bankURL: bank_url
-                                             error: nil]
-        }
-    }
+    pub fn with_data(path: std::path::PathBuf, bank: std::path::PathBuf) -> Self {
+        // use cocoa_foundation::
+        // core_foundation::URL::new();
+        use cocoa_foundation::foundation::{
+            NSString,
+            NSURL,
+        };
+        let path_url = unsafe {
+            let string =
+                NSString::alloc(nil).init_str(&path.into_os_string().into_string().unwrap());
+            NSURL::alloc(nil).initWithString_(string)
+        };
 
-    pub fn with_data() -> Self {
+        let bank_url = unsafe {
+            let string =
+                NSString::alloc(nil).init_str(&bank.into_os_string().into_string().unwrap());
+            NSURL::alloc(nil).initWithString_(string)
+        };
+        unsafe {
+
+        }
+        // println!("path_string {:?}", );
+        // let url = NSURL::URLWithString_();
+        // let path = foundation::URL::
         todo!()
     }
 }
