@@ -1,7 +1,7 @@
 use avfoundation::{
     AVAudioUnitComponentManager,
-    ShouldStop,
     AVAudioUnitMIDIInstrument,
+    ShouldStop,
 };
 
 fn main() {
@@ -20,8 +20,6 @@ fn main() {
     let desc = serum.audio_component_description();
     let midi = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
     println!("serum {:?}", midi);
-
-
 
     std::thread::sleep(std::time::Duration::from_secs(1));
     // for c in components {

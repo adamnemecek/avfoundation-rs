@@ -55,9 +55,7 @@ foreign_obj_type! {
 // #endif
 
 impl AVAudioUnitMIDIInstrument {
-    pub fn new_with_audio_component_description(
-        description: AudioComponentDescription,
-    ) -> Self {
+    pub fn new_with_audio_component_description(description: AudioComponentDescription) -> Self {
         unsafe {
             // let class = class!(AVAudioUnitMIDIInstrument);
             // msg_send![class, new]
