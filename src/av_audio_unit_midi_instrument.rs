@@ -56,7 +56,6 @@ foreign_obj_type! {
 
 impl AVAudioUnitMIDIInstrument {
     pub fn new_with_audio_component_description(
-        &self,
         description: AudioComponentDescription,
     ) -> Self {
         unsafe {
