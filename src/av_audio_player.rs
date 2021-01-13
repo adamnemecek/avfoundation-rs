@@ -125,6 +125,9 @@ impl AVAudioPlayerRef {
         unsafe { msg_send![self, volume] }
     }
     // - (void)setVolume:(float)volume fadeDuration:(NSTimeInterval)duration API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0)); /* fade to a new volume over a duration */
+    pub fn set_volume(&self, volume: f32, fade_duration: NSTimeInterval) -> f32 {
+        unsafe { msg_send![self, setVolume: volume fadeDuration: fade_duration] }
+    }
     //
     // @property BOOL enableRate API_AVAILABLE(macos(10.8), ios(5.0), watchos(2.0), tvos(9.0)); /* You must set enableRate to YES for the rate property to take effect. You must set this before calling prepareToPlay. */
     pub fn enable_rate(&self) -> bool {
