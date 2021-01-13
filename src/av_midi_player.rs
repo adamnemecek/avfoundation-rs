@@ -9,7 +9,7 @@ use objc::runtime::{
    // use cocoa_foundation::foundation::NSURL;
 use crate::NSTimeInterval;
 
-fn path_to_url(path: std::path::PathBuf) -> id {
+pub(crate) fn path_to_url(path: std::path::PathBuf) -> id {
     use cocoa_foundation::foundation::{
         NSString,
         NSURL,

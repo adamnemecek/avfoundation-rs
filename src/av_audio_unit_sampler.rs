@@ -51,6 +51,22 @@ impl AVAudioUnitSamplerRef {
     //  		This method reads from file and allocates memory, so it should not be called on a real time thread.
     //  */
     // - (BOOL)loadSoundBankInstrumentAtURL:(NSURL *)bankURL program:(uint8_t)program bankMSB:(uint8_t)bankMSB bankLSB:(uint8_t)bankLSB error:(NSError **)outError;
+    pub fn load_bank_instrument_at_url(&self, bank_url: std::path::PathBuf,  program: u8, bank_msb: u8, bank_lsb: u8) -> bool {
+        use cocoa_foundation::base::{YES, NO, nil};
+        let url = crate::path_to_url(bank_url);
+        unsafe {
+            match msg_send![self, loadSoundBankInstrumentAtURL: url
+                program: program
+                bankMSB: bank_msb
+                bankLSB: bank_lsb
+                error: nil
+             ] {
+                YES => true,
+                NO => false,
+                _ => unimplemented!(),
+             }
+        }
+    }
     //
     // /*! @method loadInstrumentAtURL:error:
     // 	@abstract configures the sampler by loading the specified preset file.
@@ -69,6 +85,9 @@ impl AVAudioUnitSamplerRef {
     //
     //  */
     // - (BOOL)loadInstrumentAtURL:(NSURL *)instrumentURL error:(NSError **)outError;
+    pub fn load_instrument_at_url(&self, bank_url: std::path::PathBuf) -> bool {
+        todo!()
+    }
     //
     // /*! @method loadAudioFilesAtURLs:error:
     // 	@abstract configures the sampler by loading a set of audio files.
@@ -92,6 +111,13 @@ impl AVAudioUnitSamplerRef {
     // 		Default:   0
     //  */
     // @property (nonatomic) float     stereoPan;
+    pub fn stereo_pan(&self) -> f32 {
+        todo!()
+    }
+
+    pub fn set_stereo_pan(&self, value: f32) {
+        todo!()
+    }
     //
     // /*! @property masterGain
     // 	@abstract
@@ -100,6 +126,13 @@ impl AVAudioUnitSamplerRef {
     // 		Default: 0 db
     //  */
     // @property (nonatomic) float     masterGain;
+    pub fn master_gain(&self) -> f32 {
+        todo!()
+    }
+
+    pub fn set_master_gain(&self, value: f32) {
+        todo!()
+    }
     //
     // /*! @property globalTuning
     // 	@abstract
@@ -108,6 +141,13 @@ impl AVAudioUnitSamplerRef {
     // 		Default:   0
     //  */
     // @property (nonatomic) float     globalTuning;
+    pub fn global_tuning(&self) -> f32 {
+        todo!()
+    }
+
+    pub fn set_global_tuning(&self, value: f32) {
+        todo!()
+    }
     //
     //
     // @end
