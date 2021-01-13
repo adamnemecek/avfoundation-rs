@@ -67,7 +67,9 @@ impl AVAudioUnitMIDIInstrument {
             msg_send![alloc, initWithAudioComponentDescription: description]
         }
     }
+}
 
+impl AVAudioUnitMIDIInstrumentRef {
     // /*! @method startNote:withVelocity:onChannel:
     //  @abstract sends a MIDI Note On event to the instrument
     //  @param note
@@ -81,6 +83,15 @@ impl AVAudioUnitMIDIInstrument {
     // 	Range: 0 -> 15
     //  */
     // - (void)startNote:(uint8_t)note withVelocity:(uint8_t)velocity onChannel:(uint8_t)channel;
+    pub fn start_note(&self, note: u8, velocity: u8, channel: u8) {
+        unsafe {
+            msg_send![self,
+                startNote: note
+                withVelocity: velocity
+                onChannel: channel
+            ]
+        }
+    }
 
     // /*! @method stopNote:onChannel:
     //  @abstract sends a MIDI Note Off event to the instrument
@@ -93,6 +104,14 @@ impl AVAudioUnitMIDIInstrument {
 
     //  */
     // - (void)stopNote:(uint8_t)note onChannel:(uint8_t)channel;
+    pub fn stop_note(&self, note: u8, channel: u8) {
+        unsafe {
+            msg_send![self,
+                stopNote: note
+                onChannel: channel
+            ]
+        }
+    }
 
     // /*! @method sendController:withValue:onChannel:
     //  @abstract send a MIDI controller event to the instrument.
@@ -108,6 +127,15 @@ impl AVAudioUnitMIDIInstrument {
 
     //  */
     // - (void)sendController:(uint8_t)controller withValue:(uint8_t)value onChannel:(uint8_t)channel;
+    pub fn send_controller(&self, controller: u8, value: u8, channel: u8) {
+        unsafe {
+            msg_send![self,
+                sendController: controller
+                withValue: value
+                onChannel: channel
+            ]
+        }
+    }
 
     // /*! @method sendPitchBend:onChannel:
     //  @abstract sends MIDI Pitch Bend event to the instrument.
@@ -120,6 +148,14 @@ impl AVAudioUnitMIDIInstrument {
 
     //  */
     // - (void)sendPitchBend:(uint16_t)pitchbend onChannel:(uint8_t)channel;
+    pub fn send_pitch_bend(&self, pitchbend: u16, channel: u8) {
+        unsafe {
+            msg_send![self,
+                sendPitchBend: pitchbend
+                onChannel: channel
+            ]
+        }
+    }
 
     // /*! @method sendPressure:onChannel:
     //  @abstract sends MIDI channel pressure event to the instrument.
@@ -132,6 +168,14 @@ impl AVAudioUnitMIDIInstrument {
 
     //  */
     // - (void)sendPressure:(uint8_t)pressure onChannel:(uint8_t)channel;
+    pub fn send_pressure(&self, pressure: u8, channel: u8) {
+        unsafe {
+            msg_send![self,
+                sendPressure: pressure
+                onChannel: channel
+            ]
+        }
+    }
 
     // /*! @method sendPressureForKey:withValue:onChannel:
     //  @abstract sends MIDI Polyphonic key pressure event to the instrument
@@ -147,6 +191,15 @@ impl AVAudioUnitMIDIInstrument {
 
     //  */
     // - (void)sendPressureForKey:(uint8_t)key withValue:(uint8_t)value onChannel:(uint8_t)channel;
+    pub fn send_pressure_for_key(&self, key: u8, value: u8, channel: u8) {
+        unsafe {
+            msg_send![self,
+                sendPressureForKey: key
+                withValue: value
+                onChannel: channel
+            ]
+        }
+    }
 
     // /*! @method sendProgramChange:onChannel:
     //  @abstract sends MIDI Program Change event to the instrument
@@ -161,6 +214,14 @@ impl AVAudioUnitMIDIInstrument {
     //     controller messages (0 and 31). If none has been set, bank 0 will be used.
     //  */
     // - (void)sendProgramChange:(uint8_t)program onChannel:(uint8_t)channel;
+    pub fn send_program_change(&self, program: u8, channel: u8) {
+        unsafe {
+            msg_send![self,
+                sendProgramChange: program
+                onChannel: channel
+            ]
+        }
+    }
 
     // /*! @method sendProgramChange:bankMSB:bankLSB:onChannel:
     //  @abstract sends a MIDI Program Change and Bank Select events to the instrument
@@ -178,7 +239,22 @@ impl AVAudioUnitMIDIInstrument {
     // 	Range: 0 -> 15
     //  */
     // - (void)sendProgramChange:(uint8_t)program bankMSB:(uint8_t)bankMSB bankLSB:(uint8_t)bankLSB onChannel:(uint8_t)channel;
-
+    pub fn send_program_change_with_bank(
+        &self,
+        program: u8,
+        bank_msb: u8,
+        bank_lsb: u8,
+        channel: u8,
+    ) {
+        unsafe {
+            msg_send![self,
+                sendProgramChange: program
+                bankMSB: bank_msb
+                bankLSB: bank_lsb
+                onChannel: channel
+            ]
+        }
+    }
     // /*! @method sendMIDIEvent:data1:data2:
     //  @abstract sends a MIDI event which contains two data bytes to the instrument.
     //  @param midiStatus
@@ -189,6 +265,9 @@ impl AVAudioUnitMIDIInstrument {
     //     the second data byte of the MIDI event.
     //   */
     // - (void)sendMIDIEvent:(uint8_t)midiStatus data1:(uint8_t)data1 data2:(uint8_t)data2;
+    pub fn send_midi_event_2B(&self, midi_status: u8, data1: u8, data2: u8) {
+        unsafe { msg_send![self, sendMIDIEvent: midi_status data1: data1 data2: data2] }
+    }
 
     // /*! @method sendMIDIEvent:data1:
     //  @abstract sends a MIDI event which contains one data byte to the instrument.
@@ -199,6 +278,9 @@ impl AVAudioUnitMIDIInstrument {
     //  */
     // - (void)sendMIDIEvent:(uint8_t)midiStatus data1:(uint8_t)data1;
 
+    pub fn send_midi_event_1B(&self, midi_status: u8, data: u8) {
+        unsafe { msg_send![self, sendMIDIEvent: midi_status data1: data] }
+    }
     // /*! @method sendMIDISysExEvent:
     //  @abstract sends a MIDI System Exclusive event to the instrument.
     //  @param midiData
@@ -206,6 +288,17 @@ impl AVAudioUnitMIDIInstrument {
 
     //  */
     // - (void)sendMIDISysExEvent:(NSData *)midiData;
+    pub fn send_midi_sysex_event(&self, data: &[u8]) {
+        unsafe {
+            use cocoa_foundation::base::nil;
+            let data = cocoa_foundation::foundation::NSData::dataWithBytesNoCopy_length_(
+                nil,
+                data.as_ptr() as *const _,
+                data.len() as _,
+            );
+            let _: () = msg_send![self, sendMIDISysExEvent: data];
+        };
+    }
 
     // @end
 
