@@ -265,7 +265,7 @@ impl AVAudioUnitMIDIInstrumentRef {
     //     the second data byte of the MIDI event.
     //   */
     // - (void)sendMIDIEvent:(uint8_t)midiStatus data1:(uint8_t)data1 data2:(uint8_t)data2;
-    pub fn send_midi_event_2B(&self, midi_status: u8, data1: u8, data2: u8) {
+    pub fn send_midi_event_2b(&self, midi_status: u8, data1: u8, data2: u8) {
         unsafe { msg_send![self, sendMIDIEvent: midi_status data1: data1 data2: data2] }
     }
 
@@ -278,7 +278,7 @@ impl AVAudioUnitMIDIInstrumentRef {
     //  */
     // - (void)sendMIDIEvent:(uint8_t)midiStatus data1:(uint8_t)data1;
 
-    pub fn send_midi_event_1B(&self, midi_status: u8, data: u8) {
+    pub fn send_midi_event_1b(&self, midi_status: u8, data: u8) {
         unsafe { msg_send![self, sendMIDIEvent: midi_status data1: data] }
     }
     // /*! @method sendMIDISysExEvent:
