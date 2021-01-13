@@ -1,0 +1,20 @@
+use avfoundation::{
+    AVAudioUnitComponentManager,
+    ShouldStop,
+};
+
+fn main() {
+    let manager = AVAudioUnitComponentManager::shared();
+    let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
+
+    for c in components {
+        println!(
+            "manufacturer: {:?}, name: {:?}, description: {:?}, type_name {:?}",
+            c.manufacturer_name(),
+            c.name(),
+            c.audio_component_description(),
+            c.type_name(),
+        );
+        println!("--");
+    }
+}
