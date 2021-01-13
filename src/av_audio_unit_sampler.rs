@@ -55,7 +55,8 @@ impl AVAudioUnitSamplerRef {
         use cocoa_foundation::base::{YES, NO, nil};
         let url = crate::path_to_url(bank_url);
         unsafe {
-            match msg_send![self, loadSoundBankInstrumentAtURL: url
+            match msg_send![self,
+                loadSoundBankInstrumentAtURL: url
                 program: program
                 bankMSB: bank_msb
                 bankLSB: bank_lsb
@@ -85,8 +86,19 @@ impl AVAudioUnitSamplerRef {
     //
     //  */
     // - (BOOL)loadInstrumentAtURL:(NSURL *)instrumentURL error:(NSError **)outError;
-    pub fn load_instrument_at_url(&self, bank_url: std::path::PathBuf) -> bool {
-        todo!()
+    pub fn load_instrument_at_url(&self, instrument_url: std::path::PathBuf) -> bool {
+        use cocoa_foundation::base::{YES, NO, nil};
+        let url = crate::path_to_url(instrument_url);
+        unsafe {
+            match msg_send![self,
+                loadInstrumentAtURL: url
+                error: nil
+             ] {
+                YES => true,
+                NO => false,
+                _ => unimplemented!(),
+             }
+        }
     }
     //
     // /*! @method loadAudioFilesAtURLs:error:
@@ -104,6 +116,9 @@ impl AVAudioUnitSamplerRef {
     //  */
     // - (BOOL)loadAudioFilesAtURLs:(NSArray<NSURL *> *)audioFiles error:(NSError **)outError;
     //
+    pub fn load_audio_files_at_url(&self, ) -> bool {
+        todo!()
+    }
     // /*! @property stereoPan
     // 	@abstract
     // 		adjusts the pan for all the notes played.
@@ -112,11 +127,11 @@ impl AVAudioUnitSamplerRef {
     //  */
     // @property (nonatomic) float     stereoPan;
     pub fn stereo_pan(&self) -> f32 {
-        todo!()
+        unsafe { msg_send![self, stereoPan] }
     }
 
     pub fn set_stereo_pan(&self, value: f32) {
-        todo!()
+        unsafe { msg_send![self, setStereoPan: value] }
     }
     //
     // /*! @property masterGain
@@ -127,11 +142,11 @@ impl AVAudioUnitSamplerRef {
     //  */
     // @property (nonatomic) float     masterGain;
     pub fn master_gain(&self) -> f32 {
-        todo!()
+        unsafe { msg_send![self, masterGain] }
     }
 
     pub fn set_master_gain(&self, value: f32) {
-        todo!()
+        unsafe { msg_send![self, setMasterGain: value] }
     }
     //
     // /*! @property globalTuning
@@ -142,11 +157,11 @@ impl AVAudioUnitSamplerRef {
     //  */
     // @property (nonatomic) float     globalTuning;
     pub fn global_tuning(&self) -> f32 {
-        todo!()
+        unsafe { msg_send![self, globalTuning] }
     }
 
     pub fn set_global_tuning(&self, value: f32) {
-        todo!()
+        unsafe { msg_send![self, setGlobalTuning: value] }
     }
     //
     //
