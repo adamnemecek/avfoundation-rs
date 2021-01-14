@@ -72,9 +72,8 @@ impl AVAudioUnitSamplerRef {
             NO,
             YES,
         };
-        println!("here");
         let url = crate::path_to_url(bank_url);
-        println!("here");
+
         unsafe {
             match msg_send![self,
                loadSoundBankInstrumentAtURL: url

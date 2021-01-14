@@ -45,7 +45,14 @@ impl Instrument {
 }
 
 fn main() {
+    use rand::Rng;
     let instrument = Instrument::new();
+    let mut rng = rand::thread_rng();
 
-    instrument.play_note(100, 50);
+    for i in 0..100 {
+        std::thread::sleep(std::time::Duration::from_millis(20));
+        let pitch = rng.gen_range(0..127);
+        instrument.play_note(pitch, 100);
+    }
+    std::thread::sleep(std::time::Duration::from_secs(1));
 }
