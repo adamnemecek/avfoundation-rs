@@ -13,22 +13,23 @@ pub struct Instrument {
 
 impl Instrument {
     pub fn new() -> Self {
-        println!("start");
+        // println!("start");
         let engine = AVAudioEngine::new();
 
-        println!("2");
+        // println!("2");
         let sampler = AVAudioUnitSampler::new();
-        println!("start");
+        // println!("start");
         // let node = AVAudioNode::new();
-        // engine.attach_node(&node);
-        engine.attach_node(Some(&sampler));
-        println!("after attach");
+        // let output = engine.output_node();
+        // println!("3");
+        engine.attach_node(&sampler);
+        // println!("after attach");
         let output = engine.output_node();
-        println!("after output");
-        engine.connect_nodes(Some(&sampler), output, None);
-        println!("after connect");
+        // println!("after output");
+        engine.connect_nodes(&sampler, output, None);
+        // println!("after connect");
         engine.start_and_return_error();
-        println!("after start");
+        // println!("after start");
         let bank = 121;
         let url = std::path::Path::new("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
 

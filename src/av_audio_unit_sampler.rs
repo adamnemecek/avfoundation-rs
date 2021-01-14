@@ -1,4 +1,4 @@
-use crate::AVAudioUnitMIDIInstrument;
+use crate::AVAudioUnitMIDIInstrumentRef;
 //
 // /*
 // 	File:		AVAudioUnitSampler.h
@@ -30,7 +30,7 @@ foreign_obj_type! {
     type CType = AVAudioUnitSamplerFFI;
     pub struct AVAudioUnitSampler;
     pub struct AVAudioUnitSamplerRef;
-    type ParentType = AVAudioUnitMIDIInstrument;
+    type ParentType = AVAudioUnitMIDIInstrumentRef;
 }
 
 impl AVAudioUnitSampler {

@@ -201,7 +201,7 @@ impl AVAudioEngineRef {
     ///    [_player release];
     ///    ```
 
-    pub fn attach_node(&self, node: Option<&AVAudioNodeRef>) {
+    pub fn attach_node(&self, node: &AVAudioNodeRef) {
         unsafe { msg_send![self, attachNode: node] }
     }
 
@@ -261,7 +261,7 @@ impl AVAudioEngineRef {
     ///    in which case the destination is the mixer's nextAvailableInputBus.
 
     // - (void)connect:(AVAudioNode *)node1 to:(AVAudioNode *)node2 format:(AVAudioFormat * __nullable)format;
-    pub fn connect_nodes(&self, node1: Option<&AVAudioNodeRef>, node2: Option<&AVAudioNodeRef>, format: Option<&AVAudioFormatRef>) {
+    pub fn connect_nodes(&self, node1: &AVAudioNodeRef, node2: &crate::AVAudioOutputNodeRef, format: Option<&AVAudioFormatRef>) {
         // let format = format.map
         use cocoa_foundation::base::nil;
         assert!(format.is_none());
@@ -470,7 +470,7 @@ impl AVAudioEngineRef {
     /// 	`enableManualRenderingMode:format:maximumFrameCount:error:`.
     /// */
     // todo: can this ever be nil?
-    pub fn output_node(&self) -> Option<&AVAudioOutputNodeRef> {
+    pub fn output_node(&self) -> &AVAudioOutputNodeRef {
         unsafe { msg_send![self, outputNode] }
     }
 
