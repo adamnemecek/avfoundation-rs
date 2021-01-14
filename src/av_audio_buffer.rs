@@ -164,6 +164,37 @@ impl AVAudioPCMBufferRef {
     pub fn int32_channel_data(&self) -> *const i32 {
         unsafe { msg_send![self, int32ChannelData] }
     }
+
+    // utility functions
+    pub fn as_f16_slice(&self) -> &[i16] {
+        let len = self.frame_length();
+        unsafe { std::slice::from_raw_parts(self.int16_channel_data(), len as _) }
+    }
+
+    pub fn as_f16_slice_mut(&self) -> &mut [i16] {
+        let len = self.frame_length();
+        unsafe { std::slice::from_raw_parts_mut(self.int16_channel_data() as *mut _, len as _) }
+    }
+
+    pub fn as_f32_slice(&self) -> &[f32] {
+        let len = self.frame_length();
+        unsafe { std::slice::from_raw_parts(self.float_channel_data(), len as _) }
+    }
+
+    pub fn as_f32_slice_mut(&self) -> &mut [f32] {
+        let len = self.frame_length();
+        unsafe { std::slice::from_raw_parts_mut(self.float_channel_data() as *mut _, len as _) }
+    }
+
+    pub fn as_i32_slice(&self) -> &[i32] {
+        let len = self.frame_length();
+        unsafe { std::slice::from_raw_parts(self.int32_channel_data(), len as _) }
+    }
+
+    pub fn as_i32_slice_mut(&self) -> &mut [i32] {
+        let len = self.frame_length();
+        unsafe { std::slice::from_raw_parts_mut(self.int32_channel_data() as *mut _, len as _) }
+    }
 }
 
 /// @class AVAudioCompressedBuffer

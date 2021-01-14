@@ -261,12 +261,17 @@ impl AVAudioEngineRef {
     ///    in which case the destination is the mixer's nextAvailableInputBus.
 
     // - (void)connect:(AVAudioNode *)node1 to:(AVAudioNode *)node2 format:(AVAudioFormat * __nullable)format;
-    pub fn connect_nodes(&self, node1: &AVAudioNodeRef, node2: &AVAudioNodeRef, format: Option<&AVAudioFormatRef>) {
+    pub fn connect_nodes(
+        &self,
+        node1: &AVAudioNodeRef,
+        node2: &AVAudioNodeRef,
+        format: Option<&AVAudioFormatRef>,
+    ) {
         // let format = format.map
         use cocoa_foundation::base::nil;
         assert!(format.is_none());
         unsafe {
-            let _:() = msg_send![self, connect: node1 to: node2 format: nil];
+            let _: () = msg_send![self, connect: node1 to: node2 format: nil];
         }
     }
 
