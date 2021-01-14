@@ -33,6 +33,15 @@ foreign_obj_type! {
     type ParentType = AVAudioUnitMIDIInstrument;
 }
 
+impl AVAudioUnitSampler {
+    pub fn new() -> Self {
+        unsafe {
+            let class = class!(AVAudioUnitSampler);
+            msg_send![class, new]
+        }
+    }
+}
+
 impl AVAudioUnitSamplerRef {
     // /*! @method loadSoundBankInstrumentAtURL:program:bankMSB:bankLSB:error:
     // 	@abstract loads a specific instrument from the specified sound bank
@@ -51,21 +60,33 @@ impl AVAudioUnitSamplerRef {
     //  		This method reads from file and allocates memory, so it should not be called on a real time thread.
     //  */
     // - (BOOL)loadSoundBankInstrumentAtURL:(NSURL *)bankURL program:(uint8_t)program bankMSB:(uint8_t)bankMSB bankLSB:(uint8_t)bankLSB error:(NSError **)outError;
-    pub fn load_bank_instrument_at_url(&self, bank_url: std::path::PathBuf,  program: u8, bank_msb: u8, bank_lsb: u8) -> bool {
-        use cocoa_foundation::base::{YES, NO, nil};
+    pub fn load_bank_instrument_at_url(
+        &self,
+        bank_url: std::path::PathBuf,
+        program: u8,
+        bank_msb: u8,
+        bank_lsb: u8,
+    ) -> bool {
+        use cocoa_foundation::base::{
+            nil,
+            NO,
+            YES,
+        };
+        println!("here");
         let url = crate::path_to_url(bank_url);
+        println!("here");
         unsafe {
             match msg_send![self,
-                loadSoundBankInstrumentAtURL: url
-                program: program
-                bankMSB: bank_msb
-                bankLSB: bank_lsb
-                error: nil
-             ] {
+               loadSoundBankInstrumentAtURL: url
+               program: program
+               bankMSB: bank_msb
+               bankLSB: bank_lsb
+               error: nil
+            ] {
                 YES => true,
                 NO => false,
                 _ => unimplemented!(),
-             }
+            }
         }
     }
     //
@@ -87,17 +108,21 @@ impl AVAudioUnitSamplerRef {
     //  */
     // - (BOOL)loadInstrumentAtURL:(NSURL *)instrumentURL error:(NSError **)outError;
     pub fn load_instrument_at_url(&self, instrument_url: std::path::PathBuf) -> bool {
-        use cocoa_foundation::base::{YES, NO, nil};
+        use cocoa_foundation::base::{
+            nil,
+            NO,
+            YES,
+        };
         let url = crate::path_to_url(instrument_url);
         unsafe {
             match msg_send![self,
-                loadInstrumentAtURL: url
-                error: nil
-             ] {
+               loadInstrumentAtURL: url
+               error: nil
+            ] {
                 YES => true,
                 NO => false,
                 _ => unimplemented!(),
-             }
+            }
         }
     }
     //
@@ -116,7 +141,7 @@ impl AVAudioUnitSamplerRef {
     //  */
     // - (BOOL)loadAudioFilesAtURLs:(NSArray<NSURL *> *)audioFiles error:(NSError **)outError;
     //
-    pub fn load_audio_files_at_url(&self, ) -> bool {
+    pub fn load_audio_files_at_url(&self) -> bool {
         todo!()
     }
     // /*! @property stereoPan

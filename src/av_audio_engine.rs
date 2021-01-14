@@ -261,11 +261,14 @@ impl AVAudioEngineRef {
     ///    in which case the destination is the mixer's nextAvailableInputBus.
 
     // - (void)connect:(AVAudioNode *)node1 to:(AVAudioNode *)node2 format:(AVAudioFormat * __nullable)format;
-    // pub fn connect(&self, node1: &AVAudioNodeRef, to node2: &AVAudioNodeRef, format: AVAudioFormat?) {
-    //    unsafe {
-    //      msg_send![self, connect]
-    //    }
-    //}
+    pub fn connect_nodes(&self, node1: &AVAudioNodeRef, node2: &AVAudioNodeRef, format: Option<&AVAudioFormatRef>) {
+        // let format = format.map
+        use cocoa_foundation::base::nil;
+        assert!(format.is_none());
+        unsafe {
+            let _:() = msg_send![self, connect: node1 to: node2 format: nil];
+        }
+    }
 
     ///    @method connect:toConnectionPoints:fromBus:format:
     ///    @abstract
@@ -341,8 +344,10 @@ impl AVAudioEngineRef {
 
     // throws
     pub fn start_and_return_error(&self) -> bool {
+        use cocoa_foundation::base::nil;
         unsafe {
-            match msg_send![self, startAndReturnError] {
+            let mut error = nil;
+            match msg_send![self, startAndReturnError: &error] {
                 YES => true,
                 NO => false,
                 _ => unreachable!(),
@@ -464,7 +469,8 @@ impl AVAudioEngineRef {
     /// 	render format of the engine. It can be changed through
     /// 	`enableManualRenderingMode:format:maximumFrameCount:error:`.
     /// */
-    pub fn output_node(&self) -> Option<&AVAudioOutputNodeRef> {
+    // todo: can this ever be nil?
+    pub fn output_node(&self) -> &AVAudioOutputNodeRef {
         unsafe { msg_send![self, outputNode] }
     }
 
@@ -487,7 +493,7 @@ impl AVAudioEngineRef {
     /// 	the engine while it is rendering (see
     /// 	`AVAudioInputNode(setManualRenderingInputPCMFormat:inputBlock:)`.
     /// */
-    pub fn input_node(&self) -> Option<&AVAudioInputNodeRef> {
+    pub fn input_node(&self) -> &AVAudioInputNodeRef {
         unsafe { msg_send![self, inputNode] }
     }
 
