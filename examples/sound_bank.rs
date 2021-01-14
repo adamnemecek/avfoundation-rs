@@ -3,6 +3,7 @@ use avfoundation::{
     // ShouldStop,
     // AVAudioUnitComponentManager,
     AVAudioUnitSampler,
+    AVAudioNode,
 };
 
 pub struct Instrument {
@@ -14,12 +15,17 @@ impl Instrument {
     pub fn new() -> Self {
         println!("start");
         let engine = AVAudioEngine::new();
+
         println!("2");
         let sampler = AVAudioUnitSampler::new();
         println!("start");
-        engine.attach_node(&sampler);
+        // let node = AVAudioNode::new();
+        // engine.attach_node(&node);
+        engine.attach_node(Some(&sampler));
         println!("after attach");
-        engine.connect_nodes(&sampler, engine.output_node(), None);
+        let output = engine.output_node();
+        println!("after output");
+        engine.connect_nodes(Some(&sampler), output, None);
         println!("after connect");
         engine.start_and_return_error();
         println!("after start");
