@@ -9,6 +9,7 @@ use crate::{
     AVAudioNodeRef,
     AVAudioOutputNodeRef,
     AVAudioPCMBuffer,
+    AVAudioFramePosition,
 };
 
 pub struct MusicSequenceRef {}
@@ -498,12 +499,13 @@ impl AVAudioEngineRef {
     /// 	the engine while it is rendering (see
     /// 	`AVAudioInputNode(setManualRenderingInputPCMFormat:inputBlock:)`.
     /// */
+
+    //     @available(OSX 10.10, *)
+    // open var inputNode: AVAudioInputNode { get }
     pub fn input_node(&self) -> &AVAudioInputNodeRef {
         unsafe { msg_send![self, inputNode] }
     }
 
-    //     @available(OSX 10.10, *)
-    // open var inputNode: AVAudioInputNode { get }
     // open var mainMixerNode: AVAudioMixerNode { get }
     pub fn main_mixer_node(&self) -> Option<&AVAudioMixerNodeRef> {
         unsafe { msg_send![self, mainMixerNode] }
@@ -565,6 +567,7 @@ impl AVAudioEngineRef {
     // @available(OSX 10.13, *)
     // open var manualRenderingBlock: AVAudioEngineManualRenderingBlock { get }
 
+
     // @available(OSX 10.13, *)
     // open var isInManualRenderingMode: Bool { get }
     pub fn is_in_manual_rendering_mode(&self) -> bool {
@@ -595,9 +598,19 @@ impl AVAudioEngineRef {
 
     // @available(OSX 10.13, *)
     // open var manualRenderingMaximumFrameCount: AVAudioFrameCount { get }
+    pub fn manual_rendering_maximum_frame_count(&self) -> AVAudioFrameCount {
+        unsafe {
+            msg_send![self, manualRenderingMaximumFrameCount]
+        }
+    }
 
     // @available(OSX 10.13, *)
     // open var manualRenderingSampleTime: AVAudioFramePosition { get }
+    pub fn manual_rendering_sample_time(&self) -> AVAudioFramePosition {
+        unsafe {
+            msg_send![self, manualRenderingSampleTime]
+        }
+    }
 
     // pub fn connect_midi(&self, sourceNode: &AVAudioNodeRef, to destinationNode: &AVAudioNodeRef, format: AVAudioFormat?, block tapBlock: AUMIDIOutputEventBlock? = nil) {
     //    unsafe {
