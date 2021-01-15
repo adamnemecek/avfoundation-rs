@@ -256,7 +256,14 @@ impl AVAudioEngineRef {
         format: Option<&AVAudioFormatRef>,
     ) {
         unsafe {
-            msg_send![self, connect: from to: to fromBus: from_bus toBus: to_bus format: format]
+            msg_send![
+                self,
+                connect: from
+                to: to
+                fromBus: from_bus
+                toBus: to_bus
+                format: format
+            ]
         }
     }
 
