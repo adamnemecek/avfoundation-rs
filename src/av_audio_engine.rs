@@ -3,13 +3,16 @@ use crate::{
     AVAudioConnectionPointRef,
     AVAudioFormatRef,
     AVAudioFrameCount,
+    AVAudioFramePosition,
     AVAudioInputNodeRef,
     AVAudioMixerNodeRef,
     AVAudioNodeBus,
     AVAudioNodeRef,
     AVAudioOutputNodeRef,
     AVAudioPCMBuffer,
-    AVAudioFramePosition,
+    AudioBufferList,
+    AudioBufferListRef,
+    OSStatus,
 };
 
 pub struct MusicSequenceRef {}
@@ -135,7 +138,11 @@ pub enum AudioEngineManualRenderingMode {
 ///    and non-realtime threads and retry calling `AVAudioEngineManualRenderingBlock`.
 
 // API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
-pub type AVAudioEngineManualRenderingBlock = block::Block<(), ()>;
+// typedef AVAudioEngineManualRenderingStatus (^AVAudioEngineManualRenderingBlock)(AVAudioFrameCount numberOfFrames, AudioBufferList *outBuffer, OSStatus *outError);
+pub type AVAudioEngineManualRenderingBlock<'a> = block::Block<
+    (AVAudioFrameCount, &'a AudioBufferListRef, OSStatus),
+    AVAudioEngineManualRenderingStatus,
+>;
 
 ///    @class AVAudioEngine
 ///
@@ -567,7 +574,6 @@ impl AVAudioEngineRef {
     // @available(OSX 10.13, *)
     // open var manualRenderingBlock: AVAudioEngineManualRenderingBlock { get }
 
-
     // @available(OSX 10.13, *)
     // open var isInManualRenderingMode: Bool { get }
     pub fn is_in_manual_rendering_mode(&self) -> bool {
@@ -599,17 +605,13 @@ impl AVAudioEngineRef {
     // @available(OSX 10.13, *)
     // open var manualRenderingMaximumFrameCount: AVAudioFrameCount { get }
     pub fn manual_rendering_maximum_frame_count(&self) -> AVAudioFrameCount {
-        unsafe {
-            msg_send![self, manualRenderingMaximumFrameCount]
-        }
+        unsafe { msg_send![self, manualRenderingMaximumFrameCount] }
     }
 
     // @available(OSX 10.13, *)
     // open var manualRenderingSampleTime: AVAudioFramePosition { get }
     pub fn manual_rendering_sample_time(&self) -> AVAudioFramePosition {
-        unsafe {
-            msg_send![self, manualRenderingSampleTime]
-        }
+        unsafe { msg_send![self, manualRenderingSampleTime] }
     }
 
     // pub fn connect_midi(&self, sourceNode: &AVAudioNodeRef, to destinationNode: &AVAudioNodeRef, format: AVAudioFormat?, block tapBlock: AUMIDIOutputEventBlock? = nil) {

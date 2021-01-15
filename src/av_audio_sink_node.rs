@@ -1,6 +1,10 @@
 pub struct AudioTimeStamp {}
 pub struct OSStatus {}
 pub struct AudioBufferList {}
+
+// pub type OSStatus = u32;
+
+pub struct AudioBufferListRef {}
 use crate::{
     AVAudioFrameCount,
     AVAudioNodeRef,
