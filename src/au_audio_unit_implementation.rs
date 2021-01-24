@@ -1,4 +1,11 @@
-
+use crate::{
+    AUEventSampleTime,
+    AudioBufferList,
+    AUAudioFrameCount,
+    AUAudioUnitStatus,
+    AudioUnitRenderActionFlags,
+    AudioTimeStamp,
+};
 // #if (defined(__USE_PUBLIC_HEADERS__) && __USE_PUBLIC_HEADERS__) || (defined(USE_AUDIOTOOLBOX_PUBLIC_HEADERS) && USE_AUDIOTOOLBOX_PUBLIC_HEADERS) || !__has_include(<AudioToolboxCore/AUAudioUnitImplementation.h>)
 // /*!
 // 	@file		AUAudioUnitImplementation.h
@@ -120,6 +127,17 @@
 // 	AURenderEventMIDISysEx		= 9
 // };
 
+// todo
+#[repr(u8)]
+// #[repr(u8)]
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum AURenderEventType {
+    Parameter = 1,
+    ParameterRamp = 2,
+    MIDI = 8,
+    MIDISysEx = 9
+}
+
 // #pragma pack(4)
 // ///	Common header for an AURenderEvent.
 // typedef struct AURenderEventHeader {
@@ -128,6 +146,14 @@
 // 	AURenderEventType		eventType;			//!< The type of the event.
 // 	uint8_t					reserved;			//!< Must be 0.
 // } AURenderEventHeader;
+
+#[derive(Clone, Copy)]
+pub struct AURenderEventHeader {
+    next: *const AURenderEvent,
+    event_sample_time: AUEventSampleTime,
+    event_type: AURenderEventType,
+    reserved: u8,
+}
 
 // /// Describes a scheduled parameter change.
 // typedef struct AUParameterEvent {
@@ -143,6 +169,10 @@
 // 												///	end of the ramp; for a non-ramped event,
 // 												///	the new value.
 // } AUParameterEvent;
+#[derive(Clone, Copy)]
+struct AUParameterEvent {
+    
+}
 
 // /// Describes a single scheduled MIDI event.
 // typedef struct AUMIDIEvent {
@@ -157,6 +187,17 @@
 // 	uint8_t					data[3];			//!< The bytes of the MIDI event. Running status will not be used.
 // } AUMIDIEvent;
 
+#[derive(Clone, Copy)]
+pub struct AUMIDIEvent {
+
+    event_sample_time: AUEventSampleTime,
+    event_type: AURenderEventType,
+    reserved: u8,
+    length: u16,
+    cable: u8,
+    data: [u8; 3]
+}
+
 // /*!	@brief	A union of the various specific render event types.
 // 	@discussion
 // 		Determine which variant to use via head.eventType. AURenderEventParameter and
@@ -168,6 +209,11 @@
 // 	AUParameterEvent		parameter;
 // 	AUMIDIEvent				MIDI;
 // } AURenderEvent;
+union AURenderEvent {
+    head: AURenderEventHeader,
+    parameter: AUParameterEvent,
+    MIDI: AUMIDIEvent,
+}
 // #pragma pack()
 
 // /*!	@brief	Block to render the audio unit.
@@ -189,6 +235,17 @@
 // 	AudioBufferList *										outputData,
 // 	const AURenderEvent *__nullable 						realtimeEventListHead,
 // 	AURenderPullInputBlock __nullable __unsafe_unretained	pullInputBlock);
+use cocoa_foundation::foundation::NSInteger;
+pub type AUInternalRenderBlock = block::Block<
+    (
+        *const AudioUnitRenderActionFlags, 
+        *const AudioTimeStamp,
+        AUAudioFrameCount, // framecount
+        NSInteger, // output bus number
+        *const AudioBufferList,
+    ),
+    (AUAudioUnitStatus),
+>;
 
 // // =================================================================================================
 

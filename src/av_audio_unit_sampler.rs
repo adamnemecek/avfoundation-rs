@@ -114,15 +114,17 @@ impl AVAudioUnitSamplerRef {
         };
         let url = crate::path_to_url(instrument_url);
         unsafe {
+            let mut err = nil;
             match msg_send![self,
                loadInstrumentAtURL: url
-               error: nil
+               error: &err
             ] {
                 YES => true,
                 NO => false,
                 _ => unimplemented!(),
-            }
+            };
         }
+        todo!();
     }
     //
     // /*! @method loadAudioFilesAtURLs:error:

@@ -55,7 +55,7 @@ impl AUAudioUnitRef {
 // 	@brief		A result code returned from an audio unit's render function.
 // */
 // typedef OSStatus AUAudioUnitStatus;
-type AUAudioUnitStatus = OSStatus;
+pub type AUAudioUnitStatus = OSStatus;
 
 // /*!	@typedef	AUEventSampleTime
 // 	@brief		Expresses time as a sample count.
@@ -151,7 +151,7 @@ pub type AURenderPullInputBlock = block::Block<
         NSInteger,
         *const AudioBufferList,
     ),
-    (AUAudioUnitStatus),
+    AUAudioUnitStatus,
 >;
 
 // /*!	@typedef	AURenderBlock
