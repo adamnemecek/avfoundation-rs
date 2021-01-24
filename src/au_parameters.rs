@@ -417,7 +417,7 @@ impl AUParameterRef {
     ///        Bridged to the v2 function AudioUnitSetParameter.
 
     // - (void)setValue:(AUValue)value originator:(AUParameterObserverToken __nullable)originator atHostTime:(uint64_t)hostTime eventType:(AUParameterAutomationEventType)eventType API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
-    pub fn set_value_at(&self) {
+    pub fn set_value_at(&self, originator: AUParameterObserverToken, at: u64, event: AUParameterAutomationEventType) {
         todo!()
     }
 
@@ -428,7 +428,7 @@ impl AUParameterRef {
     ///        kAudioUnitParameterFlag_ValuesHaveStrings.
 
     // - (NSString *)stringFromValue:(const AUValue *__nullable)value;
-    pub fn string_for_value(&self) {
+    pub fn string_for_value(&self, value: *const AUValue) {
         todo!()
     }
 
