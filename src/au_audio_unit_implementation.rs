@@ -1,10 +1,10 @@
 use crate::{
-    AUEventSampleTime,
-    AudioBufferList,
     AUAudioFrameCount,
     AUAudioUnitStatus,
-    AudioUnitRenderActionFlags,
+    AUEventSampleTime,
+    AudioBufferList,
     AudioTimeStamp,
+    AudioUnitRenderActionFlags,
 };
 // #if (defined(__USE_PUBLIC_HEADERS__) && __USE_PUBLIC_HEADERS__) || (defined(USE_AUDIOTOOLBOX_PUBLIC_HEADERS) && USE_AUDIOTOOLBOX_PUBLIC_HEADERS) || !__has_include(<AudioToolboxCore/AUAudioUnitImplementation.h>)
 // /*!
@@ -14,7 +14,6 @@ use crate::{
 
 // 	@brief		Additional AUAudioUnit interfaces specific to subclass implementations.
 // */
-
 
 // /*!
 // @page AUExtensionPackaging Audio Unit Extension Packaging
@@ -104,7 +103,6 @@ use crate::{
 // registration "wins", though if an app attempts to open it synchronously, with
 // AudioComponentInstanceNew, then the system will fall back to the version 2 implementation.
 // */
-
 // #ifndef AudioToolbox_AUAudioUnitImplementation_h
 // #define AudioToolbox_AUAudioUnitImplementation_h
 // #ifdef __OBJC2__
@@ -135,7 +133,7 @@ pub enum AURenderEventType {
     Parameter = 1,
     ParameterRamp = 2,
     MIDI = 8,
-    MIDISysEx = 9
+    MIDISysEx = 9,
 }
 
 // #pragma pack(4)
@@ -170,9 +168,7 @@ pub struct AURenderEventHeader {
 // 												///	the new value.
 // } AUParameterEvent;
 #[derive(Clone, Copy)]
-struct AUParameterEvent {
-    
-}
+struct AUParameterEvent {}
 
 // /// Describes a single scheduled MIDI event.
 // typedef struct AUMIDIEvent {
@@ -189,13 +185,12 @@ struct AUParameterEvent {
 
 #[derive(Clone, Copy)]
 pub struct AUMIDIEvent {
-
     event_sample_time: AUEventSampleTime,
     event_type: AURenderEventType,
     reserved: u8,
     length: u16,
     cable: u8,
-    data: [u8; 3]
+    data: [u8; 3],
 }
 
 // /*!	@brief	A union of the various specific render event types.
@@ -238,10 +233,10 @@ union AURenderEvent {
 use cocoa_foundation::foundation::NSInteger;
 pub type AUInternalRenderBlock = block::Block<
     (
-        *const AudioUnitRenderActionFlags, 
+        *const AudioUnitRenderActionFlags,
         *const AudioTimeStamp,
         AUAudioFrameCount, // framecount
-        NSInteger, // output bus number
+        NSInteger,         // output bus number
         *const AudioBufferList,
     ),
     (AUAudioUnitStatus),
@@ -351,7 +346,6 @@ pub type AUInternalRenderBlock = block::Block<
 // @property (nonatomic) AUAudioChannelCount maximumChannelCount;
 
 // @end
-
 
 // // =================================================================================================
 
@@ -497,7 +491,6 @@ pub type AUInternalRenderBlock = block::Block<
 // */
 // - (nullable AUAudioUnit *)createAudioUnitWithComponentDescription:(AudioComponentDescription)desc error:(NSError **)error;
 // @end
-
 
 // NS_ASSUME_NONNULL_END
 

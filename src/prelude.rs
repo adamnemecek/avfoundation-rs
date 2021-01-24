@@ -1,1 +1,4 @@
-pub use crate::{AudioUnitParameterID, AUEventSampleTime};
+pub use crate::{
+    AUEventSampleTime,
+    AudioUnitParameterID,
+};

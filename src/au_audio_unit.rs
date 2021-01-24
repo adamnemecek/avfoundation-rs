@@ -3,19 +3,6 @@ use crate::{
     AudioComponentDescription,
     OSStatus,
 };
-pub enum AUAudioUnitFFI {}
-
-foreign_obj_type! {
-    type CType = AUAudioUnitFFI;
-    pub struct AUAudioUnit;
-    pub struct AUAudioUnitRef;
-}
-
-impl AUAudioUnitRef {
-    pub fn component_description(&self) -> AudioComponentDescription {
-        unsafe { msg_send![self, componentDescription] }
-    }
-}
 
 // #if (defined(__USE_PUBLIC_HEADERS__) && __USE_PUBLIC_HEADERS__) || (defined(USE_AUDIOTOOLBOX_PUBLIC_HEADERS) && USE_AUDIOTOOLBOX_PUBLIC_HEADERS) || !__has_include(<AudioToolboxCore/AUAudioUnit.h>)
 // /*!
@@ -139,7 +126,10 @@ pub enum AUAudioUnitBusType {
 // 		to be invalid.
 // */
 // typedef AUAudioUnitStatus (^AURenderPullInputBlock)(AudioUnitRenderActionFlags *actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger inputBusNumber, AudioBufferList *inputData);
-use cocoa_foundation::foundation::NSInteger;
+use cocoa_foundation::foundation::{
+    NSInteger,
+    NSIntegerMax,
+};
 pub struct AudioTimeStamp {}
 
 pub struct AudioUnitRenderActionFlags {}
@@ -193,9 +183,9 @@ pub type AURenderBlock = block::Block<
         AUAudioFrameCount,
         NSInteger,
         *const AudioBufferList,
-        AURenderPullInputBlock,
+        AURenderPullInputBlock, /* nullable*/
     ),
-    (AUAudioUnitStatus),
+    AUAudioUnitStatus,
 >;
 
 // /*!	@typedef	AURenderObserver
@@ -208,7 +198,15 @@ pub type AURenderBlock = block::Block<
 // 		The parameters are identical to those of AURenderBlock.
 // */
 // typedef void (^AURenderObserver)(AudioUnitRenderActionFlags actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger outputBusNumber);
-pub type AURenderObserver = block::Block<(AudioUnitRenderActionFlags, *const AudioTimeStamp, AUAudioFrameCount, NSInteger), ()>;
+pub type AURenderObserver = block::Block<
+    (
+        AudioUnitRenderActionFlags,
+        *const AudioTimeStamp,
+        AUAudioFrameCount,
+        NSInteger,
+    ),
+    (),
+>;
 
 // /*!	@typedef	AUScheduleParameterBlock
 // 	@brief		Block to schedule parameter changes.
@@ -229,7 +227,15 @@ pub type AURenderObserver = block::Block<(AudioUnitRenderActionFlags, *const Aud
 // 		of the scheduled ramp.
 // */
 // typedef void (^AUScheduleParameterBlock)(AUEventSampleTime eventSampleTime, AUAudioFrameCount rampDurationSampleFrames, AUParameterAddress parameterAddress, AUValue value);
-pub type AUScheduleParameterBlock = block::Block<(AUEventSampleTime, *const AudioTimeStamp, AUAudioFrameCount, NSInteger), ()>;
+pub type AUScheduleParameterBlock = block::Block<
+    (
+        AUEventSampleTime,
+        *const AudioTimeStamp,
+        AUAudioFrameCount,
+        NSInteger,
+    ),
+    (),
+>;
 
 // /*!	@typedef	AUScheduleMIDIEventBlock
 // 	@brief		Block to schedule MIDI events.
@@ -247,6 +253,7 @@ pub type AUScheduleParameterBlock = block::Block<(AUEventSampleTime, *const Audi
 // 		in the chunk. Also, running status is not allowed.
 // */
 // typedef void (^AUScheduleMIDIEventBlock)(AUEventSampleTime eventSampleTime, uint8_t cable, NSInteger length, const uint8_t *midiBytes);
+pub type AUScheduleMIDIEventBlock = block::Block<(AUEventSampleTime, u8, NSInteger, *const u8), ()>;
 
 // /*!	@typedef	AUMIDIOutputEventBlock
 // 	@brief		Block to provide MIDI output events to the host.
@@ -261,6 +268,7 @@ pub type AUScheduleParameterBlock = block::Block<(AUEventSampleTime, *const Audi
 // 		in the chunk.
 // */
 // typedef OSStatus (^AUMIDIOutputEventBlock)(AUEventSampleTime eventSampleTime, uint8_t cable, NSInteger length, const uint8_t *midiBytes);
+pub type AUMIDIOutputEventBlock = block::Block<(AUEventSampleTime, u8, NSInteger, *const u8), OSStatus>;
 
 // /*!	@typedef	AUHostMusicalContextBlock
 // 	@brief		Block by which hosts provide musical tempo, time signature, and beat position.
@@ -288,6 +296,18 @@ pub type AUScheduleParameterBlock = block::Block<(AUEventSampleTime, *const Audi
 // 		in that particular piece of information.
 // */
 // typedef BOOL (^AUHostMusicalContextBlock)(double * __nullable currentTempo, double * __nullable timeSignatureNumerator, NSInteger * __nullable timeSignatureDenominator, double * __nullable currentBeatPosition, NSInteger * __nullable sampleOffsetToNextBeat, double * __nullable currentMeasureDownbeatPosition);
+use cocoa_foundation::base::BOOL;
+pub type AUHostMusicalContextBlock = block::Block<
+    (
+        *const f32,
+        *const f32,
+        NSInteger,
+        *const f32,
+        *const NSInteger,
+        *const f32,
+    ),
+    BOOL,
+>;
 
 // /*!	@typedef	AUMIDICIProfileChangedBlock
 // 	@brief		Block by which hosts are informed of an audio unit having enabled or disabled a
@@ -302,6 +322,13 @@ pub type AUScheduleParameterBlock = block::Block<(AUEventSampleTime, *const Audi
 // 		YES if the profile was enabled, NO if the profile was disabled.
 // */
 // typedef void (^AUMIDICIProfileChangedBlock)(uint8_t cable, MIDIChannelNumber channel, MIDICIProfile *profile, BOOL enabled);
+pub struct MIDIChannelNumber {
+    //todo
+}
+pub struct MIDICIProfile {
+    //todo
+}
+pub type AUMIDICIProfileChangedBlock = block::Block<(u8, MIDIChannelNumber, *const MIDICIProfile, BOOL,), OSStatus>;
 
 // /*!	@enum		AUHostTransportStateFlags
 // 	@brief		Flags describing the host's transport state.
@@ -323,6 +350,14 @@ pub type AUScheduleParameterBlock = block::Block<(AUEventSampleTime, *const Audi
 // 	AUHostTransportStateRecording		= 4,
 // 	AUHostTransportStateCycling			= 8
 // };
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum AUHostTransportStateFlags {
+    Changed = 1,
+    Moving = 2,
+    Recorging = 4,
+    Cycling = 8
+}
 
 // /*!	@typedef	AUHostTransportStateBlock
 // 	@brief		Block by which hosts provide information about their transport state.
@@ -380,6 +415,27 @@ pub type AUScheduleParameterBlock = block::Block<(AUEventSampleTime, *const Audi
 // 		two API's. This header describes, for each v3 method or property, the v2 equivalent.
 // */
 // API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
+
+// pub enum AUAudioUnitFFI {}
+// foreign_obj_type! {
+//     type CType = AUAudioUnitFFI;
+//     pub struct AUAudioUnit;
+//     pub struct AUAudioUnitRef;
+// }
+
+pub enum AUAudioUnitFFI {}
+
+foreign_obj_type! {
+    type CType = AUAudioUnitFFI;
+    pub struct AUAudioUnit;
+    pub struct AUAudioUnitRef;
+}
+
+impl AUAudioUnitRef {
+    pub fn component_description(&self) -> AudioComponentDescription {
+        unsafe { msg_send![self, componentDescription] }
+    }
+}
 // @interface AUAudioUnit : NSObject
 
 // - (instancetype)init NS_UNAVAILABLE;
