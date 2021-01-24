@@ -193,6 +193,7 @@ pub type AURenderBlock = block::Block<
         AUAudioFrameCount,
         NSInteger,
         *const AudioBufferList,
+        AURenderPullInputBlock,
     ),
     (AUAudioUnitStatus),
 >;
@@ -207,6 +208,7 @@ pub type AURenderBlock = block::Block<
 // 		The parameters are identical to those of AURenderBlock.
 // */
 // typedef void (^AURenderObserver)(AudioUnitRenderActionFlags actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger outputBusNumber);
+pub type AURenderObserver = block::Block<(AudioUnitRenderActionFlags, *const AudioTimeStamp, AUAudioFrameCount, NSInteger), ()>;
 
 // /*!	@typedef	AUScheduleParameterBlock
 // 	@brief		Block to schedule parameter changes.
@@ -227,6 +229,7 @@ pub type AURenderBlock = block::Block<
 // 		of the scheduled ramp.
 // */
 // typedef void (^AUScheduleParameterBlock)(AUEventSampleTime eventSampleTime, AUAudioFrameCount rampDurationSampleFrames, AUParameterAddress parameterAddress, AUValue value);
+pub type AUScheduleParameterBlock = block::Block<(AUEventSampleTime, *const AudioTimeStamp, AUAudioFrameCount, NSInteger), ()>;
 
 // /*!	@typedef	AUScheduleMIDIEventBlock
 // 	@brief		Block to schedule MIDI events.
