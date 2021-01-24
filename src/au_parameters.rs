@@ -87,10 +87,10 @@ pub type AUParameterObserver = block::Block<(AUParameterAddress, AUValue), ()>;
 ///        The number of events being delivered.
 ///    @param events
 ///        The events being delivered.
-
 // typedef void (^AUParameterRecordingObserver)(NSInteger numberEvents, const AURecordedParameterEvent *events);
 use cocoa_foundation::foundation::NSInteger;
-pub type AUParameterRecordingObserver = block::Block<(NSInteger, *const AURecordedParameterEvent), ()>;
+pub type AUParameterRecordingObserver =
+    block::Block<(NSInteger, *const AURecordedParameterEvent), ()>;
 
 ///    @typedef    AUParameterAutomationObserver
 ///    @brief        A block called to record parameter changes as automation events.
@@ -102,8 +102,8 @@ pub type AUParameterRecordingObserver = block::Block<(NSInteger, *const AURecord
 ///        The events being delivered.
 
 // typedef void (^AUParameterAutomationObserver)(NSInteger numberEvents, const AUParameterAutomationEvent *events);
-pub type AUParameterAutomationObserver = block::Block<(NSInteger, *const AUParameterAutomationEvent), ()>;
-
+pub type AUParameterAutomationObserver =
+    block::Block<(NSInteger, *const AUParameterAutomationEvent), ()>;
 
 ///    @typedef    AUParameterObserverToken
 ///    @brief        A token representing an installed AUParameterObserver, AUParameterRecordingObserver,
@@ -417,7 +417,12 @@ impl AUParameterRef {
     ///        Bridged to the v2 function AudioUnitSetParameter.
 
     // - (void)setValue:(AUValue)value originator:(AUParameterObserverToken __nullable)originator atHostTime:(uint64_t)hostTime eventType:(AUParameterAutomationEventType)eventType API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
-    pub fn set_value_at(&self, originator: AUParameterObserverToken, at: u64, event: AUParameterAutomationEventType) {
+    pub fn set_value_at(
+        &self,
+        originator: AUParameterObserverToken,
+        at: u64,
+        event: AUParameterAutomationEventType,
+    ) {
         todo!()
     }
 

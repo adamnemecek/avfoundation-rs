@@ -1,4 +1,8 @@
-use crate::AudioComponentDescription;
+use crate::{
+    AudioBufferList,
+    AudioComponentDescription,
+    OSStatus,
+};
 pub enum AUAudioUnitFFI {}
 
 foreign_obj_type! {
@@ -21,7 +25,6 @@ impl AUAudioUnitRef {
 
 // 	@brief		Objective-C interfaces for hosting and implementing Audio Units.
 // */
-
 // #ifndef AudioToolbox_AUAudioUnit_h
 // #define AudioToolbox_AUAudioUnit_h
 // #ifdef __OBJC2__
@@ -52,6 +55,7 @@ impl AUAudioUnitRef {
 // 	@brief		A result code returned from an audio unit's render function.
 // */
 // typedef OSStatus AUAudioUnitStatus;
+type AUAudioUnitStatus = OSStatus;
 
 // /*!	@typedef	AUEventSampleTime
 // 	@brief		Expresses time as a sample count.
@@ -60,6 +64,7 @@ impl AUAudioUnitRef {
 // 		units, and HAL sample times can be small negative numbers.
 // */
 // typedef int64_t AUEventSampleTime;
+pub type AUEventSampleTime = i64;
 
 // /*!	@var		AUEventSampleTimeImmediate
 // 	@brief		A special value of AUEventSampleTime indicating "immediately."
@@ -81,6 +86,7 @@ impl AUAudioUnitRef {
 // 		and C AudioUnit API's, as well as `AVAudioFrameCount`.
 // */
 // typedef uint32_t AUAudioFrameCount;
+pub type AUAudioFrameCount = u32;
 
 // /*!	@typedef	AUAudioChannelCount
 // 	@brief		A number of audio channels.
@@ -89,6 +95,7 @@ impl AUAudioUnitRef {
 // 		and C AudioUnit API's, as well as `AVAudioChannelCount`.
 // */
 // typedef uint32_t AUAudioChannelCount;
+pub type AUAudioChannelCount = u32;
 
 // // =================================================================================================
 
@@ -99,6 +106,13 @@ impl AUAudioUnitRef {
 // 	AUAudioUnitBusTypeInput		= 1,
 // 	AUAudioUnitBusTypeOutput	= 2
 // };
+
+#[repr(C)]
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum AUAudioUnitBusType {
+    Input = 1,
+    Output = 2,
+}
 
 // // =================================================================================================
 
@@ -121,10 +135,24 @@ impl AUAudioUnitRef {
 // 		specified buffers, or it may replace the mData pointers with pointers to memory which it
 // 		owns and guarantees will remain valid until the next render cycle.
 // 	@return
-// 		An AUAudioUnitStatus result code. If an error is returned, the input data should be assumed 
+// 		An AUAudioUnitStatus result code. If an error is returned, the input data should be assumed
 // 		to be invalid.
 // */
 // typedef AUAudioUnitStatus (^AURenderPullInputBlock)(AudioUnitRenderActionFlags *actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger inputBusNumber, AudioBufferList *inputData);
+use cocoa_foundation::foundation::NSInteger;
+pub struct AudioTimeStamp {}
+
+pub struct AudioUnitRenderActionFlags {}
+pub type AURenderPullInputBlock = block::Block<
+    (
+        AudioUnitRenderActionFlags,
+        *const AudioTimeStamp,
+        AUAudioFrameCount,
+        NSInteger,
+        *const AudioBufferList,
+    ),
+    (AUAudioUnitStatus),
+>;
 
 // /*!	@typedef	AURenderBlock
 // 	@brief		Block to render the audio unit.
@@ -158,6 +186,16 @@ impl AUAudioUnitRef {
 // 		to be invalid.
 // */
 // typedef AUAudioUnitStatus (^AURenderBlock)(AudioUnitRenderActionFlags *actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger outputBusNumber, AudioBufferList *outputData, AURenderPullInputBlock __nullable pullInputBlock);
+pub type AURenderBlock = block::Block<
+    (
+        *const AudioUnitRenderActionFlags,
+        *const AudioTimeStamp,
+        AUAudioFrameCount,
+        NSInteger,
+        *const AudioBufferList,
+    ),
+    (AUAudioUnitStatus),
+>;
 
 // /*!	@typedef	AURenderObserver
 // 	@brief		Block called when an audio unit renders.
@@ -165,7 +203,7 @@ impl AUAudioUnitRef {
 // 		This block is called by the base class's AURenderBlock before and after each render cycle.
 // 		The observer can distinguish between before and after using the PreRender and PostRender
 // 		flags.
-		
+
 // 		The parameters are identical to those of AURenderBlock.
 // */
 // typedef void (^AURenderObserver)(AudioUnitRenderActionFlags actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger outputBusNumber);
@@ -180,7 +218,7 @@ impl AUAudioUnitRef {
 // 		AUEventSampleTimeImmediate plus an optional buffer offset, in which case the event is
 // 		scheduled at that position in the current render cycle.
 // 	@param rampDurationSampleFrames
-// 		The number of sample frames over which the parameter's value is to ramp, or 0 if the 
+// 		The number of sample frames over which the parameter's value is to ramp, or 0 if the
 // 		parameter change should take effect immediately.
 // 	@param parameterAddress
 // 		The parameter's address.
@@ -242,7 +280,7 @@ impl AUAudioUnitRef {
 // 		If the host app provides this block to an AUAudioUnit (as its musicalContextBlock), then
 // 		the block may be called at the beginning of each render cycle to obtain information about
 // 		the current render cycle's musical context.
-		
+
 // 		Any of the provided parameters may be null to indicate that the audio unit is not interested
 // 		in that particular piece of information.
 // */
@@ -298,7 +336,7 @@ impl AUAudioUnitRef {
 // 		If the host app provides this block to an AUAudioUnit (as its transportStateBlock), then
 // 		the block may be called at the beginning of each render cycle to obtain information about
 // 		the current transport state.
-		
+
 // 		Any of the provided parameters may be null to indicate that the audio unit is not interested
 // 		in that particular piece of information.
 // */
@@ -312,28 +350,28 @@ impl AUAudioUnitRef {
 // 		AUAudioUnit is a host interface to an audio unit. Hosts can instantiate either version 2 or
 // 		version 3 units with this class, and to some extent control whether an audio unit is
 // 		instantiated in-process or in a separate extension process.
-		
+
 // 		Implementors of version 3 audio units can and should subclass AUAudioUnit. To port an
 // 		existing version 2 audio unit easily, AUAudioUnitV2Bridge can be subclassed.
-		
+
 // 		These are the ways in which audio unit components can be registered:
-		
+
 // 		- (v2) Packaged into a component bundle containing an `AudioComponents` Info.plist entry,
 // 		referring to an `AudioComponentFactoryFunction`. See AudioComponent.h.
-		
+
 // 		- (v2) AudioComponentRegister(). Associates a component description with an
 // 		AudioComponentFactoryFunction. See AudioComponent.h.
-		
+
 // 		- (v3) Packaged into an app extension containing an AudioComponents Info.plist entry.
 // 		The principal class must conform to the AUAudioUnitFactory protocol, which will typically
 // 		instantiate an AUAudioUnit subclass.
 
 // 		- (v3) `+[AUAudioUnit registerSubclass:asComponentDescription:name:version:]`. Associates
 // 		a component description with an AUAudioUnit subclass.
-		
+
 // 		A host need not be aware of the concrete subclass of AUAudioUnit that is being instantiated.
 // 		`initWithComponentDescription:options:error:` ensures that the proper subclass is used.
-		
+
 // 		When using AUAudioUnit with a v2 audio unit, or the C AudioComponent and AudioUnit API's
 // 		with a v3 audio unit, all major pieces of functionality are bridged between the
 // 		two API's. This header describes, for each v3 method or property, the v2 equivalent.
@@ -371,7 +409,7 @@ impl AUAudioUnitRef {
 // 		Called in a thread/dispatch queue context internal to the implementation. The client should
 // 		retain the supplied AUAudioUnit.
 // 	@discussion
-// 		Certain types of AUAudioUnits must be instantiated asynchronously -- see 
+// 		Certain types of AUAudioUnits must be instantiated asynchronously -- see
 // 		the discussion of kAudioComponentFlag_RequiresAsyncInstantiation in
 // 		AudioToolbox/AudioComponent.h.
 
@@ -413,8 +451,8 @@ impl AUAudioUnitRef {
 // /*!	@property	audioUnitShortName
 // 	@brief		A short name for the audio unit.
 // 	@discussion
-// 		Audio unit host applications can display this name in situations where the audioUnitName 
-// 		might be too long. The recommended length is up to 16 characters. Host applications may 
+// 		Audio unit host applications can display this name in situations where the audioUnitName
+// 		might be too long. The recommended length is up to 16 characters. Host applications may
 // 		truncate it.
 // */
 // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitShortName API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
@@ -429,7 +467,7 @@ impl AUAudioUnitRef {
 // 	@discussion
 // 		Hosts must call this before beginning to render. Subclassers should call the superclass
 // 		implementation.
-		
+
 // 		Bridged to the v2 API AudioUnitInitialize().
 // */
 // - (BOOL)allocateRenderResourcesAndReturnError:(NSError **)outError;
@@ -439,7 +477,7 @@ impl AUAudioUnitRef {
 // 	@discussion
 // 		Hosts should call this after finishing rendering. Subclassers should call the superclass
 // 		implementation.
-		
+
 // 		Bridged to the v2 API AudioUnitUninitialize().
 // */
 // - (void)deallocateRenderResources;
@@ -456,7 +494,7 @@ impl AUAudioUnitRef {
 // 		an audio unit, for example, when seeking forward or backward within a track. In response,
 // 		implementations should clear delay lines, filters, etc. Subclassers should call the
 // 		superclass implementation.
-		
+
 // 		Bridged to the v2 API AudioUnitReset(), in the global scope.
 // */
 // - (void)reset;
@@ -483,12 +521,12 @@ impl AUAudioUnitRef {
 // 		Before invoking an audio unit's rendering functionality, a host should fetch this block and
 // 		cache the result. The block can then be called from a realtime context without the
 // 		possibility of blocking and causing an overload at the Core Audio HAL level.
-		
+
 // 		This block will call a subclass' internalRenderBlock, providing all realtime events
 // 		scheduled for the current render time interval, bracketed by calls to any render observers.
 
 // 		Subclassers should override internalRenderBlock, not this property.
-		
+
 // 		Bridged to the v2 API AudioUnitRender().
 // */
 // @property (NS_NONATOMIC_IOSONLY, readonly) AURenderBlock renderBlock;
@@ -498,13 +536,13 @@ impl AUAudioUnitRef {
 // 	@discussion
 // 		As with renderBlock, a host should fetch and cache this block before beginning to render,
 // 		if it intends to schedule parameters.
-				
+
 // 		The block is safe to call from any thread context, including realtime audio render
 // 		threads.
-		
+
 // 		Subclassers should not override this; it is implemented in the base class and will schedule
 // 		the events to be provided to the internalRenderBlock.
-		
+
 // 		Bridged to the v2 API AudioUnitScheduleParameters().
 // */
 // @property (NS_NONATOMIC_IOSONLY, readonly) AUScheduleParameterBlock scheduleParameterBlock;
@@ -514,9 +552,9 @@ impl AUAudioUnitRef {
 // 	@discussion
 // 		The supplied block is called at the beginning and ending of each render cycle. It should
 // 		not make any blocking calls.
-		
+
 // 		This method is implemented in the base class AUAudioUnit, and should not be overridden.
-		
+
 // 		Bridged to the v2 API AudioUnitAddRenderNotify().
 // 	@param observer
 // 		The block to call.
@@ -539,7 +577,7 @@ impl AUAudioUnitRef {
 // 	@discussion
 // 		This must be set by the host before render resources are allocated. It cannot be changed
 // 		while render resources are allocated.
-		
+
 // 		Bridged to the v2 property kAudioUnitProperty_MaximumFramesPerSlice.
 // */
 // @property (NS_NONATOMIC_IOSONLY) AUAudioFrameCount maximumFramesToRender;
@@ -551,21 +589,21 @@ impl AUAudioUnitRef {
 // 	@discussion
 // 		Audio unit hosts can fetch this property to discover a unit's parameters. KVO notifications
 // 		are issued on this member to notify the host of changes to the set of available parameters.
-		
+
 // 		AUAudioUnit has an additional pseudo-property, "allParameterValues", on which KVO
 // 		notifications are issued in response to certain events where potentially all parameter
 // 		values are invalidated. This includes changes to currentPreset, fullState, and
 // 		fullStateForDocument.
- 
+
 // 		Hosts should not attempt to set this property.
 
 // 		Subclassers should implement the parameterTree getter to expose parameters to hosts. They
 // 		should cache as much as possible and send KVO notifications on "parameterTree" when altering
 // 		the structure of the tree or the static information (ranges, etc) of parameters.
-		
+
 // 		This is similar to the v2 properties kAudioUnitProperty_ParameterList and
 // 		kAudioUnitProperty_ParameterInfo.
- 
+
 // 		Note that it is not safe to modify this property in a real-time context.
 // */
 // @property (NS_NONATOMIC_IOSONLY, nullable, retain) AUParameterTree *parameterTree;
@@ -580,7 +618,7 @@ impl AUAudioUnitRef {
 // 		of the `count` most important parameters.
 
 // 		The base class returns an empty array regardless of count.
-		
+
 // 		Partially bridged to kAudioUnitProperty_ParametersForOverview (v2 hosts can use that
 // 		property to access this v3 method of an audio unit).
 // */
@@ -615,7 +653,7 @@ impl AUAudioUnitRef {
 // 		Subclassers should not override. When hosts schedule events via this block, they are
 // 		delivered to the audio unit via the list of AURenderEvents delivered to
 // 		internalRenderBlock.
-		
+
 // 		This bridged to the v2 API MusicDeviceMIDIEvent.
 // */
 // @property (NS_NONATOMIC_IOSONLY, readonly, nullable) AUScheduleMIDIEventBlock scheduleMIDIEventBlock;
@@ -662,12 +700,12 @@ impl AUAudioUnitRef {
 // 		Hosts may use this property to save and restore the state of an audio unit being used in a
 // 		user preset or document. The audio unit should not persist transitory properties such as
 // 		stream formats, but should save and restore all parameters and custom properties.
-		
-// 		The base class implementation of this property saves the values of all parameters 
+
+// 		The base class implementation of this property saves the values of all parameters
 // 		currently in the parameter tree. A subclass which dynamically produces multiple variants
 // 		of the parameter tree needs to be aware that the serialization method does a depth-first
 // 		preorder traversal of the tree.
-		
+
 // 		Bridged to the v2 property kAudioUnitProperty_ClassInfo.
 // */
 // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSDictionary<NSString *, id> *fullState;
@@ -680,7 +718,7 @@ impl AUAudioUnitRef {
 // 		presets, while other state is not. For example, a synthesizer's master tuning setting could
 // 		be considered global state, inappropriate for storing in reusable presets, but desirable
 // 		for storing in a document for a specific live performance.
-		
+
 // 		Hosts saving documents should use this property. If the audio unit does not implement it,
 // 		the base class simply sets/gets fullState.
 
@@ -735,9 +773,9 @@ impl AUAudioUnitRef {
 // 	@param	userPreset
 // 		The preset under which the current state will be saved.
 // 	@param outError
-// 		In the event of a failure, the method will return NO and outError will be set to an 
-// 		NSError, describing the problem. 
-// 		Some possible errors: 
+// 		In the event of a failure, the method will return NO and outError will be set to an
+// 		NSError, describing the problem.
+// 		Some possible errors:
 // 				- domain: NSOSStatusErrorDomain code: kAudioUnitErr_NoConnection
 // 				- domain: NSOSStatusErrorDomain	code: kAudioUnitErr_InvalidFilePath
 // 				- domain: NSOSStatusErrorDomain	code: kAudioUnitErr_MissingKey
@@ -760,9 +798,9 @@ impl AUAudioUnitRef {
 // 	@param	userPreset
 // 		The preset to be deleted.
 // 	@param	outError
-// 		In the event of a failure, the method will return NO and outError will be set to an 
-// 		NSError, describing the problem. 
-// 		Some possible errors: 
+// 		In the event of a failure, the method will return NO and outError will be set to an
+// 		NSError, describing the problem.
+// 		Some possible errors:
 // 				- domain: NSOSStatusErrorDomain code: kAudioUnitErr_NoConnection
 // 				- domain: NSPOSIXErrorDomain	code: ENOENT
 // 				- domain: NSOSStatusErrorDomain	code: kAudioUnitErr_InvalidFilePath
@@ -778,7 +816,7 @@ impl AUAudioUnitRef {
 // 		This method allows access to the contents of a preset without having to set that preset as
 // 		current. The returned dictionary is assignable to the audio unit's fullState and/or
 // 		fullStateForDocument properties.
- 
+
 // 		Audio units can override this method in order to vend user presets from a different location
 // 		(e.g. their iCloud container).
 
@@ -793,9 +831,9 @@ impl AUAudioUnitRef {
 // 	@param	userPreset
 // 		The preset to be selected.
 // 	@param	outError
-// 		In the event of a failure, the method will return nil and outError will be set to an 
-// 		NSError, describing the problem. 
-// 		Some possible errors: 
+// 		In the event of a failure, the method will return nil and outError will be set to an
+// 		NSError, describing the problem.
+// 		Some possible errors:
 // 				- domain: NSOSStatusErrorDomain code: kAudioUnitErr_NoConnection
 // 				- domain: NSPOSIXErrorDomain	code: ENOENT
 // 				- domain: NSCocoaErrorDomain	code: NSCoderReadCorruptError
@@ -864,7 +902,7 @@ impl AUAudioUnitRef {
 // 		arrives in the input vs. output streams. This should reflect the delay due
 // 		to signal processing (e.g. filters, FFT's, etc.), not delay or reverberation which is
 // 		being applied as an effect.
-		
+
 // 		Note that a latency that varies with parameter settings, including bypass, is generally not
 // 		useful to hosts. A host is usually only prepared to add delays before starting to render and
 // 		those delays need to be fixed. A variable delay would introduce artifacts even if the host
@@ -883,7 +921,7 @@ impl AUAudioUnitRef {
 // 		This property reflects the time interval between when the input stream ends or otherwise
 // 		transitions to silence, and when the output stream becomes silent. Unlike latency, this
 // 		should reflect the duration of a delay or reverb effect.
-		
+
 // 		Bridged to the v2 property kAudioUnitProperty_TailTime.
 // */
 // @property (NS_NONATOMIC_IOSONLY, readonly) NSTimeInterval tailTime;
@@ -892,7 +930,7 @@ impl AUAudioUnitRef {
 // 	@brief		Provides a trade-off between rendering quality and CPU load.
 // 	@discussion
 // 		The range of valid values is 0-127.
-		
+
 // 		Bridged to the v2 property kAudioUnitProperty_RenderQuality.
 // */
 // @property (NS_NONATOMIC_IOSONLY) NSInteger renderQuality;
@@ -909,14 +947,14 @@ impl AUAudioUnitRef {
 // 	@discussion
 // 		In-place processing is the ability for an audio unit to transform an input signal to an
 // 		output signal in-place in the input buffer, without requiring a separate output buffer.
-		
+
 // 		A host can express its desire to process in place by using null mData pointers in the output
 // 		buffer list. The audio unit may process in-place in the input buffers. See the discussion of
 // 		renderBlock.
-		
+
 // 		Partially bridged to the v2 property kAudioUnitProperty_InPlaceProcessing; in v3 it is not
 // 		settable.
-		
+
 // 		Defaults to NO. Subclassers can override to return YES.
 // */
 // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL canProcessInPlace;
@@ -942,16 +980,16 @@ impl AUAudioUnitRef {
 
 // 		An input, output count of (2, 2) signifies that the audio unit can process 2 input channels
 // 		to 2 output channels.
-		
+
 // 		Negative numbers (-1, -2) indicate *any* number of channels. (-1, -1) means any number
 // 		of channels on input and output as long as they are the same. (-1, -2) means any number of
 // 		channels on input or output, without the requirement that the counts are the same.
-		
+
 // 		A negative number less than -2 is used to indicate a total number of channels across every
 // 		bus in that scope, regardless of how many channels are set on any particular bus. For
 // 		example, (-16, 2) indicates that a unit can accept up to 16 channels of input across its
 // 		input busses, but will only produce 2 channels of output.
-		
+
 // 		Zero on either side (though typically input) means "not applicable", because there are no
 // 		elements on that side.
 
@@ -964,7 +1002,7 @@ impl AUAudioUnitRef {
 // 	@discussion
 // 		Note that an audio unit implementation accessing this property should cache it in
 // 		realtime-safe storage before beginning to render.
-		
+
 // 		Bridged to the HostCallback_GetBeatAndTempo and HostCallback_GetMusicalTimeLocation
 // 		callback members in kAudioUnitProperty_HostCallbacks.
 // */
@@ -975,7 +1013,7 @@ impl AUAudioUnitRef {
 // 	@discussion
 // 		Note that an audio unit implementation accessing this property should cache it in
 // 		realtime-safe storage before beginning to render.
-		
+
 // 		Bridged to the HostCallback_GetTransportState and HostCallback_GetTransportState2
 // 		callback members in kAudioUnitProperty_HostCallbacks.
 // */
@@ -1008,9 +1046,9 @@ impl AUAudioUnitRef {
 // 		number of the source channel that should be mapped to that destination channel. If -1 is
 // 		specified, then that destination channel will not contain any channel from the source (so it
 // 		will be silent).
-		
+
 // 		If the property value is nil, then the audio unit does not support this property.
- 
+
 // 		Bridged to the v2 property kAudioOutputUnitProperty_ChannelMap.
 // */
 // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSArray<NSNumber *> *channelMap API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
@@ -1066,11 +1104,11 @@ impl AUAudioUnitRef {
 //                  error:(NSError **)outError API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
 
 // /*!	@property	profileChangedBlock
-// 	@brief		A block called when a device notifies that a MIDI-CI profile has been enabled or 
+// 	@brief		A block called when a device notifies that a MIDI-CI profile has been enabled or
 // 				disabled.
 // 	@discussion
-// 		Since enabling / disabling MIDI-CI profiles is an asynchronous operation, the host can set 
-// 		this block and the audio unit is expected to call it every time the state of a MIDI-CI 
+// 		Since enabling / disabling MIDI-CI profiles is an asynchronous operation, the host can set
+// 		this block and the audio unit is expected to call it every time the state of a MIDI-CI
 // 		profile has changed.
 // */
 // @property (nonatomic, nullable) AUMIDICIProfileChangedBlock profileChangedBlock API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
@@ -1091,7 +1129,7 @@ impl AUAudioUnitRef {
 // 	@param inputBusNumber
 // 		The index of the input bus from which input is available.
 // 	@discussion	The input data is obtained by calling the render block of the audio unit.
-// 				The AUAudioUnit is not provided since it is not safe to message an Objective C 
+// 				The AUAudioUnit is not provided since it is not safe to message an Objective C
 // 				object in a real time context.
 // */
 // typedef void (^AUInputHandler)(AudioUnitRenderActionFlags *actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger inputBusNumber);
@@ -1113,7 +1151,7 @@ impl AUAudioUnitRef {
 
 // /*!	@property	inputEnabled
 // 	@brief		Flag enabling audio input from the unit.
-// 	@discussion	Input is disabled by default. This must be set to YES if input audio is desired. 
+// 	@discussion	Input is disabled by default. This must be set to YES if input audio is desired.
 // 				Setting to YES will have no effect if canPerformInput is false.
 // */
 // @property (nonatomic, getter=isInputEnabled) BOOL inputEnabled;
@@ -1155,7 +1193,7 @@ impl AUAudioUnitRef {
 // /*!	@property	deviceInputLatency
 // 	@brief		The audio device's input latency, in seconds.
 // 	@discussion
-// 		Bridged to the HAL property kAudioDevicePropertyLatency, which is implemented 
+// 		Bridged to the HAL property kAudioDevicePropertyLatency, which is implemented
 // 		by v2 input/output units.
 // */
 // @property (nonatomic, readonly) NSTimeInterval deviceInputLatency API_AVAILABLE(macos(10.13));
@@ -1216,7 +1254,7 @@ impl AUAudioUnitRef {
 // 		appropriate.
 
 // 		Subclassers should see also the AUAudioUnitBusImplementation category.
-		
+
 // 		The bus array is bridged to the v2 property kAudioUnitProperty_ElementCount.
 // */
 // API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
@@ -1322,7 +1360,7 @@ impl AUAudioUnitRef {
 // 		Hosts must enable input busses before using them. The reason for this is to allow a unit
 // 		such as a mixer to be prepared to render a large number of inputs, but avoid the work
 // 		of preparing to pull inputs which are not in use.
-		
+
 // 		Bridged to the v2 properties kAudioUnitProperty_MakeConnection and
 // 		kAudioUnitProperty_SetRenderCallback.
 // */
@@ -1359,37 +1397,37 @@ impl AUAudioUnitRef {
 // 	@discussion
 // 		This should not be confused with the audio unit's latency property, where the audio unit
 // 		describes to the host any processing latency it introduces between its input and its output.
-		
+
 // 		A host may set this property to describe to the audio unit the presentation latency of its
 // 		input and/or output audio data. Latency is described in seconds. A value of zero means
 // 		either no latency or an unknown latency.
-		
+
 // 		A host should set this property on each active bus, since, for example, the audio routing
 // 		path to each of multiple output busses may differ.
-		
+
 // 		For input busses:
 // 			Describes how long ago the audio arriving on this bus was acquired. For instance, when
 // 			reading from a file to the first audio unit in a chain, the input presentation latency
 // 			is zero. For audio input from a device, this initial input latency is the presentation
 // 			latency of the device itself, i.e. the device's safety offset and latency.
-			
+
 // 			A second chained audio unit's input presentation latency will be the input presentation
 // 			latency of the first unit, plus the processing latency of the first unit.
-			
+
 // 		For output busses:
 // 			Describes how long it will be before the output audio of an audio unit is presented. For
 // 			instance, when writing to a file, the output presentation latency of the last audio unit
 // 			in a chain is zero. When the audio from that audio unit is to be played to a device,
 // 			then that initial presentation latency will be the presentation latency of the device
 // 			itself, which is the I/O buffer size, plus the device's safety offset and latency
-			
+
 // 			A previous chained audio unit's output presentation latency is the last unit's
 // 			presentation latency plus its processing latency.
-			
-// 		So, for a given audio unit anywhere within a mixing graph, the input and output presentation 
-// 		latencies describe to that unit how long from the moment of generation it has taken for its 
+
+// 		So, for a given audio unit anywhere within a mixing graph, the input and output presentation
+// 		latencies describe to that unit how long from the moment of generation it has taken for its
 // 		input to arrive, and how long it will take for its output to be presented.
-		
+
 // 		Bridged to the v2 property kAudioUnitProperty_PresentationLatency.
 // */
 // @property (NS_NONATOMIC_IOSONLY) NSTimeInterval contextPresentationLatency;

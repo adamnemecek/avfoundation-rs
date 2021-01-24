@@ -134,6 +134,9 @@ pub use au_component::*;
 mod au_audio_unit;
 pub use au_audio_unit::*;
 
+mod au_audio_unit_implementation;
+pub use au_audio_unit_implementation::*;
+
 mod au_parameters;
 pub use au_parameters::*;
 
