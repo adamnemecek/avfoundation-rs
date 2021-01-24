@@ -39,6 +39,7 @@ pub enum AUParameterAutomationEventType {
 
 ///    @typedef    AURecordedParameterEvent
 ///    @brief      An event recording the changing of a parameter at a particular host time.
+#[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct AURecordedParameterEvent {
     ///< The host time at which the event occurred.
@@ -52,6 +53,7 @@ pub struct AURecordedParameterEvent {
 ///    @typedef    AUParameterAutomationEvent
 ///    @brief      An event recording the changing of a parameter, possibly including events
 ///                such as touch and release gestures, at a particular host time.
+#[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct AUParameterAutomationEvent {
     ///< The host time at which the event occurred.
@@ -75,7 +77,7 @@ pub struct AUParameterAutomationEvent {
 ///        The current value of the parameter.
 
 // typedef void (^AUParameterObserver)(AUParameterAddress address, AUValue value);
-// pub type AUParameterObserver = Fn(AUParameterAddress, AUValue) -> ();
+pub type AUParameterObserver = block::Block<(AUParameterAddress, AUValue), ()>;
 
 ///    @typedef    AUParameterRecordingObserver
 ///    @brief        A block called to record parameter changes as automation events.
@@ -87,6 +89,8 @@ pub struct AUParameterAutomationEvent {
 ///        The events being delivered.
 
 // typedef void (^AUParameterRecordingObserver)(NSInteger numberEvents, const AURecordedParameterEvent *events);
+use cocoa_foundation::foundation::NSInteger;
+pub type AUParameterRecordingObserver = block::Block<(NSInteger, *const AURecordedParameterEvent), ()>;
 
 ///    @typedef    AUParameterAutomationObserver
 ///    @brief        A block called to record parameter changes as automation events.
@@ -98,15 +102,15 @@ pub struct AUParameterAutomationEvent {
 ///        The events being delivered.
 
 // typedef void (^AUParameterAutomationObserver)(NSInteger numberEvents, const AUParameterAutomationEvent *events);
+pub type AUParameterAutomationObserver = block::Block<(NSInteger, *const AUParameterAutomationEvent), ()>;
+
 
 ///    @typedef    AUParameterObserverToken
 ///    @brief        A token representing an installed AUParameterObserver, AUParameterRecordingObserver,
 ///                or AUParameterAutomationObserver.
 
 // typedef void *AUParameterObserverToken;
-pub struct AUParameterObserverToken {
-    inner: *const std::ffi::c_void,
-}
+pub struct AUParameterObserverToken(*const std::ffi::c_void);
 
 ///    @class        AUParameterNode
 ///    @brief        A node in an audio unit's tree of parameters.
