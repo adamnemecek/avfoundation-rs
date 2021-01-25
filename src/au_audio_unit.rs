@@ -1,4 +1,5 @@
 use crate::{
+    AVAudioFormat,
     AudioBufferList,
     AudioComponentDescription,
     NSTimeInterval,
@@ -1486,9 +1487,6 @@ foreign_obj_type! {
     pub struct AUAudioUnitBus;
     pub struct AUAudioUnitBusRef;
 }
-use crate::{
-    AVAudioFormat
-};
 
 impl AUAudioUnitBusRef {
     // /*!	@property	format
@@ -1509,6 +1507,9 @@ impl AUAudioUnitBusRef {
     // 		see AUAudioUnit.channelCapabilities.
     // */
     // - (BOOL)setFormat:(AVAudioFormat *)format error:(NSError **)outError;
+    pub fn set_format(&self, format: AVAudioFormat) -> bool {
+        todo!()
+    }
 
     // /*! @property	shouldAllocateBuffer
     //     @brief		Controls the audio unit's allocation strategy for a bus.
@@ -1585,6 +1586,9 @@ impl AUAudioUnitBusRef {
     // 		This is an array of NSNumbers representing AudioChannelLayoutTag.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<NSNumber *> *supportedChannelLayoutTags;
+    pub fn supported_channel_layout_tags(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	contextPresentationLatency
     // 	@brief		Information about latency in the audio unit's processing context.
@@ -1625,6 +1629,9 @@ impl AUAudioUnitBusRef {
     // 		Bridged to the v2 property kAudioUnitProperty_PresentationLatency.
     // */
     // @property (NS_NONATOMIC_IOSONLY) NSTimeInterval contextPresentationLatency;
+    pub fn context_presentation_latency(&self) -> NSTimeInterval {
+        todo!()
+    }
 
     // @end
 }
