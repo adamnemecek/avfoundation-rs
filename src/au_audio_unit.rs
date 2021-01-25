@@ -1211,6 +1211,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_SupportedNumChannels.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<NSNumber *> *channelCapabilities;
+    pub fn channel_capabilities(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	musicalContextBlock
     // 	@brief		A callback for the AU to call the host for musical context information.
@@ -1222,6 +1225,9 @@ impl AUAudioUnitRef {
     // 		callback members in kAudioUnitProperty_HostCallbacks.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUHostMusicalContextBlock musicalContextBlock;
+    pub fn musical_context_block(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	transportStateBlock
     // 	@brief		A callback for the AU to call the host for transport state information.
@@ -1233,6 +1239,9 @@ impl AUAudioUnitRef {
     // 		callback members in kAudioUnitProperty_HostCallbacks.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUHostTransportStateBlock transportStateBlock;
+    pub fn transport_state_block(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	contextName
     // 	@brief		Information about the host context in which the audio unit is connected, for display
@@ -1244,6 +1253,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_ContextName.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *contextName;
+    pub fn context_name(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	supportsMPE
     // 	@brief		Specifies whether an audio unit supports Multi-dimensional Polyphonic Expression.
@@ -1251,6 +1263,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_SupportsMPE.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL supportsMPE API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
+    pub fn supports_mpe(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	channelMap
     // 	@brief		Specify a mapping of input channels to output channels.
@@ -1267,6 +1282,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioOutputUnitProperty_ChannelMap.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSArray<NSNumber *> *channelMap API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
+    pub fn channel_map(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@method		profileStateForCable:channel:
     // 	@brief		Given a MIDI cable and channel number, return the supported MIDI-CI Profiles.
@@ -1279,6 +1297,9 @@ impl AUAudioUnitRef {
     // 		on this cable.
     // */
     // - (MIDICIProfileState *)profileStateForCable:(uint8_t)cable channel:(MIDIChannelNumber)channel API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
+    pub fn profile_state_for_cable(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@method		enableProfile:cable:onChannel:error:
     // 	@brief		Enable a MIDI-CI Profile on the specified cable/channel.
@@ -1299,6 +1320,9 @@ impl AUAudioUnitRef {
     //             onChannel:(MIDIChannelNumber)channel
     //                 error:(NSError **)outError API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
 
+    pub fn enable_profile(&self) -> ! {
+        todo!()
+    }
     // /*!	@method		disableProfile:cable:onChannel:error:
     // 	@brief		Disable a MIDI-CI Profile on the specified cable/channel.
     // 	@param	profile
@@ -1317,7 +1341,9 @@ impl AUAudioUnitRef {
     //                  cable:(uint8_t)cable
     //              onChannel:(MIDIChannelNumber)channel
     //                  error:(NSError **)outError API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
-
+    pub fn disable_profile(&self) -> ! {
+        todo!()
+    }
     // /*!	@property	profileChangedBlock
     // 	@brief		A block called when a device notifies that a MIDI-CI profile has been enabled or
     // 				disabled.
@@ -1327,6 +1353,9 @@ impl AUAudioUnitRef {
     // 		profile has changed.
     // */
     // @property (nonatomic, nullable) AUMIDICIProfileChangedBlock profileChangedBlock API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
+    pub fn profile_changed_block(&self) -> ! {
+        todo!()
+    }
 
     // @end
 }
