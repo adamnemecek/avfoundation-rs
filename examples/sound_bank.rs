@@ -18,7 +18,7 @@ impl Instrument {
         engine.attach_node(&sampler);
         let output = engine.output_node();
         engine.connect_nodes(&sampler, output, None);
-        engine.start_and_return_error();
+        self.engine.start_and_return_error();
         let bank = 121;
         let url = std::path::Path::new("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
 
@@ -37,6 +37,14 @@ impl Instrument {
     pub fn stop_note(&self, note: u8, channel: u8) {
         self.sampler.stop_note(note, channel)
     }
+
+    // pub fn start(&self) {
+    //     self.engine.start_and_return_error();
+    // }
+}
+
+pub fn sleep(s: u64) {
+    std::thread::sleep(std::time::Duration::from_secs(s))
 }
 
 fn main() {
@@ -65,11 +73,12 @@ fn main() {
     // cbytes[0] = 0xB0
     //         cbytes[1] = 123
     //         cbytes[2] = 0
-    let bytes: [u8; 3] = [0xb0, 123, 0];
+    let bytes: [u8; 3] = [0x90, 123, 50];
     unsafe {
         block.call((AUEventSampleTimeImmediate, 0, 3, bytes.as_ptr()));
     }
 
+    sleep(1);
     // println!("{:?}", instrument.sampler.au_audio_unit().latency());
 
     use chromagear::prelude::*;
@@ -77,21 +86,21 @@ fn main() {
 
     let channel = 0;
     let loudness = 100;
-    for degree in 0..8 {
-        // let degree = rng.gen_range(0..6);
-        println!("degree {}", degree);
+    // for degree in 0..8 {
+    //     // let degree = rng.gen_range(0..6);
+    //     println!("degree {}", degree);
 
-        let chord = d_major.function(degree % 7);
-        // println!("chord {:?}", chord.names());
+    //     let chord = d_major.function(degree % 7);
+    //     // println!("chord {:?}", chord.names());
 
-        for p in chord.iter() {
-            instrument.play_note(Pitch::new(p, 5).into(), loudness, channel);
-        }
-        std::thread::sleep(std::time::Duration::from_millis(1000));
-        for p in chord.iter() {
-            instrument.stop_note(Pitch::new(p, 5).into(), channel);
-        }
-    }
+    //     for p in chord.iter() {
+    //         instrument.play_note(Pitch::new(p, 5).into(), loudness, channel);
+    //     }
+    //     std::thread::sleep(std::time::Duration::from_millis(1000));
+    //     for p in chord.iter() {
+    //         instrument.stop_note(Pitch::new(p, 5).into(), channel);
+    //     }
+    // }
 
     // std::thread::sleep(std::time::Duration::from_secs(1));
 }
