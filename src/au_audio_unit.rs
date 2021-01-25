@@ -1205,8 +1205,13 @@ impl AUAudioUnitRef {
     // 		Defaults to NO. Subclassers can override to return YES.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL canProcessInPlace;
-    pub fn can_process_in_place(&self) -> ! {
-        todo!()
+    pub fn can_process_in_place(&self) -> bool {
+        unsafe {
+            match msg_send![self, canProcessInPlace] {
+                YES => true,
+                NO => false,
+            }
+        }
     }
 
     // /*!	@property	renderingOffline
@@ -1221,12 +1226,17 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_OfflineRender.
     // */
     // @property (NS_NONATOMIC_IOSONLY, getter=isRenderingOffline) BOOL renderingOffline;
-    pub fn rendering_offline(&self) -> ! {
-        todo!()
+    pub fn is_rendering_offline(&self) -> bool {
+        unsafe {
+            match msg_send![self, isRenderingOffline] {
+                YES => true,
+                NO => false,
+            }
+        }
     }
 
     pub fn set_rendering_offline(&self, v: bool) {
-        todo!()
+        unsafe { msg_send![self, setRenderingOffline: v] }
     }
 
     // /*!	@property	channelCapabilities
@@ -1295,8 +1305,11 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_ContextName.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *contextName;
-    pub fn context_name(&self) -> ! {
-        todo!()
+    pub fn context_name(&self) -> &str {
+        unsafe {
+            let s = msg_send![self, contextName];
+            crate::nsstring_as_str(s)
+        }
     }
 
     // /*!	@property	supportsMPE
