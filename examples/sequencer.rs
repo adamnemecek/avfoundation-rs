@@ -6,7 +6,6 @@ use avfoundation::{
     AVMusicSequenceLoadOptions,
 };
 
-
 fn main() {
     // five();
     let path = std::path::PathBuf::from("/Users/adamnemecek/Downloads/darude-sandstorm.mid");

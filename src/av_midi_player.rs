@@ -123,6 +123,7 @@ impl AVMIDIPlayerRef {
         let block = block::ConcreteBlock::new(completion_handler);
         unsafe { msg_send![self, play: block] }
     }
+
     // /*! @method stop
     //     @abstract Stop playing the sequence.
     //  */

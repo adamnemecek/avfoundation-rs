@@ -305,8 +305,6 @@ impl AVAudioSequencerRef {
         }
     }
 
- 
-
     // /*!	@method	startAndReturnError:
     // 	@abstract	Start the sequencer's player
     // 	@discussion
@@ -315,7 +313,7 @@ impl AVAudioSequencerRef {
     // 		play if the audio engine is running.
     // */
     // - (BOOL)startAndReturnError:(NSError **)outError;
- 
+
     // /*!	@method	stop
     // 	@abstract	Stop the sequencer's player
     // 	@discussion
@@ -329,7 +327,6 @@ impl AVAudioSequencerRef {
             let _: () = msg_send![self, stop];
         }
     }
-
 }
 
 pub enum AVMusicTrackFFI {}
