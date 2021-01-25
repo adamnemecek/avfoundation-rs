@@ -193,14 +193,26 @@ impl AVMusicTrackRef {
     // }
 
     pub fn is_looping_enabled(&self) -> bool {
-        unsafe { msg_send![self, isLoopingEnabled] }
+        unsafe {
+            match msg_send![self, isLoopingEnabled] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
     }
 
     pub fn is_muted(&self) -> bool {
-        unsafe { msg_send![self, isMuted] }
+        unsafe {
+            match msg_send![self, isMuted] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
     }
 
-    pub fn number_of_loops(&self) -> u32 {
+    pub fn number_of_loops(&self) -> ! {
         unsafe { msg_send![self, numberOfLoops] }
     }
 
@@ -209,11 +221,16 @@ impl AVMusicTrackRef {
     }
 
     pub fn is_soloed(&self) -> bool {
-        unsafe { msg_send![self, isSoloed] }
+        unsafe {
+            match msg_send![self, isSoloed] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
     }
 
-    pub fn time_resolution(&self) -> u32 {
+    pub fn time_resolution(&self) -> ! {
         unsafe { msg_send![self, timeResolution] }
     }
-
 }
