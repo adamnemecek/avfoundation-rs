@@ -253,8 +253,8 @@ impl AVMusicTrackRef {
         unsafe { msg_send![self, destinationAudioUnit] }
     }
 
-    pub fn set_destination_audio_unit(&self, audioUnit: &AVAudioUnitRef) {
-        unsafe { msg_send![self, setDestinationAudioUnit: audioUnit] }
+    pub fn set_destination_audio_unit(&self, audio_unit: &AVAudioUnitRef) {
+        unsafe { msg_send![self, setDestinationAudioUnit: audio_unit] }
     }
     //
     // /*!	@property destinationMIDIEndpoint

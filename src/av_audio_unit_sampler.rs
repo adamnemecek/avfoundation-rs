@@ -1,7 +1,14 @@
+use cocoa_foundation::base::{
+    nil,
+    NO,
+    YES,
+};
+
 use crate::{
     AVAudioUnitMIDIInstrumentRef,
     NSError,
 };
+
 //
 // /*
 // 	File:		AVAudioUnitSampler.h
@@ -70,11 +77,6 @@ impl AVAudioUnitSamplerRef {
         bank_msb: u8,
         bank_lsb: u8,
     ) -> Result<bool, NSError> {
-        use cocoa_foundation::base::{
-            nil,
-            NO,
-            YES,
-        };
         let url = crate::path_to_url(bank_url);
 
         unsafe {
@@ -120,14 +122,9 @@ impl AVAudioUnitSamplerRef {
         &self,
         instrument_url: std::path::PathBuf,
     ) -> Result<bool, NSError> {
-        use cocoa_foundation::base::{
-            nil,
-            NO,
-            YES,
-        };
         let url = crate::path_to_url(instrument_url);
         unsafe {
-            let mut err: *mut NSError = std::ptr::null_mut();
+            let err: *mut NSError = std::ptr::null_mut();
             let res = match msg_send![self,
                loadInstrumentAtURL: url
                error: &err
