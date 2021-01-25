@@ -339,8 +339,8 @@ impl AVMusicTrackRef {
         unsafe { msg_send![self, lengthInBeats] }
     }
 
-    pub fn set_length_in_beats(&self, beats: AVMusicTimeStamp) {
-        unsafe { msg_send![self, setLengthInBeats: beats] }
+    pub fn set_length_in_beats(&self, length: AVMusicTimeStamp) {
+        unsafe { msg_send![self, setLengthInBeats: length] }
     }
     // /*! @property lengthInSeconds
     // 	@abstract The total duration of the track in seconds
@@ -353,6 +353,13 @@ impl AVMusicTrackRef {
     // 		The property will return the maximum of the user-set track length, or the calculated length.
     // */
     // @property (nonatomic) NSTimeInterval lengthInSeconds;
+    pub fn length_in_seconds(&self) -> NSTimeInterval {
+        unsafe { msg_send![self, lengthInSeconds] }
+    }
+
+    pub fn set_length_in_seconds(&self, length: NSTimeInterval) {
+        unsafe { msg_send![self, setLengthInSeconds: length] }
+    }
     //
     //
     // /*! @property timeResolution
