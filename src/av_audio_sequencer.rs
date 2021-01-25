@@ -9,6 +9,15 @@ use objc::runtime::{
     YES,
 };
 
+pub struct AVBeatRange {
+	pub start: AVMusicTimeStamp,
+	pub length: AVMusicTimeStamp,
+}
+
+pub struct AVMusicSequenceLoadOptions {
+
+}
+
 use cocoa_foundation::foundation::NSUInteger;
 
 pub type AVMusicTimeStamp = f64;
@@ -42,6 +51,9 @@ impl AVAudioSequencerRef {
     //         on exit, if an error occurs, a description of the error
     // */
     // - (BOOL)loadFromURL:(NSURL *)fileURL options:(AVMusicSequenceLoadOptions)options error:(NSError **)outError;
+    pub fn load_from_url(&self, url: std::path::PathBuf, ) -> bool{
+        todo!()
+    }
 
     // /*! @method loadFromData:options:error:
     //     @abstract Parse the data and add the its events to the sequence
@@ -193,13 +205,6 @@ impl AVMusicTrackRef {
     //     unsafe { msg_send![self, lengthInSeconds] }
     // }
 
-    // pub fn loop_range(&self) -> AVBeatRange {
-    //     unsafe { msg_send![self, loopRange] }
-    // }
-
-    // pub fn set_loop_range(&self) -> AVBeatRange {
-    //     unsafe { msg_send![self, loopRange] }
-    // }
 
     pub fn is_looping_enabled(&self) -> bool {
         unsafe {
@@ -285,6 +290,14 @@ impl AVMusicTrackRef {
     // 		The loop is set by specifying its beat range.
     // */
     // @property (nonatomic) AVBeatRange loopRange;
+
+    pub fn loop_range(&self) -> AVBeatRange {
+        unsafe { msg_send![self, loopRange] }
+    }
+
+    pub fn set_loop_range(&self, range: AVBeatRange)  {
+        unsafe { msg_send![self, setLoopRange: range] }
+    }
     //
     // /*!	@property loopingEnabled
     // 	@abstract Determines whether or not the track is looped.
