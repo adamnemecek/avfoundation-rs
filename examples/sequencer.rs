@@ -1,6 +1,4 @@
-use avfoundation::{
-    AVAudioSequencer,
-};
+use avfoundation::AVAudioSequencer;
 
 fn main() {
     println!("here");

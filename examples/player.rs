@@ -11,7 +11,6 @@ fn main() {
     let duration = std::time::Duration::from_secs(200);
     player.set_current_position(30.0);
     let tracks = player.tracks();
-    
-    // std::thread::sleep(duration);
 
+    // std::thread::sleep(duration);
 }
