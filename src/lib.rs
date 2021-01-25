@@ -254,3 +254,6 @@ pub use av_midi_player::*;
 
 mod av_speech_synthesis;
 pub use av_speech_synthesis::*;
+
+mod au_view_controller;
+pub use au_view_controller::*;

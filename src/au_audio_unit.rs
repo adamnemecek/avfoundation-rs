@@ -1318,8 +1318,13 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_SupportsMPE.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL supportsMPE API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
-    pub fn supports_mpe(&self) -> ! {
-        todo!()
+    pub fn supports_mpe(&self) -> bool {
+        unsafe {
+            match msg_send![self, supportsMPE] {
+                YES => true,
+                NO => false,
+            }
+        }
     }
 
     // /*!	@property	channelMap
