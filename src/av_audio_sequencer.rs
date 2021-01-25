@@ -1,24 +1,26 @@
-use crate::{
-    AVAudioEngineRef,
-    AVAudioUnitRef,
-    NSTimeInterval,
-};
 use objc::runtime::{
     Object,
     NO,
     YES,
 };
 
+use crate::{
+    AVAudioEngineRef,
+    AVAudioUnitRef,
+    NSTimeInterval,
+};
+use cocoa_foundation::{
+    base::nil,
+    foundation::{
+        NSInteger,
+        NSUInteger,
+    },
+};
+
 pub struct AVBeatRange {
-	pub start: AVMusicTimeStamp,
-	pub length: AVMusicTimeStamp,
+    pub start: AVMusicTimeStamp,
+    pub length: AVMusicTimeStamp,
 }
-
-pub struct AVMusicSequenceLoadOptions {
-
-}
-
-use cocoa_foundation::foundation::NSUInteger;
 
 pub type AVMusicTimeStamp = f64;
 
@@ -40,6 +42,11 @@ impl AVAudioSequencer {
     }
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct AVMusicSequenceLoadOptions {
+    inner: NSUInteger,
+}
 impl AVAudioSequencerRef {
     // /*! @method loadFromURL:options:error:
     //     @abstract Load the file referenced by the URL and add the events to the sequence
@@ -51,8 +58,18 @@ impl AVAudioSequencerRef {
     //         on exit, if an error occurs, a description of the error
     // */
     // - (BOOL)loadFromURL:(NSURL *)fileURL options:(AVMusicSequenceLoadOptions)options error:(NSError **)outError;
-    pub fn load_from_url(&self, url: std::path::PathBuf, ) -> bool{
-        todo!()
+    pub fn load_from_url(
+        &self,
+        url: std::path::PathBuf,
+        options: AVMusicSequenceLoadOptions,
+    ) -> bool {
+        unsafe {
+            match msg_send![self, loadFromURL: url options: options error: nil] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
     }
 
     // /*! @method loadFromData:options:error:
@@ -187,72 +204,6 @@ foreign_obj_type! {
 }
 
 impl AVMusicTrackRef {
-    // pub fn destination_midi_endpoint(&self) -> MIDIEndpointRef {
-    //     unsafe { msg_send![self, destinationMIDIEndpoint] }
-    // }
-
-    // pub fn set_destination_midi_endpoint(&self) -> MIDIEndpointRef {
-    //     unsafe { msg_send![self, destinationMIDIEndpoint] }
-    // }
-
-
-
-    // pub fn length_in_seconds(&self) -> TimeInterval {
-    //     unsafe { msg_send![self, lengthInSeconds] }
-    // }
-
-    // pub fn set_length_in_seconds(&self) -> TimeInterval {
-    //     unsafe { msg_send![self, lengthInSeconds] }
-    // }
-
-
-    pub fn is_looping_enabled(&self) -> bool {
-        unsafe {
-            match msg_send![self, isLoopingEnabled] {
-                YES => true,
-                NO => false,
-                _ => unreachable!(),
-            }
-        }
-    }
-
-    pub fn set_looping_enabled(&self, v: bool) {
-        todo!()
-    }
-
-    pub fn is_muted(&self) -> bool {
-        unsafe {
-            match msg_send![self, isMuted] {
-                YES => true,
-                NO => false,
-                _ => unreachable!(),
-            }
-        }
-    }
-
-    pub fn set_is_muted(&self, v: bool) {
-        todo!()
-    }
-
-    pub fn number_of_loops(&self) -> ! {
-        unsafe { msg_send![self, numberOfLoops] }
-    }
-
-    pub fn offset_time(&self) -> AVMusicTimeStamp {
-        unsafe { msg_send![self, offsetTime] }
-    }
-
-    pub fn is_soloed(&self) -> bool {
-        unsafe {
-            match msg_send![self, isSoloed] {
-                YES => true,
-                NO => false,
-                _ => unreachable!(),
-            }
-        }
-    }
-
-
     //     /* properties */
     //
     // /*!	@property destinationAudioUnit
@@ -295,7 +246,7 @@ impl AVMusicTrackRef {
         unsafe { msg_send![self, loopRange] }
     }
 
-    pub fn set_loop_range(&self, range: AVBeatRange)  {
+    pub fn set_loop_range(&self, range: AVBeatRange) {
         unsafe { msg_send![self, setLoopRange: range] }
     }
     //
@@ -305,6 +256,19 @@ impl AVMusicTrackRef {
     // 		If loopRange has not been set, the full track will be looped.
     // */
     // @property (nonatomic,getter=isLoopingEnabled) BOOL loopingEnabled;
+    pub fn is_looping_enabled(&self) -> bool {
+        unsafe {
+            match msg_send![self, isLoopingEnabled] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
+
+    pub fn set_looping_enabled(&self, v: bool) {
+        todo!()
+    }
     //
     // typedef NS_ENUM(NSInteger, AVMusicTrackLoopCount) {
     // 	AVMusicTrackLoopCountForever		= -1
@@ -317,6 +281,14 @@ impl AVMusicTrackRef {
     // 		Otherwise, legal values start with 1.
     // */
     // @property (nonatomic) NSInteger numberOfLoops;
+
+    pub fn number_of_loops(&self) -> NSInteger {
+        unsafe { msg_send![self, numberOfLoops] }
+    }
+
+    pub fn set_number_of_loops(&self, v: NSInteger) {
+        unsafe { msg_send![self, setNumberOfLoops: v] }
+    }
     //
     // /*! @property offsetTime
     // 	@abstract Offset the track's start time to the specified time in beats
@@ -324,16 +296,53 @@ impl AVMusicTrackRef {
     // 		By default this value is zero.
     // */
     // @property (nonatomic) AVMusicTimeStamp offsetTime;
+
+    pub fn offset_time(&self) -> AVMusicTimeStamp {
+        unsafe { msg_send![self, offsetTime] }
+    }
+
+    pub fn set_offset_time(&self, time: AVMusicTimeStamp) {
+        todo!()
+    }
+
     //
     // /*! @property muted
     // 	@abstract Whether the track is muted
     // */
     // @property (nonatomic,getter=isMuted) BOOL muted;
+    pub fn is_muted(&self) -> bool {
+        unsafe {
+            match msg_send![self, isMuted] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
+
+    pub fn set_is_muted(&self, v: bool) {
+        todo!()
+    }
+
     //
     // /*! @property soloed
     // 	@abstract Whether the track is soloed
     // */
     // @property (nonatomic,getter=isSoloed) BOOL soloed;
+
+    pub fn is_soloed(&self) -> bool {
+        unsafe {
+            match msg_send![self, isSoloed] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
+
+    pub fn set_soloed(&self, v: bool) {
+        todo!()
+    }
     //
     // /*! @property lengthInBeats
     // 	@abstract The total duration of the track in beats
