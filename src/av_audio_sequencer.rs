@@ -67,6 +67,7 @@ impl AVAudioSequencerRef {
     //         on exit, if an error occurs, a description of the error
     // */
     // - (BOOL)loadFromURL:(NSURL *)fileURL options:(AVMusicSequenceLoadOptions)options error:(NSError **)outError;
+    #[must_use]
     pub fn load_from_url(
         &self,
         url: std::path::PathBuf,
@@ -209,29 +210,6 @@ impl AVAudioSequencerRef {
     // */
     // @property (nonatomic, readonly) NSDictionary<NSString *, id> *userInfo;
 
-
-    pub fn prepare_to_play(&self) {
-        unsafe {
-            let _: () = msg_send![self, prepareToPlay];
-        }
-    }
-
-    pub fn stop(&self) {
-        unsafe {
-            let _: () = msg_send![self, stop];
-        }
-    }
-
-    // /*!	@property userInfo
-    // 	@abstract A dictionary containing meta-data derived from a sequence
-    // 	@discussion
-    // 		The dictionary can contain one or more of the kAFInfoDictionary_* keys
-    // 		specified in <AudioToolbox/AudioFile.h>
-    // */
-    // @property (nonatomic, readonly) NSDictionary<NSString *, id> *userInfo;
-
-    // @end
-
     // @interface AVAudioSequencer(AVAudioSequencer_Player)
 
     // /*! @property currentPositionInSeconds
@@ -241,8 +219,12 @@ impl AVAudioSequencerRef {
     // 		the player is playing, in which case playback will resume at the new position.
     // */
     // @property(nonatomic) NSTimeInterval currentPositionInSeconds;
-    pub fn current_position_in_seconds(&self) -> f64 {
+    pub fn current_position_in_seconds(&self) -> NSTimeInterval {
         unsafe { msg_send![self, currentPositionInSeconds] }
+    }
+
+    pub fn set_current_position_in_seconds(&self, position: NSTimeInterval) {
+        unsafe { msg_send![self, setCurrentPositionInSeconds: position] }
     }
 
     // /*! @property currentPositionInBeats
@@ -252,6 +234,13 @@ impl AVAudioSequencerRef {
     // 		the player is playing, in which case playback will resume at the new position.
     // */
     // @property(nonatomic) NSTimeInterval currentPositionInBeats;
+    pub fn current_position_in_beats(&self) -> NSTimeInterval {
+        unsafe { msg_send![self, currentPositionInBeats] }
+    }
+
+    pub fn set_current_position_in_beats(&self, position: NSTimeInterval) {
+        unsafe { msg_send![self, setCurrentPositionInBeats: position] }
+    }
 
     // /*! @property playing
     // 	@abstract Indicates whether or not the sequencer's player is playing
@@ -311,6 +300,14 @@ impl AVAudioSequencerRef {
     // */
     // - (void)prepareToPlay;
 
+    pub fn prepare_to_play(&self) {
+        unsafe {
+            let _: () = msg_send![self, prepareToPlay];
+        }
+    }
+
+ 
+
     // /*!	@method	startAndReturnError:
     // 	@abstract	Start the sequencer's player
     // 	@discussion
@@ -319,7 +316,7 @@ impl AVAudioSequencerRef {
     // 		play if the audio engine is running.
     // */
     // - (BOOL)startAndReturnError:(NSError **)outError;
-
+ 
     // /*!	@method	stop
     // 	@abstract	Stop the sequencer's player
     // 	@discussion
@@ -328,6 +325,12 @@ impl AVAudioSequencerRef {
     // 		will not stop an associated audio engine.
     // */
     // - (void)stop;
+    pub fn stop(&self) {
+        unsafe {
+            let _: () = msg_send![self, stop];
+        }
+    }
+
 }
 
 pub enum AVMusicTrackFFI {}

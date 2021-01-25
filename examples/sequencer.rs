@@ -1,10 +1,14 @@
+// #![deny(unused_must_use)]
+
 use avfoundation::{
     AVAudioEngine,
     AVAudioSequencer,
     AVMusicSequenceLoadOptions,
 };
 
+
 fn main() {
+    // five();
     let path = std::path::PathBuf::from("/Users/adamnemecek/Downloads/darude-sandstorm.mid");
     // let bank = std::path::PathBuf::from("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
     let engine = AVAudioEngine::new();
