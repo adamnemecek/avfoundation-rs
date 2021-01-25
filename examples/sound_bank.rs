@@ -1,10 +1,8 @@
 use avfoundation::{
+    AUEventSampleTimeImmediate,
     AVAudioEngine,
     AVAudioNode,
-    // ShouldStop,
-    // AVAudioUnitComponentManager,
     AVAudioUnitSampler,
-    // AUEventSampleTimeExt,
 };
 
 pub struct Instrument {
@@ -60,7 +58,18 @@ fn main() {
     // }
     let audiounit = instrument.sampler.au_audio_unit();
 
-    println!("{:?}", audiounit.device_input_latency());
+    // println!("{:?}", audiounit.device_input_latency());
+    let block = audiounit.schedule_midi_event_block();
+
+    // elf.noteBlock(AUEventSampleTimeImmediate, 0, 3, cbytes)
+    // cbytes[0] = 0xB0
+    //         cbytes[1] = 123
+    //         cbytes[2] = 0
+    let bytes: [u8; 3] = [0xb0, 123, 0];
+    unsafe {
+        block.call((AUEventSampleTimeImmediate, 0, 3, bytes.as_ptr()));
+    }
+
     // println!("{:?}", instrument.sampler.au_audio_unit().latency());
 
     use chromagear::prelude::*;

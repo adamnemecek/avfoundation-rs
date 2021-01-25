@@ -1,4 +1,13 @@
-use crate::{AURenderEventHeader, AVAudioFormatRef, AudioBufferList, AudioComponentDescription, NSError, NSErrorRef, NSTimeInterval, OSStatus};
+use crate::{
+    AURenderEventHeader,
+    AVAudioFormatRef,
+    AudioBufferList,
+    AudioComponentDescription,
+    NSError,
+    NSErrorRef,
+    NSTimeInterval,
+    OSStatus,
+};
 
 use cocoa_foundation::{
     base::{
@@ -818,8 +827,8 @@ impl AUAudioUnitRef {
     // 		This bridged to the v2 API MusicDeviceMIDIEvent.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, nullable) AUScheduleMIDIEventBlock scheduleMIDIEventBlock;
-    pub fn schedule_midi_event_block(&self) -> AUScheduleMIDIEventBlock {
-        todo!()
+    pub fn schedule_midi_event_block(&self) -> &AUScheduleMIDIEventBlock {
+        unsafe { msg_send![self, scheduleMIDIEventBlock] }
     }
 
     // /*!	@property	MIDIOutputNames
