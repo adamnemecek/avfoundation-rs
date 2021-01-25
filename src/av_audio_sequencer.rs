@@ -261,4 +261,111 @@ impl AVMusicTrackRef {
     pub fn time_resolution(&self) -> ! {
         unsafe { msg_send![self, timeResolution] }
     }
+
+///     /* properties */
+///
+/// /*!	@property destinationAudioUnit
+/// 	@abstract The AVAudioUnit which will receive the track's events
+/// 	@discussion
+/// 		This is mutually exclusive with setting a destination MIDIEndpoint.  The AU must already be
+/// 		attached to an audio engine, and the track must be part of the AVAudioSequencer associated
+/// 		with that engine. When playing, the track will send its events to that AVAudioUnit. The
+/// 		destination AU cannot be changed while the track's sequence is playing.
+/// */
+/// @property (nonatomic, retain, nullable) AVAudioUnit *destinationAudioUnit;
+///
+/// /*!	@property destinationMIDIEndpoint
+/// 	@abstract Set the track's target to the specified MIDI endpoint
+/// 	@discussion
+/// 		This is mutually exclusive with setting a destination audio unit.  Setting this will remove
+/// 		the track's reference to an AVAudioUnit destination.  When played, the track will send its
+/// 		events to the MIDI Endpoint.  See also MIDIDestinationCreate.  The endpoint cannot be
+/// 		changed while the track's sequence is playing.
+/// */
+/// #if TARGET_OS_OSX || TARGET_OS_IOS
+/// @property (nonatomic) MIDIEndpointRef destinationMIDIEndpoint;
+/// #endif
+///
+/// /*!	@property loopRange
+/// 	@abstract The timestamp range in beats for the loop
+/// 	@discussion
+/// 		The loop is set by specifying its beat range.
+/// */
+/// @property (nonatomic) AVBeatRange loopRange;
+///
+/// /*!	@property loopingEnabled
+/// 	@abstract Determines whether or not the track is looped.
+/// 	@discussion
+/// 		If loopRange has not been set, the full track will be looped.
+/// */
+/// @property (nonatomic,getter=isLoopingEnabled) BOOL loopingEnabled;
+///
+/// typedef NS_ENUM(NSInteger, AVMusicTrackLoopCount) {
+/// 	AVMusicTrackLoopCountForever		= -1
+/// } NS_ENUM_AVAILABLE(10_10, 8_0);
+///
+/// /*!	@property numberOfLoops
+/// 	@abstract The number of times that the track's loop will repeat
+/// 	@discussion
+/// 		If set to AVMusicTrackLoopCountForever, the track will loop forever.
+/// 		Otherwise, legal values start with 1.
+/// */
+/// @property (nonatomic) NSInteger numberOfLoops;
+///
+/// /*! @property offsetTime
+/// 	@abstract Offset the track's start time to the specified time in beats
+/// 	@discussion
+/// 		By default this value is zero.
+/// */
+/// @property (nonatomic) AVMusicTimeStamp offsetTime;
+///
+/// /*! @property muted
+/// 	@abstract Whether the track is muted
+/// */
+/// @property (nonatomic,getter=isMuted) BOOL muted;
+///
+/// /*! @property soloed
+/// 	@abstract Whether the track is soloed
+/// */
+/// @property (nonatomic,getter=isSoloed) BOOL soloed;
+///
+/// /*! @property lengthInBeats
+/// 	@abstract The total duration of the track in beats
+/// 	@discussion
+/// 		This will return the beat of the last event in the track plus any additional time that may
+/// 		be needed for fading out of ending notes or round a loop point to musical bar, etc.  If this
+/// 		has not been set by the user, the track length will always be adjusted to the end of the
+/// 		last active event in a track and is adjusted dynamically as events are added or removed.
+///
+/// 		The property will return the maximum of the user-set track length, or the calculated length.
+/// */
+/// @property (nonatomic) AVMusicTimeStamp lengthInBeats;
+///
+/// /*! @property lengthInSeconds
+/// 	@abstract The total duration of the track in seconds
+/// 	@discussion
+/// 		This will return time of the last event in the track plus any additional time that may be
+/// 		needed for fading out of ending notes or round a loop point to musical bar, etc.  If this
+/// 		has not been set by the user, the track length will always be adjusted to the end of the
+/// 		last active event in a track and is adjusted dynamically as events are added or removed.
+///
+/// 		The property will return the maximum of the user-set track length, or the calculated length.
+/// */
+/// @property (nonatomic) NSTimeInterval lengthInSeconds;
+///
+///
+/// /*! @property timeResolution
+/// 	@abstract The time resolution value for the sequence, in ticks (pulses) per quarter note (PPQN)
+/// 	@discussion
+/// 		If a MIDI file was used to construct the containing sequence, the resolution will be what
+/// 		was in the file. If you want to keep a time resolution when writing a new file, you can
+/// 		retrieve this value and then specify it when calling -[AVAudioSequencer
+/// 		writeToFile:flags:withResolution]. It has no direct bearing on the rendering or notion of
+/// 		time of the sequence itself, just its representation in MIDI files. By default this is set
+/// 		to either 480 if the sequence was created manually, or a value based on what was in a MIDI
+/// 		file if the sequence was created from a MIDI file.
+///
+/// 		This can only be retrieved from the tempo track.
+/// */
+/// @property (nonatomic, readonly) NSUInteger timeResolution;
 }
