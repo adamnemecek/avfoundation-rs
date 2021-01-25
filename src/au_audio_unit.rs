@@ -2,6 +2,7 @@ use crate::{
     AudioBufferList,
     AudioComponentDescription,
     OSStatus,
+    NSTimeInterval,
 };
 
 
@@ -9,6 +10,8 @@ use cocoa_foundation::base::{
     NO,
     YES,
 };
+
+
 
 // #if (defined(__USE_PUBLIC_HEADERS__) && __USE_PUBLIC_HEADERS__) || (defined(USE_AUDIOTOOLBOX_PUBLIC_HEADERS) && USE_AUDIOTOOLBOX_PUBLIC_HEADERS) || !__has_include(<AudioToolboxCore/AUAudioUnit.h>)
 // /*!
@@ -27,6 +30,7 @@ use cocoa_foundation::base::{
 
 // #if !TARGET_OS_IPHONE
 // typedef UInt32 AUAudioObjectID; // AudioObjectID
+pub type  AUAudioObjectID = u32;
 // #endif
 
 // NS_ASSUME_NONNULL_BEGIN
@@ -1298,6 +1302,9 @@ impl AUAudioUnitRef {
     // 	@brief		Get the I/O hardware device.
     // */
     // @property (nonatomic, readonly) AUAudioObjectID deviceID;
+    pub fn device_id(&self) -> AUAudioObjectID {
+        todo!()
+    }
 
     // /*!	@method		setDeviceID:error:
     // 	@brief		Set the I/O hardware device.
@@ -1315,6 +1322,9 @@ impl AUAudioUnitRef {
     // 		by v2 input/output units.
     // */
     // @property (nonatomic, readonly) NSTimeInterval deviceInputLatency API_AVAILABLE(macos(10.13));
+    pub fn device_input_latency(&self) -> NSTimeInterval {
+        todo!()
+    }
 
     // /*!	@property	deviceOutputLatency
     // 	@brief		The audio device's output latency, in seconds.
@@ -1341,6 +1351,9 @@ impl AUAudioUnitRef {
     // 	@brief		Stops the audio hardware.
     // */
     // - (void)stopHardware;
+    pub fn stop_hardware(&self) {
+         unsafe { msg_send![self, stopHardware] }
+    }
 
     // /*!	@property	osWorkgroup
     // 	@brief		The os_workgroup_t to which the input/output audio unit belongs.
