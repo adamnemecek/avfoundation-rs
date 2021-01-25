@@ -785,6 +785,9 @@ impl AUAudioUnitRef {
     // 		property expresses the number of cables supported by the audio unit.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSInteger virtualMIDICableCount;
+    pub fn virtual_midi_cable_count(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	scheduleMIDIEventBlock
     // 	@brief		Block used to schedule MIDI events.
@@ -801,6 +804,9 @@ impl AUAudioUnitRef {
     // 		This bridged to the v2 API MusicDeviceMIDIEvent.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, nullable) AUScheduleMIDIEventBlock scheduleMIDIEventBlock;
+    pub fn schedule_midi_event_block(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	MIDIOutputNames
     // 	@brief		Count, and names of, a plug-in's MIDI outputs.
@@ -812,6 +818,9 @@ impl AUAudioUnitRef {
     // 		This is bridged to the v2 API property kAudioUnitProperty_MIDIOutputCallbackInfo.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSArray<NSString *> *MIDIOutputNames API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    pub fn midi_output_names(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	providesUserInterface
     // 	@brief		Specifies whether an audio unit provides UI (normally in the form of a view controller).
@@ -823,6 +832,9 @@ impl AUAudioUnitRef {
     // 		`requestViewControllerWithCompletionHandler:` in <CoreAudioKit/AUViewController.h>
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL providesUserInterface API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    pub fn provides_user_interface(&self) -> ! {
+        todo!()
+    }
 
     // // ------------------------
     // // These properties and methods are generally optional.
@@ -836,6 +848,9 @@ impl AUAudioUnitRef {
     //  		This is bridged to the v2 API property kAudioUnitProperty_MIDIOutputCallback.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUMIDIOutputEventBlock MIDIOutputEventBlock API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    pub fn midi_output_event_block(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	fullState
     // 	@brief		A persistable snapshot of the audio unit's properties and parameters, suitable for
@@ -853,6 +868,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_ClassInfo.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSDictionary<NSString *, id> *fullState;
+    pub fn full_state(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	fullStateForDocument
     // 	@brief		A persistable snapshot of the audio unit's properties and parameters, suitable for
@@ -869,6 +887,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_ClassInfoFromDocument.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSDictionary<NSString *, id> *fullStateForDocument;
+    pub fn full_state_for_document(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	factoryPresets
     // 	@brief		A collection of presets provided by the audio unit's developer.
@@ -879,6 +900,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_FactoryPresets.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<AUAudioUnitPreset *> *factoryPresets;
+    pub fn factory_presets(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	userPresets
     // 	@brief		A collection of presets saved by the user
@@ -896,6 +920,9 @@ impl AUAudioUnitRef {
     // 		(e.g. from their iCloud container).
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSArray<AUAudioUnitPreset *> *userPresets API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+    pub fn user_presets(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@method		saveUserPreset:error
     // 	@brief		Persistently save the current state of the audio unit into a userPreset
@@ -928,6 +955,9 @@ impl AUAudioUnitRef {
     // 		outError.
     //  */
     // - (BOOL)saveUserPreset:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+    pub fn save_user_preset(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@method		deleteUserPreset:error
     // 	@brief		Remove a user preset.
@@ -953,6 +983,9 @@ impl AUAudioUnitRef {
     // 		outError.
     // */
     // - (BOOL)deleteUserPreset:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+    pub fn delete_user_preset(&self) -> ! {
+        todo!()
+    }
 
     // /*! @method		presetStateFor:error
     // 	@brief		Retrieve the state stored in a user preset
@@ -995,6 +1028,9 @@ impl AUAudioUnitRef {
     // 													@kAUPresetDataKey : NSData
     // */
     // - (nullable NSDictionary<NSString *, id> *)presetStateFor:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+    pub fn preset_state_for(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	supportsUserPresets
     // 	@brief		Specifies whether an audio unit supports loading and saving user presets
@@ -1009,6 +1045,9 @@ impl AUAudioUnitRef {
     // 		restoring state from user presets may result in incorrect behavior.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL supportsUserPresets API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+    pub fn supports_user_presets(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	isLoadedInProcess
     // 	@brief		Set to YES when an AUAudioUnit is loaded in-process
@@ -1027,6 +1066,9 @@ impl AUAudioUnitRef {
     // 		be done in the audio unit's extension process.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL isLoadedInProcess API_AVAILABLE(macos(10.15)) API_UNAVAILABLE(ios, watchos, tvos);
+    pub fn is_loaded_in_process(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	currentPreset
     // 	@brief		The audio unit's last-selected preset.
@@ -1038,6 +1080,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_PresentPreset.
     // */
     // @property (NS_NONATOMIC_IOSONLY, retain, nullable) AUAudioUnitPreset *currentPreset;
+    pub fn current_preset(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	latency
     // 	@brief		The audio unit's processing latency, in seconds.
@@ -1058,6 +1103,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_Latency.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSTimeInterval latency;
+    pub fn latency(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	tailTime
     // 	@brief		The audio unit's tail time, in seconds.
@@ -1069,6 +1117,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_TailTime.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSTimeInterval tailTime;
+    pub fn tail_time(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	renderQuality
     // 	@brief		Provides a trade-off between rendering quality and CPU load.
@@ -1078,6 +1129,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_RenderQuality.
     // */
     // @property (NS_NONATOMIC_IOSONLY) NSInteger renderQuality;
+    pub fn render_quality(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	shouldBypassEffect
     // 	@brief		Directs an effect to route input directly to output, without any processing.
@@ -1085,6 +1139,13 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_BypassEffect.
     // */
     // @property (NS_NONATOMIC_IOSONLY) BOOL shouldBypassEffect;
+    pub fn should_bypass_effect(&self) -> ! {
+        todo!()
+    }
+
+    pub fn set_should_bypass_effect(&self, v: bool) {
+        todo!()
+    }
 
     // /*!	@property	canProcessInPlace
     // 	@brief		Expresses whether an audio unit can process in place.
@@ -1102,6 +1163,9 @@ impl AUAudioUnitRef {
     // 		Defaults to NO. Subclassers can override to return YES.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL canProcessInPlace;
+    pub fn can_process_in_place(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	renderingOffline
     // 	@brief		Communicates to an audio unit that it is rendering offline.
@@ -1115,6 +1179,13 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_OfflineRender.
     // */
     // @property (NS_NONATOMIC_IOSONLY, getter=isRenderingOffline) BOOL renderingOffline;
+    pub fn rendering_offline(&self) -> ! {
+        todo!()
+    }
+
+    pub fn set_rendering_offline(&self, v: bool) {
+        todo!()
+    }
 
     // /*!	@property	channelCapabilities
     // 	@brief		Expresses valid combinations of input and output channel counts.
