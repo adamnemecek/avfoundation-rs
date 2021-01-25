@@ -14,7 +14,7 @@ fn u32_to_string(a: u32) -> String {
 
     s.iter().collect()
 }
-
+#[repr(C)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct AudioComponentDescription {
     pub component_type: u32,

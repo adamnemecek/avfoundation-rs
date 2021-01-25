@@ -1,5 +1,5 @@
 use crate::{
-    AUAudioUnit,
+    AUAudioUnitRef,
     AVAudioEngineRef,
     AVAudioFormat,
     AVAudioFormatRef,
@@ -146,7 +146,7 @@ impl AVAudioNodeRef {
     /// 		directly on the audio unit. These include changing initialization state, stream formats,
     /// 		channel layouts or connections to other audio units.
     /// */
-    pub fn au_audio_unit(&self) -> &AUAudioUnit {
+    pub fn au_audio_unit(&self) -> &AUAudioUnitRef {
         unsafe { msg_send![self, AUAudioUnit] }
     }
 

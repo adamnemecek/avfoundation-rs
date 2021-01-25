@@ -1,5 +1,5 @@
-#![link(name = "AVFoundation", kind = "framework")]
 #![link(name = "AudioToolbox", kind = "framework")]
+#![link(name = "AVFoundation", kind = "framework")]
 
 #[macro_use]
 extern crate bitflags;

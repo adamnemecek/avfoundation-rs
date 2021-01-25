@@ -56,6 +56,10 @@ fn main() {
     //     let pitch = rng.gen_range(0..127);
     //     instrument.play_note(pitch, 100, 0);
     // }
+    let audiounit = instrument.sampler.au_audio_unit();
+
+    println!("{:?}", audiounit.tail_time());
+    // println!("{:?}", instrument.sampler.au_audio_unit().latency());
 
     use chromagear::prelude::*;
     let d_major = Scale::new(PC::C, &[0, 2, 4, 5, 7, 9, 11]);

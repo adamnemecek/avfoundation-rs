@@ -517,24 +517,33 @@ impl AUAudioUnitRef {
     // 		from the component name.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *componentName;
-    pub fn component_name(&self) -> ! {
-        todo!()
+    pub fn component_name(&self) -> &str {
+        unsafe {
+            let s = msg_send![self, componentName];
+            crate::nsstring_as_str(s)
+        }
     }
 
     // /*!	@property	audioUnitName
     // 	@brief		The audio unit's name.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitName;
-    pub fn audio_unit_name(&self) -> ! {
-        todo!()
+    pub fn audio_unit_name(&self) -> &str {
+        unsafe {
+            let s = msg_send![self, audioUnitName];
+            crate::nsstring_as_str(s)
+        }
     }
 
     // /*!	@property	manufacturerName
     // 	@brief		The manufacturer's name.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *manufacturerName;
-    pub fn manufacturer_name(&self) -> ! {
-        todo!()
+    pub fn manufacturer_name(&self) -> &str {
+        unsafe {
+            let s = msg_send![self, manufacturerName];
+            crate::nsstring_as_str(s)
+        }
     }
 
     // /*!	@property	audioUnitShortName
@@ -553,8 +562,8 @@ impl AUAudioUnitRef {
     // 	@brief		The unit's component's version.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) uint32_t componentVersion;
-    pub fn component_version(&self) -> ! {
-        todo!()
+    pub fn component_version(&self) -> u32 {
+        unsafe { msg_send![self, componentVersion] }
     }
 
     // /*!	@method		allocateRenderResourcesAndReturnError:
@@ -1102,8 +1111,8 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_Latency.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSTimeInterval latency;
-    pub fn latency(&self) -> ! {
-        todo!()
+    pub fn latency(&self) -> NSTimeInterval {
+        unsafe { msg_send![self, latency] }
     }
 
     // /*!	@property	tailTime
@@ -1116,8 +1125,8 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_TailTime.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSTimeInterval tailTime;
-    pub fn tail_time(&self) -> ! {
-        todo!()
+    pub fn tail_time(&self) -> NSTimeInterval {
+        unsafe { msg_send![self, tailTime] }
     }
 
     // /*!	@property	renderQuality
