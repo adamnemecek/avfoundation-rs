@@ -450,10 +450,6 @@ foreign_obj_type! {
 }
 
 impl AUAudioUnitRef {
-    pub fn component_description(&self) -> AudioComponentDescription {
-        unsafe { msg_send![self, componentDescription] }
-    }
-
     // @interface AUAudioUnit : NSObject
 
     // - (instancetype)init NS_UNAVAILABLE;
@@ -500,11 +496,19 @@ impl AUAudioUnitRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AudioComponentDescription componentDescription;
 
+    pub fn component_description(&self) -> AudioComponentDescription {
+        unsafe { msg_send![self, componentDescription] }
+    }
+
     // /*!	@property	component
     // 	@brief		The AudioComponent which was found based on componentDescription when the
     // 				audio unit was created.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AudioComponent component;
+
+    pub fn component(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	componentName
     // 	@brief		The unit's component's name.
@@ -514,16 +518,25 @@ impl AUAudioUnitRef {
     // 		from the component name.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *componentName;
+    pub fn component_name(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	audioUnitName
     // 	@brief		The audio unit's name.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitName;
+    pub fn audio_unit_name(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	manufacturerName
     // 	@brief		The manufacturer's name.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *manufacturerName;
+    pub fn manufacturer_name(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	audioUnitShortName
     // 	@brief		A short name for the audio unit.
@@ -533,11 +546,17 @@ impl AUAudioUnitRef {
     // 		truncate it.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitShortName API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    pub fn audio_unit_short_name(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	componentVersion
     // 	@brief		The unit's component's version.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) uint32_t componentVersion;
+    pub fn component_version(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@method		allocateRenderResourcesAndReturnError:
     // 	@brief		Allocate resources required to render.
@@ -558,11 +577,23 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitUninitialize().
     // */
     // - (void)deallocateRenderResources;
+    pub fn deallocate_render_resources(&self) {
+        unsafe { msg_send![self, deallocateRenderResources] }
+    }
 
     // /*!	@property	renderResourcesAllocated
     // 	@brief		returns YES if the unit has render resources allocated.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL renderResourcesAllocated;
+    pub fn render_resources_allocated(&self) -> bool {
+        unsafe {
+            match msg_send![self, renderResourcesAllocated] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
     // /*!	@method		reset
     // 	@brief		Reset transitory rendering state to its initial state.
