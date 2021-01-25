@@ -1,12 +1,4 @@
-use crate::{
-    AVAudioFormat,
-    AudioBufferList,
-    AudioComponentDescription,
-    NSError,
-    NSErrorRef,
-    NSTimeInterval,
-    OSStatus,
-};
+use crate::{AURenderEventHeader, AVAudioFormatRef, AudioBufferList, AudioComponentDescription, NSError, NSErrorRef, NSTimeInterval, OSStatus};
 
 use cocoa_foundation::{
     base::{
@@ -65,6 +57,20 @@ pub type AUAudioUnitStatus = OSStatus;
 // */
 // typedef int64_t AUEventSampleTime;
 pub type AUEventSampleTime = i64;
+
+#[allow(non_upper_case_globals, overflowing_literals)]
+pub const AUEventSampleTimeImmediate: i64 = 0xffffffff00000000;
+// pub trait AUEventSampleTimeExt {
+//     fn immediate() -> Self;
+// }
+
+// impl AUEventSampleTimeExt for AUEventSampleTime {
+//     #[allow(overflowing_literals)]
+//     fn immediate() -> Self {
+//         0xffffffff00000000
+//         // todo!()
+//     }
+// }
 
 // /*!	@var		AUEventSampleTimeImmediate
 // 	@brief		A special value of AUEventSampleTime indicating "immediately."
@@ -812,7 +818,7 @@ impl AUAudioUnitRef {
     // 		This bridged to the v2 API MusicDeviceMIDIEvent.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, nullable) AUScheduleMIDIEventBlock scheduleMIDIEventBlock;
-    pub fn schedule_midi_event_block(&self) -> ! {
+    pub fn schedule_midi_event_block(&self) -> AUScheduleMIDIEventBlock {
         todo!()
     }
 
@@ -1494,7 +1500,7 @@ impl AUAudioUnitRef {
     // */
     // @property (nonatomic, readonly) AUAudioObjectID deviceID;
     pub fn device_id(&self) -> AUAudioObjectID {
-        todo!()
+        unsafe { msg_send![self, deviceID] }
     }
 
     // /*!	@method		setDeviceID:error:
@@ -1514,7 +1520,7 @@ impl AUAudioUnitRef {
     // */
     // @property (nonatomic, readonly) NSTimeInterval deviceInputLatency API_AVAILABLE(macos(10.13));
     pub fn device_input_latency(&self) -> NSTimeInterval {
-        todo!()
+        unsafe { msg_send![self, deviceInputLatency] }
     }
 
     // /*!	@property	deviceOutputLatency
@@ -1718,7 +1724,7 @@ impl AUAudioUnitBusRef {
     // 		Bridged to the v2 property kAudioUnitProperty_StreamFormat.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AVAudioFormat *format;
-    pub fn format(&self) -> &AVAudioFormat {
+    pub fn format(&self) -> &AVAudioFormatRef {
         todo!()
     }
 
@@ -1730,7 +1736,7 @@ impl AUAudioUnitBusRef {
     // 		see AUAudioUnit.channelCapabilities.
     // */
     // - (BOOL)setFormat:(AVAudioFormat *)format error:(NSError **)outError;
-    pub fn set_format(&self, format: AVAudioFormat) -> bool {
+    pub fn set_format(&self, format: &AVAudioFormatRef) -> bool {
         todo!()
     }
 

@@ -4,6 +4,7 @@ use avfoundation::{
     // ShouldStop,
     // AVAudioUnitComponentManager,
     AVAudioUnitSampler,
+    // AUEventSampleTimeExt,
 };
 
 pub struct Instrument {
@@ -42,6 +43,7 @@ impl Instrument {
 
 fn main() {
     use rand::Rng;
+    println!("{:?}", avfoundation::AUEventSampleTimeImmediate);
     let instrument = Instrument::new();
     let mut rng = rand::thread_rng();
 
@@ -58,7 +60,7 @@ fn main() {
     // }
     let audiounit = instrument.sampler.au_audio_unit();
 
-    println!("{:?}", audiounit.tail_time());
+    println!("{:?}", audiounit.device_input_latency());
     // println!("{:?}", instrument.sampler.au_audio_unit().latency());
 
     use chromagear::prelude::*;
