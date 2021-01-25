@@ -2,6 +2,8 @@ use crate::{
     AVAudioFormat,
     AudioBufferList,
     AudioComponentDescription,
+    NSError,
+    NSErrorRef,
     NSTimeInterval,
     OSStatus,
 };
@@ -11,10 +13,7 @@ use cocoa_foundation::{
         NO,
         YES,
     },
-    foundation::{
-        self,
-        NSUInteger,
-    },
+    foundation::NSUInteger,
 };
 
 // #if (defined(__USE_PUBLIC_HEADERS__) && __USE_PUBLIC_HEADERS__) || (defined(USE_AUDIOTOOLBOX_PUBLIC_HEADERS) && USE_AUDIOTOOLBOX_PUBLIC_HEADERS) || !__has_include(<AudioToolboxCore/AUAudioUnit.h>)
@@ -1618,11 +1617,48 @@ impl AUAudioUnitBusArrayRef {
     // 		The base implementation returns false.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, getter=isCountChangeable) BOOL countChangeable;
+    pub fn count_changeable(&self) -> bool {
+        unsafe {
+            match msg_send![self, countChangeable] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
     // /*!	@property	setBusCount:error:
     // 	@brief		Change the number of busses in the array.
     // */
     // - (BOOL)setBusCount:(NSUInteger)count error:(NSError **)outError;
+    // unsafe {
+    //     let mut err: *mut Object = ptr::null_mut();
+    //     let result: BOOL = msg_send![self, addComputePipelineFunctionsWithDescriptor:descriptor
+    //                                                                 error:&mut err];
+    //     if !err.is_null() {
+    //         // FIXME: copy pasta
+    //         let desc: *mut Object = msg_send![err, localizedDescription];
+    //         let c_msg: *const c_char = msg_send![desc, UTF8String];
+    //         let message = CStr::from_ptr(c_msg).to_string_lossy().into_owned();
+    //         Err(message)
+    //     } else {
+    //         match result {
+    //             YES => Ok(true),
+    //             NO => Ok(false),
+    //             _ => unreachable!(),
+    //         }
+    //     }
+    // }
+    pub fn set_bus_count(&self, count: NSUInteger, error: Option<&NSErrorRef>) -> bool {
+        unsafe {
+            let mut err: *mut NSError = std::ptr::null_mut();
+            match msg_send![self, countChangeable: count error: &mut err] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
     // /*!	@method		addObserverToAllBusses:forKeyPath:options:context:
     // 	@brief		Add a KVO observer for a property on all busses in the array.
@@ -1639,6 +1675,9 @@ impl AUAudioUnitBusArrayRef {
 
     // /// Which bus array this is (input or output).
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusType busType;
+    pub fn bus_type(&self) -> AUAudioUnitBusType {
+        unsafe { msg_send![self, busType] }
+    }
 
     // @end
 }

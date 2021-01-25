@@ -131,6 +131,9 @@ mod prelude;
 mod au_component;
 pub use au_component::*;
 
+mod ns_error;
+pub use ns_error::*;
+
 mod au_audio_unit;
 pub use au_audio_unit::*;
 
