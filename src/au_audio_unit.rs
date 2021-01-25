@@ -4,6 +4,12 @@ use crate::{
     OSStatus,
 };
 
+
+use cocoa_foundation::base::{
+    NO,
+    YES,
+};
+
 // #if (defined(__USE_PUBLIC_HEADERS__) && __USE_PUBLIC_HEADERS__) || (defined(USE_AUDIOTOOLBOX_PUBLIC_HEADERS) && USE_AUDIOTOOLBOX_PUBLIC_HEADERS) || !__has_include(<AudioToolboxCore/AUAudioUnit.h>)
 // /*!
 // 	@file		AUAudioUnit.h
@@ -268,7 +274,8 @@ pub type AUScheduleMIDIEventBlock = block::Block<(AUEventSampleTime, u8, NSInteg
 // 		in the chunk.
 // */
 // typedef OSStatus (^AUMIDIOutputEventBlock)(AUEventSampleTime eventSampleTime, uint8_t cable, NSInteger length, const uint8_t *midiBytes);
-pub type AUMIDIOutputEventBlock = block::Block<(AUEventSampleTime, u8, NSInteger, *const u8), OSStatus>;
+pub type AUMIDIOutputEventBlock =
+    block::Block<(AUEventSampleTime, u8, NSInteger, *const u8), OSStatus>;
 
 // /*!	@typedef	AUHostMusicalContextBlock
 // 	@brief		Block by which hosts provide musical tempo, time signature, and beat position.
@@ -328,7 +335,8 @@ pub struct MIDIChannelNumber {
 pub struct MIDICIProfile {
     //todo
 }
-pub type AUMIDICIProfileChangedBlock = block::Block<(u8, MIDIChannelNumber, *const MIDICIProfile, BOOL,), OSStatus>;
+pub type AUMIDICIProfileChangedBlock =
+    block::Block<(u8, MIDIChannelNumber, *const MIDICIProfile, BOOL), OSStatus>;
 
 // /*!	@enum		AUHostTransportStateFlags
 // 	@brief		Flags describing the host's transport state.
@@ -356,7 +364,7 @@ pub enum AUHostTransportStateFlags {
     Changed = 1,
     Moving = 2,
     Recorging = 4,
-    Cycling = 8
+    Cycling = 8,
 }
 
 // /*!	@typedef	AUHostTransportStateBlock
@@ -1198,103 +1206,155 @@ impl AUAudioUnitRef {
 // */
 // @interface AUAudioUnit (AUAudioInputOutputUnit)
 
-// /*!	@property	canPerformInput
-// 	@brief		Whether the I/O device can perform input.
-// */
-// @property (nonatomic, readonly) BOOL canPerformInput;
+impl AUAudioUnitRef {
+    // /*!	@property	canPerformInput
+    // 	@brief		Whether the I/O device can perform input.
+    // */
+    // @property (nonatomic, readonly) BOOL canPerformInput;
+    pub fn can_perform_input(&self) -> bool {
+        unsafe {
+            match msg_send![self, canPerformInput] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
-// /*!	@property	canPerformOutput
-// 	@brief		Whether the I/O device can perform output.
-// */
-// @property (nonatomic, readonly) BOOL canPerformOutput;
+    // /*!	@property	canPerformOutput
+    // 	@brief		Whether the I/O device can perform output.
+    // */
+    // @property (nonatomic, readonly) BOOL canPerformOutput;
+    pub fn can_perform_output(&self) -> bool {
+        unsafe {
+            match msg_send![self, canPerformOutput] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
-// /*!	@property	inputEnabled
-// 	@brief		Flag enabling audio input from the unit.
-// 	@discussion	Input is disabled by default. This must be set to YES if input audio is desired.
-// 				Setting to YES will have no effect if canPerformInput is false.
-// */
-// @property (nonatomic, getter=isInputEnabled) BOOL inputEnabled;
+    // /*!	@property	inputEnabled
+    // 	@brief		Flag enabling audio input from the unit.
+    // 	@discussion	Input is disabled by default. This must be set to YES if input audio is desired.
+    // 				Setting to YES will have no effect if canPerformInput is false.
+    // */
+    // @property (nonatomic, getter=isInputEnabled) BOOL inputEnabled;
+    pub fn is_input_enabled(&self) -> bool {
+        unsafe {
+            match msg_send![self, isInputEnabled] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
-// /*!	@property	outputEnabled
-// 	@brief		Flag enabling audio output from the unit.
-// 	@discussion	Output is enabled by default.
-// 				Setting to YES will have no effect if canPerformOutput is false.
-// */
-// @property (nonatomic, getter=isOutputEnabled) BOOL outputEnabled;
+    pub fn set_input_enabled(&self, v: bool) {
+        todo!()
+    }
 
-// /*!	@property	outputProvider
-// 	@brief		The block that the output unit will call to get audio to send to the output.
-// 	@discussion	This block must be set if output is enabled.
-// */
-// @property (nonatomic, copy, nullable) AURenderPullInputBlock outputProvider;
+    // /*!	@property	outputEnabled
+    // 	@brief		Flag enabling audio output from the unit.
+    // 	@discussion	Output is enabled by default.
+    // 				Setting to YES will have no effect if canPerformOutput is false.
+    // */
+    // @property (nonatomic, getter=isOutputEnabled) BOOL outputEnabled;
+    pub fn is_output_enabled(&self) -> bool {
+        unsafe {
+            match msg_send![self, isOutputEnabled] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
-// /*!	@property	inputHandler
-// 	@brief		The block that the output unit will call to notify when input is available.
-// 	@discussion	See discussion for AUInputHandler.
-// */
-// @property (nonatomic, copy, nullable) AUInputHandler inputHandler;
+    pub fn set_output_enabled(&self, v: bool) {
+        todo!()
+    }
 
-// #if !TARGET_OS_IPHONE
-// /*!	@property	device
-// 	@brief		Get the I/O hardware device.
-// */
-// @property (nonatomic, readonly) AUAudioObjectID deviceID;
+    // /*!	@property	outputProvider
+    // 	@brief		The block that the output unit will call to get audio to send to the output.
+    // 	@discussion	This block must be set if output is enabled.
+    // */
+    // @property (nonatomic, copy, nullable) AURenderPullInputBlock outputProvider;
+    pub fn output_provider(&self) -> AURenderPullInputBlock {
+        todo!()
+    }
 
-// /*!	@method		setDeviceID:error:
-// 	@brief		Set the I/O hardware device.
-// 	@param deviceID
-// 		The device to select.
-// 	@param outError
-// 		Returned in the event of failure.
-// */
-// - (BOOL)setDeviceID:(AUAudioObjectID)deviceID error:(NSError **)outError;
+    // /*!	@property	inputHandler
+    // 	@brief		The block that the output unit will call to notify when input is available.
+    // 	@discussion	See discussion for AUInputHandler.
+    // */
+    // @property (nonatomic, copy, nullable) AUInputHandler inputHandler;
+    pub fn input_handler(&self) -> AURenderPullInputBlock {
+        todo!()
+    }
 
-// /*!	@property	deviceInputLatency
-// 	@brief		The audio device's input latency, in seconds.
-// 	@discussion
-// 		Bridged to the HAL property kAudioDevicePropertyLatency, which is implemented
-// 		by v2 input/output units.
-// */
-// @property (nonatomic, readonly) NSTimeInterval deviceInputLatency API_AVAILABLE(macos(10.13));
+    // #if !TARGET_OS_IPHONE
+    // /*!	@property	device
+    // 	@brief		Get the I/O hardware device.
+    // */
+    // @property (nonatomic, readonly) AUAudioObjectID deviceID;
 
-// /*!	@property	deviceOutputLatency
-// 	@brief		The audio device's output latency, in seconds.
-// 	@discussion
-// 		Bridged to the HAL property kAudioDevicePropertyLatency, which is implemented
-// 		by v2 input/output units.
-// */
-// @property (nonatomic, readonly) NSTimeInterval deviceOutputLatency API_AVAILABLE(macos(10.13));
-// #endif // TARGET_OS_IPHONE
+    // /*!	@method		setDeviceID:error:
+    // 	@brief		Set the I/O hardware device.
+    // 	@param deviceID
+    // 		The device to select.
+    // 	@param outError
+    // 		Returned in the event of failure.
+    // */
+    // - (BOOL)setDeviceID:(AUAudioObjectID)deviceID error:(NSError **)outError;
 
-// /*!	@property	running
-// 	@brief		The audio device's running state.
-// */
-// @property (nonatomic, readonly, getter=isRunning) BOOL running API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    // /*!	@property	deviceInputLatency
+    // 	@brief		The audio device's input latency, in seconds.
+    // 	@discussion
+    // 		Bridged to the HAL property kAudioDevicePropertyLatency, which is implemented
+    // 		by v2 input/output units.
+    // */
+    // @property (nonatomic, readonly) NSTimeInterval deviceInputLatency API_AVAILABLE(macos(10.13));
 
-// /*!	@method		startHardwareAndReturnError:
-// 	@brief		Starts the audio hardware.
-// 	@param outError
-// 		Returned in the event of failure.
-// */
-// - (BOOL)startHardwareAndReturnError:(NSError **)outError;
+    // /*!	@property	deviceOutputLatency
+    // 	@brief		The audio device's output latency, in seconds.
+    // 	@discussion
+    // 		Bridged to the HAL property kAudioDevicePropertyLatency, which is implemented
+    // 		by v2 input/output units.
+    // */
+    // @property (nonatomic, readonly) NSTimeInterval deviceOutputLatency API_AVAILABLE(macos(10.13));
+    // #endif // TARGET_OS_IPHONE
 
-// /*!	@method		stopHardware
-// 	@brief		Stops the audio hardware.
-// */
-// - (void)stopHardware;
+    // /*!	@property	running
+    // 	@brief		The audio device's running state.
+    // */
+    // @property (nonatomic, readonly, getter=isRunning) BOOL running API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
 
-// /*!	@property	osWorkgroup
-// 	@brief		The os_workgroup_t to which the input/output audio unit belongs.
-// 	@discussion
-// 		For further background, see <AudioToolbox/AudioWorkInterval.h>.
+    // /*!	@method		startHardwareAndReturnError:
+    // 	@brief		Starts the audio hardware.
+    // 	@param outError
+    // 		Returned in the event of failure.
+    // */
+    // - (BOOL)startHardwareAndReturnError:(NSError **)outError;
 
-// 		Bridged to the v2 property kAudioOutputUnitProperty_OSWorkgroup.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) os_workgroup_t osWorkgroup
-// 	API_AVAILABLE(macos(11.0), ios(14.0), watchos(7.0), tvos(14.0))
-// 	__SWIFT_UNAVAILABLE_MSG("Swift is not supported for use with audio realtime threads");
+    // /*!	@method		stopHardware
+    // 	@brief		Stops the audio hardware.
+    // */
+    // - (void)stopHardware;
 
-// @end
+    // /*!	@property	osWorkgroup
+    // 	@brief		The os_workgroup_t to which the input/output audio unit belongs.
+    // 	@discussion
+    // 		For further background, see <AudioToolbox/AudioWorkInterval.h>.
+
+    // 		Bridged to the v2 property kAudioOutputUnitProperty_OSWorkgroup.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) os_workgroup_t osWorkgroup
+    // 	API_AVAILABLE(macos(11.0), ios(14.0), watchos(7.0), tvos(14.0))
+    // 	__SWIFT_UNAVAILABLE_MSG("Swift is not supported for use with audio realtime threads");
+
+    // @end
+}
 
 // // =================================================================================================
 
