@@ -13,9 +13,7 @@ impl std::fmt::Display for NSError {
     }
 }
 
-impl std::error::Error for NSError {
-
-}
+impl std::error::Error for NSError {}
 
 impl NSErrorRef {
     // pub fn new(raw: id) -> Option<Self> {
