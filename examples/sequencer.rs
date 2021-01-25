@@ -6,14 +6,17 @@ use avfoundation::{
 
 fn main() {
     let path = std::path::PathBuf::from("/Users/adamnemecek/Downloads/darude-sandstorm.mid");
-    let bank = std::path::PathBuf::from("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
+    // let bank = std::path::PathBuf::from("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
     let engine = AVAudioEngine::new();
     let sequencer = AVAudioSequencer::with_engine(&engine);
 
     match sequencer.load_from_url(path, Default::default()) {
         Ok(res) => {println!("ok")},
-        Err(e) => println!("err {:?}", e.localized_description()),
-    } ;
+        Err(e) => println!("err {:?}", e.domain()),
+    };
+    let tempo = sequencer.tempo_track().unwrap();
+    println!("tempo {:?}", tempo.is_soloed());
+
     let tracks = sequencer.tracks();
     for t in tracks {
         println!("is_soloed {:?}", t.is_soloed());
