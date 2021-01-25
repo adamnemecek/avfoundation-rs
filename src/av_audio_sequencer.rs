@@ -267,7 +267,7 @@ impl AVMusicTrackRef {
     }
 
     pub fn set_looping_enabled(&self, v: bool) {
-        todo!()
+        unsafe { msg_send![self, setLoopingEnabled: v] }
     }
     //
     // typedef NS_ENUM(NSInteger, AVMusicTrackLoopCount) {
@@ -302,7 +302,7 @@ impl AVMusicTrackRef {
     }
 
     pub fn set_offset_time(&self, time: AVMusicTimeStamp) {
-        todo!()
+        unsafe { msg_send![self, setOffsetTime: time] }
     }
 
     //
@@ -321,7 +321,7 @@ impl AVMusicTrackRef {
     }
 
     pub fn set_is_muted(&self, v: bool) {
-        todo!()
+        unsafe { msg_send![self, setMuted: v] }
     }
 
     //
@@ -341,7 +341,7 @@ impl AVMusicTrackRef {
     }
 
     pub fn set_soloed(&self, v: bool) {
-        todo!()
+        unsafe { msg_send![self, setSoloed: v] }
     }
     //
     // /*! @property lengthInBeats
