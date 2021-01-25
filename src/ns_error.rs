@@ -40,14 +40,10 @@ impl NSErrorRef {
     }
 
     pub fn domain(&self) -> &str {
-        unsafe {
-            crate::nsstring_as_str(msg_send![self, domain])
-        }
+        unsafe { crate::nsstring_as_str(msg_send![self, domain]) }
     }
 
     pub fn localized_description(&self) -> &str {
-        unsafe {
-            crate::nsstring_as_str(msg_send![self, localizedDescription])
-        }
+        unsafe { crate::nsstring_as_str(msg_send![self, localizedDescription]) }
     }
 }

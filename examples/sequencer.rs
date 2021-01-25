@@ -11,7 +11,9 @@ fn main() {
     let sequencer = AVAudioSequencer::with_engine(&engine);
 
     match sequencer.load_from_url(path, Default::default()) {
-        Ok(res) => {println!("ok")},
+        Ok(res) => {
+            println!("ok")
+        }
         Err(e) => println!("err {:?}", e.domain()),
     };
     let tempo = sequencer.tempo_track().unwrap();
@@ -21,7 +23,10 @@ fn main() {
     for t in tracks {
         println!("is_soloed {:?}", t.is_soloed());
     }
-    println!("here");
+    println!(
+        "current_position_in_seconds {:?}",
+        sequencer.current_position_in_seconds()
+    );
 
     // println!("player {:?}", player.duration());
     // player.set_rate(1.5);

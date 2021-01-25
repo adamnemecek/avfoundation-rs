@@ -7,9 +7,9 @@ use objc::runtime::{
 use crate::{
     AVAudioEngineRef,
     AVAudioUnitRef,
-    NSTimeInterval,
     NSError,
     NSErrorRef,
+    NSTimeInterval,
 };
 use cocoa_foundation::{
     base::nil,
@@ -208,23 +208,7 @@ impl AVAudioSequencerRef {
     //         specified in <AudioToolbox/AudioFile.h>
     // */
     // @property (nonatomic, readonly) NSDictionary<NSString *, id> *userInfo;
-    pub fn current_position_in_seconds(&self) -> f64 {
-        unsafe { msg_send![self, currentPositionInSeconds] }
-    }
 
-    pub fn rate(&self) -> f32 {
-        unsafe { msg_send![self, rate] }
-    }
-
-    pub fn is_playing(&self) -> bool {
-        unsafe {
-            match msg_send![self, isPlaying] {
-                YES => true,
-                NO => false,
-                _ => unreachable!(),
-            }
-        }
-    }
 
     pub fn prepare_to_play(&self) {
         unsafe {
@@ -237,6 +221,113 @@ impl AVAudioSequencerRef {
             let _: () = msg_send![self, stop];
         }
     }
+
+    // /*!	@property userInfo
+    // 	@abstract A dictionary containing meta-data derived from a sequence
+    // 	@discussion
+    // 		The dictionary can contain one or more of the kAFInfoDictionary_* keys
+    // 		specified in <AudioToolbox/AudioFile.h>
+    // */
+    // @property (nonatomic, readonly) NSDictionary<NSString *, id> *userInfo;
+
+    // @end
+
+    // @interface AVAudioSequencer(AVAudioSequencer_Player)
+
+    // /*! @property currentPositionInSeconds
+    // 	@abstract The current playback position in seconds
+    // 	@discussion
+    // 		Setting this positions the sequencer's player to the specified time.  This can be set while
+    // 		the player is playing, in which case playback will resume at the new position.
+    // */
+    // @property(nonatomic) NSTimeInterval currentPositionInSeconds;
+    pub fn current_position_in_seconds(&self) -> f64 {
+        unsafe { msg_send![self, currentPositionInSeconds] }
+    }
+
+    // /*! @property currentPositionInBeats
+    // 	@abstract The current playback position in beats
+    // 	@discussion
+    // 		Setting this positions the sequencer's player to the specified beat.  This can be set while
+    // 		the player is playing, in which case playback will resume at the new position.
+    // */
+    // @property(nonatomic) NSTimeInterval currentPositionInBeats;
+
+    // /*! @property playing
+    // 	@abstract Indicates whether or not the sequencer's player is playing
+    // 	@discussion
+    // 		Returns TRUE if the sequencer's player has been started and not stopped. It may have
+    // 		"played" past the end of the events in the sequence, but it is still considered to be
+    // 		playing (and its time value increasing) until it is explicitly stopped.
+    // */
+    // @property(nonatomic, readonly, getter=isPlaying) BOOL playing;
+
+    pub fn is_playing(&self) -> bool {
+        unsafe {
+            match msg_send![self, isPlaying] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
+
+    // /*! @property rate
+    // 	@abstract The playback rate of the sequencer's player
+    // 	@discussion
+    // 		1.0 is normal playback rate.  Rate must be > 0.0.
+    // */
+    // @property (nonatomic) float rate;
+
+    pub fn rate(&self) -> f32 {
+        unsafe { msg_send![self, rate] }
+    }
+
+    // /*!	@method hostTimeForBeats:error:
+    // 	@abstract Returns the host time that will be (or was) played at the specified beat.
+    // 	@discussion
+    // 		This call is only valid if the player is playing and will return 0 with an error if the
+    // 		player is not playing or if the starting position of the player (its "starting beat") was
+    // 		after the specified beat.  The method uses the sequence's tempo map to translate a beat
+    // 		time from the starting time and beat of the player.
+    // */
+    // - (UInt64)hostTimeForBeats:(AVMusicTimeStamp)inBeats error:(NSError **)outError;
+
+    // /*!	@method beatsForHostTime:error:
+    // 	@abstract Returns the beat that will be (or was) played at the specified host time.
+    // 	@discussion
+    // 		This call is only valid if the player is playing and will return 0 with an error if the
+    // 		player is not playing or if the starting time of the player was after the specified host
+    // 		time.  The method uses the sequence's tempo map to retrieve a beat time from the starting
+    // 		and specified host time.
+    // */
+    // - (AVMusicTimeStamp)beatsForHostTime:(UInt64)inHostTime error:(NSError **)outError;
+
+    // /*! @method prepareToPlay
+    // 	@abstract Get ready to play the sequence by prerolling all events
+    // 	@discussion
+    // 		Happens automatically on play if it has not already been called, but may produce a delay in
+    // 		startup.
+    // */
+    // - (void)prepareToPlay;
+
+    // /*!	@method	startAndReturnError:
+    // 	@abstract	Start the sequencer's player
+    // 	@discussion
+    // 		If the AVAudioSequencer has not been prerolled, it will pre-roll itself and then start.
+    // 		When the sequencer is associated with an audio engine, the sequencer's player will only
+    // 		play if the audio engine is running.
+    // */
+    // - (BOOL)startAndReturnError:(NSError **)outError;
+
+    // /*!	@method	stop
+    // 	@abstract	Stop the sequencer's player
+    // 	@discussion
+    // 		Stopping the player leaves it in an un-prerolled state, but stores the playback position so
+    // 		that a subsequent call to startAndReturnError will resume where it left off. This action
+    // 		will not stop an associated audio engine.
+    // */
+    // - (void)stop;
 }
 
 pub enum AVMusicTrackFFI {}
