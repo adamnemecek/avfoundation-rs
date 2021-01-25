@@ -181,13 +181,7 @@ impl AVMusicTrackRef {
     //     unsafe { msg_send![self, destinationMIDIEndpoint] }
     // }
 
-    // pub fn length_in_beats(&self) -> AVMusicTimeStamp {
-    //     unsafe { msg_send![self, lengthInBeats] }
-    // }
 
-    // pub fn set_length_in_beats(&self) -> AVMusicTimeStamp {
-    //     unsafe { msg_send![self, lengthInBeats] }
-    // }
 
     // pub fn length_in_seconds(&self) -> TimeInterval {
     //     unsafe { msg_send![self, lengthInSeconds] }
@@ -341,6 +335,13 @@ impl AVMusicTrackRef {
     // */
     // @property (nonatomic) AVMusicTimeStamp lengthInBeats;
     //
+    pub fn length_in_beats(&self) -> AVMusicTimeStamp {
+        unsafe { msg_send![self, lengthInBeats] }
+    }
+
+    pub fn set_length_in_beats(&self, beats: AVMusicTimeStamp) {
+        unsafe { msg_send![self, setLengthInBeats: beats] }
+    }
     // /*! @property lengthInSeconds
     // 	@abstract The total duration of the track in seconds
     // 	@discussion
