@@ -9,6 +9,8 @@ use objc::runtime::{
     YES,
 };
 
+use cocoa_foundation::foundation::NSUInteger;
+
 pub type AVMusicTimeStamp = f64;
 
 pub enum AVAudioSequencerFFI {}
@@ -245,9 +247,6 @@ impl AVMusicTrackRef {
         }
     }
 
-    pub fn time_resolution(&self) -> ! {
-        unsafe { msg_send![self, timeResolution] }
-    }
 
     //     /* properties */
     //
@@ -376,4 +375,8 @@ impl AVMusicTrackRef {
     // 		This can only be retrieved from the tempo track.
     // */
     // @property (nonatomic, readonly) NSUInteger timeResolution;
+
+    pub fn time_resolution(&self) -> NSUInteger {
+        unsafe { msg_send![self, timeResolution] }
+    }
 }
