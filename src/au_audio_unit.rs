@@ -854,8 +854,13 @@ impl AUAudioUnitRef {
     // 		`requestViewControllerWithCompletionHandler:` in <CoreAudioKit/AUViewController.h>
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL providesUserInterface API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
-    pub fn provides_user_interface(&self) -> ! {
-        todo!()
+    pub fn provides_user_interface(&self) -> bool {
+        unsafe {
+            match msg_send![self, providesUserInterface] {
+                YES => true,
+                NO => false,
+            }
+        }
     }
 
     // // ------------------------
@@ -1067,8 +1072,13 @@ impl AUAudioUnitRef {
     // 		restoring state from user presets may result in incorrect behavior.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL supportsUserPresets API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
-    pub fn supports_user_presets(&self) -> ! {
-        todo!()
+    pub fn supports_user_presets(&self) -> bool {
+        unsafe {
+            match msg_send![self, supportsUserPresets] {
+                YES => true,
+                NO => false,
+            }
+        }
     }
 
     // /*!	@property	isLoadedInProcess
@@ -1088,8 +1098,13 @@ impl AUAudioUnitRef {
     // 		be done in the audio unit's extension process.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL isLoadedInProcess API_AVAILABLE(macos(10.15)) API_UNAVAILABLE(ios, watchos, tvos);
-    pub fn is_loaded_in_process(&self) -> ! {
-        todo!()
+    pub fn is_loaded_in_process(&self) -> bool {
+        unsafe {
+            match msg_send![self, isLoadedInProcess] {
+                YES => true,
+                NO => false,
+            }
+        }
     }
 
     // /*!	@property	currentPreset
@@ -1151,8 +1166,8 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_RenderQuality.
     // */
     // @property (NS_NONATOMIC_IOSONLY) NSInteger renderQuality;
-    pub fn render_quality(&self) -> ! {
-        todo!()
+    pub fn render_quality(&self) -> NSInteger {
+        unsafe { msg_send![self, renderQuality] }
     }
 
     // /*!	@property	shouldBypassEffect
@@ -1161,8 +1176,13 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_BypassEffect.
     // */
     // @property (NS_NONATOMIC_IOSONLY) BOOL shouldBypassEffect;
-    pub fn should_bypass_effect(&self) -> ! {
-        todo!()
+    pub fn should_bypass_effect(&self) -> bool {
+        unsafe {
+            match msg_send![self, shouldBypassEffect] {
+                YES => true,
+                NO => false,
+            }
+        }
     }
 
     pub fn set_should_bypass_effect(&self, v: bool) {
