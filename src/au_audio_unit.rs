@@ -1486,6 +1486,9 @@ foreign_obj_type! {
     pub struct AUAudioUnitBus;
     pub struct AUAudioUnitBusRef;
 }
+use crate::{
+    AVAudioFormat
+};
 
 impl AUAudioUnitBusRef {
     // /*!	@property	format
@@ -1494,6 +1497,9 @@ impl AUAudioUnitBusRef {
     // 		Bridged to the v2 property kAudioUnitProperty_StreamFormat.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AVAudioFormat *format;
+    pub fn format(&self) -> &AVAudioFormat {
+        todo!()
+    }
 
     // /*!	@property	setFormat:error:
     // 	@brief		Sets the bus's audio format.
@@ -1523,6 +1529,9 @@ impl AUAudioUnitBusRef {
     //         Bridged to the v2 property kAudioUnitProperty_ShouldAllocateBuffer.
     // */
     // @property (NS_NONATOMIC_IOSONLY) BOOL shouldAllocateBuffer API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    pub fn should_allocate_buffer(&self) -> bool {
+        todo!()
+    }
 
     // /*!	@property	enabled
     // 	@brief		Whether the bus is active.
@@ -1535,26 +1544,41 @@ impl AUAudioUnitBusRef {
     // 		kAudioUnitProperty_SetRenderCallback.
     // */
     // @property (NS_NONATOMIC_IOSONLY, getter=isEnabled) BOOL enabled;
+    pub fn is_enabled(&self) -> bool {
+        todo!()
+    }
 
     // /*!	@property	name
     // 	@brief		A name for the bus. Can be set by host.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *name;
+    pub fn name(&self) -> &str {
+        todo!()
+    }
 
     // /*! @property   index
     //     @brief      The index of this bus in the containing array.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSUInteger index;
+    pub fn index(&self) -> NSUInteger {
+        todo!()
+    }
 
     // /*! @property   busType
     //     @brief      The AUAudioUnitBusType.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusType busType;
+    pub fn bus_type(&self) -> AUAudioUnitBusType {
+        todo!()
+    }
 
     // /*! @property   ownerAudioUnit
     // 	@brief      The audio unit that owns the bus.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, assign) AUAudioUnit *ownerAudioUnit;
+    pub fn owner_audio_unit(&self) -> &AUAudioUnitRef {
+        todo!()
+    }
 
     // /*!	@property	supportedChannelLayoutTags
     // 	@discussion
@@ -1614,6 +1638,7 @@ foreign_obj_type! {
     pub struct AUAudioUnitPreset;
     pub struct AUAudioUnitPresetRef;
 }
+
 impl AUAudioUnitPresetRef {
     // /*!	@class	AUAudioUnitPreset
     // 	@brief	A collection of parameter settings provided by the audio unit implementor, producing a
@@ -1626,11 +1651,18 @@ impl AUAudioUnitPresetRef {
     // 	@brief		The preset's unique numeric identifier.
     // */
     // @property (NS_NONATOMIC_IOSONLY) NSInteger number;
+    pub fn number(&self) -> NSInteger {
+        unsafe { msg_send![self, number] }
+    }
 
     // /*!	@property	name
     // 	@brief		The preset's name.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy) NSString *name;
+
+    pub fn name(&self) -> &str {
+        unsafe { crate::nsstring_as_str(msg_send![self, name]) }
+    }
 
     // @end
 }
