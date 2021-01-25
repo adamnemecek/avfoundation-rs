@@ -370,7 +370,6 @@ impl AVAudioEngineRef {
             match msg_send![self, startAndReturnError: &error] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -533,7 +532,6 @@ impl AVAudioEngineRef {
             match msg_send![self, isRunning] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -544,7 +542,6 @@ impl AVAudioEngineRef {
             match msg_send![self, isAutoShutdownEnabled] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -588,7 +585,6 @@ impl AVAudioEngineRef {
             match msg_send![self, isInManualRenderingMode] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }

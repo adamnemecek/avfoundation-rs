@@ -91,7 +91,6 @@ impl AVAudioUnitSamplerRef {
             ] {
                 YES => true,
                 NO => false,
-                _ => unimplemented!(),
             };
             if err.is_null() {
                 Ok(res)
@@ -132,7 +131,6 @@ impl AVAudioUnitSamplerRef {
             ] {
                 YES => true,
                 NO => false,
-                _ => unimplemented!(),
             };
 
             if err.is_null() {

@@ -256,7 +256,6 @@ impl AVAudioSequencerRef {
             match msg_send![self, isPlaying] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -399,7 +398,6 @@ impl AVMusicTrackRef {
             match msg_send![self, isLoopingEnabled] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -453,7 +451,6 @@ impl AVMusicTrackRef {
             match msg_send![self, isMuted] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -473,7 +470,6 @@ impl AVMusicTrackRef {
             match msg_send![self, isSoloed] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }

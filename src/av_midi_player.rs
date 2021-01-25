@@ -149,7 +149,6 @@ impl AVMIDIPlayerRef {
             match msg_send![self, isPlaying] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }

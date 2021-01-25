@@ -613,7 +613,6 @@ impl AUAudioUnitRef {
             match msg_send![self, renderResourcesAllocated] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -1426,7 +1425,6 @@ impl AUAudioUnitRef {
             match msg_send![self, canPerformInput] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -1440,7 +1438,6 @@ impl AUAudioUnitRef {
             match msg_send![self, canPerformOutput] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -1456,7 +1453,6 @@ impl AUAudioUnitRef {
             match msg_send![self, isInputEnabled] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -1476,7 +1472,6 @@ impl AUAudioUnitRef {
             match msg_send![self, isOutputEnabled] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -1646,7 +1641,6 @@ impl AUAudioUnitBusArrayRef {
             match msg_send![self, countChangeable] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
