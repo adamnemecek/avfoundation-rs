@@ -170,3 +170,50 @@ foreign_obj_type! {
     pub struct AVMusicTrack;
     pub struct AVMusicTrackRef;
 }
+
+impl AVMusicTrackRef {
+    // pub fn destination_audio_unit(&self) -> &AVAudioUnit {
+    //     unsafe { msg_send![self, destinationAudioUnit] }
+    // }
+
+    // pub fn destination_midi_endpoint(&self) -> MIDIEndpointRef {
+    //     unsafe { msg_send![self, destinationMIDIEndpoint] }
+    // }
+
+    // pub fn length_in_beats(&self) -> AVMusicTimeStamp {
+    //     unsafe { msg_send![self, lengthInBeats] }
+    // }
+
+    // pub fn length_in_seconds(&self) -> TimeInterval {
+    //     unsafe { msg_send![self, lengthInSeconds] }
+    // }
+
+    // pub fn loop_range(&self) -> AVBeatRange {
+    //     unsafe { msg_send![self, loopRange] }
+    // }
+
+    pub fn is_looping_enabled(&self) -> bool {
+        unsafe { msg_send![self, isLoopingEnabled] }
+    }
+
+    pub fn is_muted(&self) -> bool {
+        unsafe { msg_send![self, isMuted] }
+    }
+
+    pub fn number_of_loops(&self) -> u32 {
+        unsafe { msg_send![self, numberOfLoops] }
+    }
+
+    pub fn offset_time(&self) -> AVMusicTimeStamp {
+        unsafe { msg_send![self, offsetTime] }
+    }
+
+    pub fn is_soloed(&self) -> bool {
+        unsafe { msg_send![self, isSoloed] }
+    }
+
+    pub fn time_resolution(&self) -> u32 {
+        unsafe { msg_send![self, timeResolution] }
+    }
+
+}
