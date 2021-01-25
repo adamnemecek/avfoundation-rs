@@ -1,3 +1,4 @@
+use crate::AUAudioUnitRef;
 // //
 // //  AUViewController.h
 // //	Framework: CoreAudioKit
@@ -90,61 +91,74 @@ impl AUAudioUnitViewConfigurationRef {
 
     // @end
 }
-// API_AVAILABLE(macos(10.12), ios(9.0)) API_UNAVAILABLE(watchos)
-// @interface AUAudioUnit (AUAudioUnit_ViewController)
-// /*!	@method	requestViewControllerWithCompletionHandler:
-// 	@brief	Obtains an audio unit's view controller (and thereby a view).
-// 	@discussion
-// 		Asynchronously requests the audio unit's view controller. This method will later call the
-// 		completion handler, in a thread/dispatch queue context internal to the implementation, with
-// 		a view controller, or nil in the case of an audio unit without a custom view controller.
-// */
-// - (void)requestViewControllerWithCompletionHandler:(void (^)(AUViewControllerBase * __nullable viewController))completionHandler;
 
-// /*!	@method		supportedViewConfigurations
-// 	@param		availableViewConfigurations
-// 		The list of all available view configurations supported by the host.
-// 	@return
-// 		A set of indices of view configurations from the availableViewConfigurations array that the
-// 		audio unit supports.
-// 	@brief      Query the list of supported view configurations.
-// 	@discussion
-// 		The host can query the audio unit for all the view configurations it supports.
-// 		Hosts can support multiple configurations in which they can display the user interfaces of
-// 		audio units (for example: full screen, normal, live mode, etc). These configurations can be
-// 		of different sizes and the host might display its own control surfaces along with the view
-// 		of the audio unit. The host will call this method and pass an array of supported
-// 		configurations.
+use cocoa_foundation::base::{
+    id,
+    nil,
+};
 
-// 		The audio unit should override this method and implement its own logic to report all the
-// 		view configurations it supports. The size of the view in the selected configuration should
-// 		be large enough to fit the view of the audio unit, otherwise it might be truncated and a
-// 		scroll bar might be necessary to navigate it.
+pub type RequestAUAudioUnitViewController = block::Block<id, ()>;
 
-// 		In case an empty set is returned from this method, it is considered that the plugin only
-// 		supports the largest available view configuration.
-// */
-// - (NSIndexSet *)supportedViewConfigurations:(NSArray<AUAudioUnitViewConfiguration *> *)availableViewConfigurations API_AVAILABLE(macosx(10.13), ios(11.0)) API_UNAVAILABLE(watchos, tvos);
+impl AUAudioUnitRef {
+    // API_AVAILABLE(macos(10.12), ios(9.0)) API_UNAVAILABLE(watchos)
+    // @interface AUAudioUnit (AUAudioUnit_ViewController)
+    // /*!	@method	requestViewControllerWithCompletionHandler:
+    // 	@brief	Obtains an audio unit's view controller (and thereby a view).
+    // 	@discussion
+    // 		Asynchronously requests the audio unit's view controller. This method will later call the
+    // 		completion handler, in a thread/dispatch queue context internal to the implementation, with
+    // 		a view controller, or nil in the case of an audio unit without a custom view controller.
+    // */
+    // - (void)requestViewControllerWithCompletionHandler:(void (^)(AUViewControllerBase * __nullable viewController))completionHandler;
+    pub fn request_view_controller(&self, block: &RequestAUAudioUnitViewController) {
+        unsafe { msg_send![self, requestViewControllerWithCompletionHandler: block] }
+    }
 
-// /*!	@method		selectViewConfiguration
-// 	@param		viewConfiguration
-//         The requested view configuration.
+    // /*!	@method		supportedViewConfigurations
+    // 	@param		availableViewConfigurations
+    // 		The list of all available view configurations supported by the host.
+    // 	@return
+    // 		A set of indices of view configurations from the availableViewConfigurations array that the
+    // 		audio unit supports.
+    // 	@brief      Query the list of supported view configurations.
+    // 	@discussion
+    // 		The host can query the audio unit for all the view configurations it supports.
+    // 		Hosts can support multiple configurations in which they can display the user interfaces of
+    // 		audio units (for example: full screen, normal, live mode, etc). These configurations can be
+    // 		of different sizes and the host might display its own control surfaces along with the view
+    // 		of the audio unit. The host will call this method and pass an array of supported
+    // 		configurations.
 
-//         The view configuration passed to this method should be one which was indicated as supported
-//         via supportedViewConfigurations. If any other, unsupported, view configuration is passed or
-//         if supportedViewConfigurations returns an empty set, the audio unit implementation should
-//         fall back to its default (largest available) view configuration.
+    // 		The audio unit should override this method and implement its own logic to report all the
+    // 		view configurations it supports. The size of the view in the selected configuration should
+    // 		be large enough to fit the view of the audio unit, otherwise it might be truncated and a
+    // 		scroll bar might be necessary to navigate it.
 
-// 	@brief		Request a view configuration from the audio unit.
-// 	@discussion
-// 		The host can use this method to switch the audio unit's view into a new configuration.
-// 		Audio Units should override this method with the logic needed to adapt their view controller
-// 		to the requested configuration.
-// */
-// - (void)selectViewConfiguration:(AUAudioUnitViewConfiguration *)viewConfiguration API_AVAILABLE(macosx(10.13), ios(11.0)) API_UNAVAILABLE(watchos, tvos);
+    // 		In case an empty set is returned from this method, it is considered that the plugin only
+    // 		supports the largest available view configuration.
+    // */
+    // - (NSIndexSet *)supportedViewConfigurations:(NSArray<AUAudioUnitViewConfiguration *> *)availableViewConfigurations API_AVAILABLE(macosx(10.13), ios(11.0)) API_UNAVAILABLE(watchos, tvos);
 
-// @end
+    // /*!	@method		selectViewConfiguration
+    // 	@param		viewConfiguration
+    //         The requested view configuration.
 
-// NS_ASSUME_NONNULL_END
+    //         The view configuration passed to this method should be one which was indicated as supported
+    //         via supportedViewConfigurations. If any other, unsupported, view configuration is passed or
+    //         if supportedViewConfigurations returns an empty set, the audio unit implementation should
+    //         fall back to its default (largest available) view configuration.
 
-// #endif
+    // 	@brief		Request a view configuration from the audio unit.
+    // 	@discussion
+    // 		The host can use this method to switch the audio unit's view into a new configuration.
+    // 		Audio Units should override this method with the logic needed to adapt their view controller
+    // 		to the requested configuration.
+    // */
+    // - (void)selectViewConfiguration:(AUAudioUnitViewConfiguration *)viewConfiguration API_AVAILABLE(macosx(10.13), ios(11.0)) API_UNAVAILABLE(watchos, tvos);
+
+    // @end
+
+    // NS_ASSUME_NONNULL_END
+
+    // #endif
+}
