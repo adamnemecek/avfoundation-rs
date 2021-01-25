@@ -1608,7 +1608,7 @@ impl AUAudioUnitBusArrayRef {
     // */
     // - (AUAudioUnitBus *)objectAtIndexedSubscript:(NSUInteger)index;
     pub fn object_at_indexed_subscript(&self, index: NSUInteger) -> &AUAudioUnitBus {
-        todo!()
+        unsafe { msg_send![self, objectAtIndexedSubscript: index] }
     }
 
     // /*!	@property	countChangeable
@@ -1652,6 +1652,11 @@ impl AUAudioUnitBusArrayRef {
     pub fn set_bus_count(&self, count: NSUInteger, error: Option<&NSErrorRef>) -> bool {
         unsafe {
             let mut err: *mut NSError = std::ptr::null_mut();
+            // msg_send![self, countChangeable: count error: &mut err];
+            // if !err.is_null() {
+
+            // }
+
             match msg_send![self, countChangeable: count error: &mut err] {
                 YES => true,
                 NO => false,

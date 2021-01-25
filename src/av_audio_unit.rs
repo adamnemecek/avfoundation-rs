@@ -1,4 +1,8 @@
-use crate::AVAudioNodeRef;
+use crate::{
+    AUAudioUnitRef,
+    AVAudioNodeRef,
+};
+
 pub enum AVAudioUnitFFI {}
 
 foreign_obj_type! {
@@ -17,9 +21,9 @@ impl AVAudioUnitRef {
     //  unsafe { msg_send![self, audioUnit] }
     // }
 
-    // pub fn au_audio_unit(&self) -> AUAudioUnit {
-    //  unsafe { msg_send![self, auAudioUnit] }
-    // }
+    pub fn au_audio_unit(&self) -> &AUAudioUnitRef {
+        unsafe { msg_send![self, auAudioUnit] }
+    }
 
     pub fn name(&self) -> &str {
         unsafe {
