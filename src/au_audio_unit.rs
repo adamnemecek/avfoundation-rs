@@ -606,6 +606,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitReset(), in the global scope.
     // */
     // - (void)reset;
+    pub fn reset(&self) {
+        unsafe { msg_send![self, reset] }
+    }
 
     // /*!	@property	inputBusses
     // 	@brief		An audio unit's audio input connection points.
@@ -614,6 +617,9 @@ impl AUAudioUnitRef {
     // 		object every time it is asked for it, since clients can install KVO observers on it.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusArray *inputBusses;
+    pub fn input_busses(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	outputBusses
     // 	@brief		An audio unit's audio output connection points.
@@ -622,6 +628,9 @@ impl AUAudioUnitRef {
     // 		object every time it is asked for it, since clients can install KVO observers on it.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusArray *outputBusses;
+    pub fn output_busses(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	renderBlock
     // 	@brief		Block which hosts use to ask the unit to render.
@@ -638,6 +647,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitRender().
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AURenderBlock renderBlock;
+    pub fn render_block(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	scheduleParameterBlock
     // 	@brief		Block which hosts use to schedule parameters.
@@ -654,6 +666,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitScheduleParameters().
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUScheduleParameterBlock scheduleParameterBlock;
+    pub fn schedule_parameter_block(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@method		tokenByAddingRenderObserver:
     // 	@brief		Add a block to be called on each render cycle.
@@ -670,6 +685,9 @@ impl AUAudioUnitRef {
     // 		A token to be used when removing the observer.
     // */
     // - (NSInteger)tokenByAddingRenderObserver:(AURenderObserver)observer;
+    pub fn token_by_adding_render_observer(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@method		removeRenderObserver:
     // 	@brief		Remove an observer block added via tokenByAddingRenderObserver:
@@ -679,6 +697,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitRemoveRenderNotify().
     // */
     // - (void)removeRenderObserver:(NSInteger)token;
+    pub fn remove_render_observer(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	maximumFramesToRender
     // 	@brief		The maximum number of frames which the audio unit can render at once.
@@ -689,6 +710,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_MaximumFramesPerSlice.
     // */
     // @property (NS_NONATOMIC_IOSONLY) AUAudioFrameCount maximumFramesToRender;
+    pub fn maximum_frames_to_render(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	parameterTree
     // 	@brief		An audio unit's parameters, organized in a hierarchy.
@@ -715,6 +739,9 @@ impl AUAudioUnitRef {
     // 		Note that it is not safe to modify this property in a real-time context.
     // */
     // @property (NS_NONATOMIC_IOSONLY, nullable, retain) AUParameterTree *parameterTree;
+    pub fn parameter_tree(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@method		parametersForOverviewWithCount:
     // 	@brief		Returns the audio unit's `count` most important parameters.
@@ -731,8 +758,14 @@ impl AUAudioUnitRef {
     // 		property to access this v3 method of an audio unit).
     // */
     // - (NSArray<NSNumber *> *)parametersForOverviewWithCount:(NSInteger)count;
+    pub fn parameters_for_overview_with_count(&self) -> ! {
+        todo!()
+    }
 
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL allParameterValues;	/// special pseudo-property for KVO
+    pub fn all_parameter_values(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	musicDeviceOrEffect
     // 	@brief		Specifies whether an audio unit responds to MIDI events.
@@ -741,6 +774,9 @@ impl AUAudioUnitRef {
     // 		device or music effect.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, getter=isMusicDeviceOrEffect) BOOL musicDeviceOrEffect;
+    pub fn music_device_or_effect(&self) -> ! {
+        todo!()
+    }
 
     // /*!	@property	virtualMIDICableCount
     // 	@brief		The number of virtual MIDI cables implemented by a music device or effect.
