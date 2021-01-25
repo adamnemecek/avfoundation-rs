@@ -647,8 +647,8 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitRender().
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AURenderBlock renderBlock;
-    pub fn render_block(&self) -> ! {
-        todo!()
+    pub fn render_block(&self) -> AURenderBlock {
+        unsafe { msg_send![self, renderBlock] }
     }
 
     // /*!	@property	scheduleParameterBlock
@@ -1608,6 +1608,9 @@ impl AUAudioUnitBusArrayRef {
     // /*!	@method		objectAtIndexedSubscript:
     // */
     // - (AUAudioUnitBus *)objectAtIndexedSubscript:(NSUInteger)index;
+    pub fn object_at_indexed_subscript(&self, index: NSUInteger) -> &AUAudioUnitBus {
+        todo!()
+    }
 
     // /*!	@property	countChangeable
     // 	@brief		Whether the array can have a variable number of busses.

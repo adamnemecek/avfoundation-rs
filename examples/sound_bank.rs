@@ -67,15 +67,15 @@ fn main() {
         println!("degree {}", degree);
 
         let chord = d_major.chord(degree % 7);
-        println!("chord {:?}", chord.names());
+        // println!("chord {:?}", chord.names());
 
-        for p in chord.iter() {
-            instrument.play_note(Pitch::new(p, 5).into(), loudness, channel);
-        }
-        std::thread::sleep(std::time::Duration::from_millis(1000));
-        for p in chord.iter() {
-            instrument.stop_note(Pitch::new(p, 5).into(), channel);
-        }
+        // for p in chord.iter() {
+        //     instrument.play_note(Pitch::new(p, 5).into(), loudness, channel);
+        // }
+        // std::thread::sleep(std::time::Duration::from_millis(1000));
+        // for p in chord.iter() {
+        //     instrument.stop_note(Pitch::new(p, 5).into(), channel);
+        // }
     }
 
     // std::thread::sleep(std::time::Duration::from_secs(1));
