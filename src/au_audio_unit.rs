@@ -1,17 +1,20 @@
 use crate::{
     AudioBufferList,
     AudioComponentDescription,
-    OSStatus,
     NSTimeInterval,
+    OSStatus,
 };
 
-
-use cocoa_foundation::base::{
-    NO,
-    YES,
+use cocoa_foundation::{
+    base::{
+        NO,
+        YES,
+    },
+    foundation::{
+        self,
+        NSUInteger,
+    },
 };
-
-
 
 // #if (defined(__USE_PUBLIC_HEADERS__) && __USE_PUBLIC_HEADERS__) || (defined(USE_AUDIOTOOLBOX_PUBLIC_HEADERS) && USE_AUDIOTOOLBOX_PUBLIC_HEADERS) || !__has_include(<AudioToolboxCore/AUAudioUnit.h>)
 // /*!
@@ -30,7 +33,7 @@ use cocoa_foundation::base::{
 
 // #if !TARGET_OS_IPHONE
 // typedef UInt32 AUAudioObjectID; // AudioObjectID
-pub type  AUAudioObjectID = u32;
+pub type AUAudioObjectID = u32;
 // #endif
 
 // NS_ASSUME_NONNULL_BEGIN
@@ -391,6 +394,15 @@ pub enum AUHostTransportStateFlags {
 // 		in that particular piece of information.
 // */
 // typedef BOOL (^AUHostTransportStateBlock)(AUHostTransportStateFlags * __nullable transportStateFlags, double * __nullable currentSamplePosition, double * __nullable cycleStartBeatPosition, double * __nullable cycleEndBeatPosition);
+pub type AUHostTransportStateBlock = block::Block<
+    (
+        *const AUHostTransportStateFlags,
+        *const f64,
+        *const f64,
+        *const f64,
+    ),
+    BOOL,
+>;
 
 // // =================================================================================================
 
@@ -428,13 +440,6 @@ pub enum AUHostTransportStateFlags {
 // */
 // API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
 
-// pub enum AUAudioUnitFFI {}
-// foreign_obj_type! {
-//     type CType = AUAudioUnitFFI;
-//     pub struct AUAudioUnit;
-//     pub struct AUAudioUnitRef;
-// }
-
 pub enum AUAudioUnitFFI {}
 
 foreign_obj_type! {
@@ -447,744 +452,745 @@ impl AUAudioUnitRef {
     pub fn component_description(&self) -> AudioComponentDescription {
         unsafe { msg_send![self, componentDescription] }
     }
+
+    // @interface AUAudioUnit : NSObject
+
+    // - (instancetype)init NS_UNAVAILABLE;
+
+    // /*!	@method		initWithComponentDescription:options:error:
+    // 	@brief		Designated initializer.
+    // 	@param componentDescription
+    // 		A single AUAudioUnit subclass may implement multiple audio units, for example, an effect
+    // 		that can also function as a generator, or a cluster of related effects. The component
+    // 		description specifies the component which was instantiated.
+    // 	@param options
+    // 		Options for loading the unit in-process or out-of-process.
+    // 	@param outError
+    // 		Returned in the event of failure.
+    // */
+    // - (nullable instancetype)initWithComponentDescription:(AudioComponentDescription)componentDescription options:(AudioComponentInstantiationOptions)options error:(NSError **)outError NS_DESIGNATED_INITIALIZER;
+
+    // /*!	@method		initWithComponentDescription:error:
+    // 	@brief		Convenience initializer (omits options).
+    // */
+    // - (nullable instancetype)initWithComponentDescription:(AudioComponentDescription)componentDescription error:(NSError **)outError;
+
+    // /*!	@method	instantiateWithComponentDescription:options:completionHandler:
+    // 	@brief	Asynchronously create an AUAudioUnit instance.
+    // 	@param componentDescription
+    // 		The AudioComponentDescription of the audio unit to instantiate.
+    // 	@param options
+    // 		See the discussion of AudioComponentInstantiationOptions in AudioToolbox/AudioComponent.h.
+    // 	@param completionHandler
+    // 		Called in a thread/dispatch queue context internal to the implementation. The client should
+    // 		retain the supplied AUAudioUnit.
+    // 	@discussion
+    // 		Certain types of AUAudioUnits must be instantiated asynchronously -- see
+    // 		the discussion of kAudioComponentFlag_RequiresAsyncInstantiation in
+    // 		AudioToolbox/AudioComponent.h.
+
+    // 		Note: Do not block the main thread while waiting for the completion handler to be called;
+    // 		this can deadlock.
+    // */
+    // + (void)instantiateWithComponentDescription:(AudioComponentDescription)componentDescription options:(AudioComponentInstantiationOptions)options completionHandler:(void (^)(AUAudioUnit * __nullable audioUnit, NSError * __nullable error))completionHandler;
+
+    // /*!	@property	componentDescription
+    // 	@brief		The AudioComponentDescription with which the audio unit was created.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AudioComponentDescription componentDescription;
+
+    // /*!	@property	component
+    // 	@brief		The AudioComponent which was found based on componentDescription when the
+    // 				audio unit was created.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AudioComponent component;
+
+    // /*!	@property	componentName
+    // 	@brief		The unit's component's name.
+    // 	@discussion
+    // 		By convention, an audio unit's component name is its manufacturer's name, plus ": ",
+    // 		plus the audio unit's name. The audioUnitName and manufacturerName properties are derived
+    // 		from the component name.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *componentName;
+
+    // /*!	@property	audioUnitName
+    // 	@brief		The audio unit's name.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitName;
+
+    // /*!	@property	manufacturerName
+    // 	@brief		The manufacturer's name.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *manufacturerName;
+
+    // /*!	@property	audioUnitShortName
+    // 	@brief		A short name for the audio unit.
+    // 	@discussion
+    // 		Audio unit host applications can display this name in situations where the audioUnitName
+    // 		might be too long. The recommended length is up to 16 characters. Host applications may
+    // 		truncate it.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitShortName API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+
+    // /*!	@property	componentVersion
+    // 	@brief		The unit's component's version.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) uint32_t componentVersion;
+
+    // /*!	@method		allocateRenderResourcesAndReturnError:
+    // 	@brief		Allocate resources required to render.
+    // 	@discussion
+    // 		Hosts must call this before beginning to render. Subclassers should call the superclass
+    // 		implementation.
+
+    // 		Bridged to the v2 API AudioUnitInitialize().
+    // */
+    // - (BOOL)allocateRenderResourcesAndReturnError:(NSError **)outError;
+
+    // /*!	@method		deallocateRenderResources
+    // 	@brief		Deallocate resources allocated by allocateRenderResourcesAndReturnError:
+    // 	@discussion
+    // 		Hosts should call this after finishing rendering. Subclassers should call the superclass
+    // 		implementation.
+
+    // 		Bridged to the v2 API AudioUnitUninitialize().
+    // */
+    // - (void)deallocateRenderResources;
+
+    // /*!	@property	renderResourcesAllocated
+    // 	@brief		returns YES if the unit has render resources allocated.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL renderResourcesAllocated;
+
+    // /*!	@method		reset
+    // 	@brief		Reset transitory rendering state to its initial state.
+    // 	@discussion
+    // 		Hosts should call this at the point of a discontinuity in the input stream being provided to
+    // 		an audio unit, for example, when seeking forward or backward within a track. In response,
+    // 		implementations should clear delay lines, filters, etc. Subclassers should call the
+    // 		superclass implementation.
+
+    // 		Bridged to the v2 API AudioUnitReset(), in the global scope.
+    // */
+    // - (void)reset;
+
+    // /*!	@property	inputBusses
+    // 	@brief		An audio unit's audio input connection points.
+    // 	@discussion
+    // 		Subclassers must override this property's getter. The implementation should return the same
+    // 		object every time it is asked for it, since clients can install KVO observers on it.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusArray *inputBusses;
+
+    // /*!	@property	outputBusses
+    // 	@brief		An audio unit's audio output connection points.
+    // 	@discussion
+    // 		Subclassers must override this property's getter. The implementation should return the same
+    // 		object every time it is asked for it, since clients can install KVO observers on it.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusArray *outputBusses;
+
+    // /*!	@property	renderBlock
+    // 	@brief		Block which hosts use to ask the unit to render.
+    // 	@discussion
+    // 		Before invoking an audio unit's rendering functionality, a host should fetch this block and
+    // 		cache the result. The block can then be called from a realtime context without the
+    // 		possibility of blocking and causing an overload at the Core Audio HAL level.
+
+    // 		This block will call a subclass' internalRenderBlock, providing all realtime events
+    // 		scheduled for the current render time interval, bracketed by calls to any render observers.
+
+    // 		Subclassers should override internalRenderBlock, not this property.
+
+    // 		Bridged to the v2 API AudioUnitRender().
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AURenderBlock renderBlock;
+
+    // /*!	@property	scheduleParameterBlock
+    // 	@brief		Block which hosts use to schedule parameters.
+    // 	@discussion
+    // 		As with renderBlock, a host should fetch and cache this block before beginning to render,
+    // 		if it intends to schedule parameters.
+
+    // 		The block is safe to call from any thread context, including realtime audio render
+    // 		threads.
+
+    // 		Subclassers should not override this; it is implemented in the base class and will schedule
+    // 		the events to be provided to the internalRenderBlock.
+
+    // 		Bridged to the v2 API AudioUnitScheduleParameters().
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AUScheduleParameterBlock scheduleParameterBlock;
+
+    // /*!	@method		tokenByAddingRenderObserver:
+    // 	@brief		Add a block to be called on each render cycle.
+    // 	@discussion
+    // 		The supplied block is called at the beginning and ending of each render cycle. It should
+    // 		not make any blocking calls.
+
+    // 		This method is implemented in the base class AUAudioUnit, and should not be overridden.
+
+    // 		Bridged to the v2 API AudioUnitAddRenderNotify().
+    // 	@param observer
+    // 		The block to call.
+    // 	@return
+    // 		A token to be used when removing the observer.
+    // */
+    // - (NSInteger)tokenByAddingRenderObserver:(AURenderObserver)observer;
+
+    // /*!	@method		removeRenderObserver:
+    // 	@brief		Remove an observer block added via tokenByAddingRenderObserver:
+    // 	@param token
+    // 		The token previously returned by tokenByAddingRenderObserver:
+
+    // 		Bridged to the v2 API AudioUnitRemoveRenderNotify().
+    // */
+    // - (void)removeRenderObserver:(NSInteger)token;
+
+    // /*!	@property	maximumFramesToRender
+    // 	@brief		The maximum number of frames which the audio unit can render at once.
+    // 	@discussion
+    // 		This must be set by the host before render resources are allocated. It cannot be changed
+    // 		while render resources are allocated.
+
+    // 		Bridged to the v2 property kAudioUnitProperty_MaximumFramesPerSlice.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY) AUAudioFrameCount maximumFramesToRender;
+
+    // /*!	@property	parameterTree
+    // 	@brief		An audio unit's parameters, organized in a hierarchy.
+    // 	@return
+    // 		A parameter tree object, or nil if the unit has no parameters.
+    // 	@discussion
+    // 		Audio unit hosts can fetch this property to discover a unit's parameters. KVO notifications
+    // 		are issued on this member to notify the host of changes to the set of available parameters.
+
+    // 		AUAudioUnit has an additional pseudo-property, "allParameterValues", on which KVO
+    // 		notifications are issued in response to certain events where potentially all parameter
+    // 		values are invalidated. This includes changes to currentPreset, fullState, and
+    // 		fullStateForDocument.
+
+    // 		Hosts should not attempt to set this property.
+
+    // 		Subclassers should implement the parameterTree getter to expose parameters to hosts. They
+    // 		should cache as much as possible and send KVO notifications on "parameterTree" when altering
+    // 		the structure of the tree or the static information (ranges, etc) of parameters.
+
+    // 		This is similar to the v2 properties kAudioUnitProperty_ParameterList and
+    // 		kAudioUnitProperty_ParameterInfo.
+
+    // 		Note that it is not safe to modify this property in a real-time context.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, nullable, retain) AUParameterTree *parameterTree;
+
+    // /*!	@method		parametersForOverviewWithCount:
+    // 	@brief		Returns the audio unit's `count` most important parameters.
+    // 	@discussion
+    // 		This property allows a host to query an audio unit for some small number of parameters which
+    // 		are its "most important", to be displayed in a compact generic view.
+
+    // 		An audio unit subclass should return an array of NSNumbers representing the addresses
+    // 		of the `count` most important parameters.
+
+    // 		The base class returns an empty array regardless of count.
+
+    // 		Partially bridged to kAudioUnitProperty_ParametersForOverview (v2 hosts can use that
+    // 		property to access this v3 method of an audio unit).
+    // */
+    // - (NSArray<NSNumber *> *)parametersForOverviewWithCount:(NSInteger)count;
+
+    // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL allParameterValues;	/// special pseudo-property for KVO
+
+    // /*!	@property	musicDeviceOrEffect
+    // 	@brief		Specifies whether an audio unit responds to MIDI events.
+    // 	@discussion
+    // 		This is implemented in the base class and returns YES if the component type is music
+    // 		device or music effect.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, getter=isMusicDeviceOrEffect) BOOL musicDeviceOrEffect;
+
+    // /*!	@property	virtualMIDICableCount
+    // 	@brief		The number of virtual MIDI cables implemented by a music device or effect.
+    // 	@discussion
+    // 		A music device or MIDI effect can support up to 256 virtual MIDI cables of input; this
+    // 		property expresses the number of cables supported by the audio unit.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) NSInteger virtualMIDICableCount;
+
+    // /*!	@property	scheduleMIDIEventBlock
+    // 	@brief		Block used to schedule MIDI events.
+    // 	@discussion
+    // 		As with renderBlock, a host should fetch and cache this block before beginning to render,
+    // 		if it intends to schedule MIDI events.
+
+    // 		This is implemented in the base class. It is nil when musicDeviceOrEffect is NO.
+
+    // 		Subclassers should not override. When hosts schedule events via this block, they are
+    // 		delivered to the audio unit via the list of AURenderEvents delivered to
+    // 		internalRenderBlock.
+
+    // 		This bridged to the v2 API MusicDeviceMIDIEvent.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, nullable) AUScheduleMIDIEventBlock scheduleMIDIEventBlock;
+
+    // /*!	@property	MIDIOutputNames
+    // 	@brief		Count, and names of, a plug-in's MIDI outputs.
+    // 	@discussion
+    // 		A plug-in may override this method to inform hosts about its MIDI outputs. The size of the
+    // 		array is the number of outputs the audio unit supports. Each item in the array is the name
+    // 		of the MIDI output at that index.
+
+    // 		This is bridged to the v2 API property kAudioUnitProperty_MIDIOutputCallbackInfo.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSArray<NSString *> *MIDIOutputNames API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+
+    // /*!	@property	providesUserInterface
+    // 	@brief		Specifies whether an audio unit provides UI (normally in the form of a view controller).
+    // 	@discussion
+    // 		Implemented in the framework and should not be overridden by implementators. The
+    // 		framework detects whether any subclass has implemented
+    // 		`requestViewControllerWithCompletionHandler:` or is implemented by an AU extension whose
+    // 		extension point identifier is `com.apple.AudioUnit-UI`. See also
+    // 		`requestViewControllerWithCompletionHandler:` in <CoreAudioKit/AUViewController.h>
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL providesUserInterface API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+
+    // // ------------------------
+    // // These properties and methods are generally optional.
+
+    // /*!	@property	MIDIOutputEventBlock
+    // 	@brief		Block used by the host to access the MIDI output generated by an audio unit.
+    // 	@discussion
+    //  		The host can set this block and the plug-in can call it in its renderBlock to provide to the
+    //  		host the MIDI data associated with the current render cycle.
+
+    //  		This is bridged to the v2 API property kAudioUnitProperty_MIDIOutputCallback.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUMIDIOutputEventBlock MIDIOutputEventBlock API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+
+    // /*!	@property	fullState
+    // 	@brief		A persistable snapshot of the audio unit's properties and parameters, suitable for
+    // 				saving as a user preset.
+    // 	@discussion
+    // 		Hosts may use this property to save and restore the state of an audio unit being used in a
+    // 		user preset or document. The audio unit should not persist transitory properties such as
+    // 		stream formats, but should save and restore all parameters and custom properties.
+
+    // 		The base class implementation of this property saves the values of all parameters
+    // 		currently in the parameter tree. A subclass which dynamically produces multiple variants
+    // 		of the parameter tree needs to be aware that the serialization method does a depth-first
+    // 		preorder traversal of the tree.
+
+    // 		Bridged to the v2 property kAudioUnitProperty_ClassInfo.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSDictionary<NSString *, id> *fullState;
+
+    // /*!	@property	fullStateForDocument
+    // 	@brief		A persistable snapshot of the audio unit's properties and parameters, suitable for
+    // 				saving in a user's document.
+    // 	@discussion
+    // 		This property is distinct from fullState in that some state is suitable for saving in user
+    // 		presets, while other state is not. For example, a synthesizer's master tuning setting could
+    // 		be considered global state, inappropriate for storing in reusable presets, but desirable
+    // 		for storing in a document for a specific live performance.
+
+    // 		Hosts saving documents should use this property. If the audio unit does not implement it,
+    // 		the base class simply sets/gets fullState.
+
+    // 		Bridged to the v2 property kAudioUnitProperty_ClassInfoFromDocument.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSDictionary<NSString *, id> *fullStateForDocument;
+
+    // /*!	@property	factoryPresets
+    // 	@brief		A collection of presets provided by the audio unit's developer.
+    // 	@discussion
+    // 		A preset provides users of an audio unit with an easily-selectable, fine-tuned set of
+    // 		parameters provided by the developer. This property returns all of the available factory presets.
+
+    // 		Bridged to the v2 property kAudioUnitProperty_FactoryPresets.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<AUAudioUnitPreset *> *factoryPresets;
+
+    // /*!	@property	userPresets
+    // 	@brief		A collection of presets saved by the user
+    // 	@discussion
+    // 		In addition to factory presets, provided by the audio unit vendor, users have the ability to
+    // 		save the values of the parameters of an audio unit into a user preset. These users presets
+    // 		can be accessed using this property.
+
+    // 		The default implementation of this method will load the user presets from an internal
+    // 		location that might not be directly accessible to the audio unit host application or to the
+    // 		audio unit. Instead of accessing this path directly, the audio unit should rely on the
+    // 		superclass implementation of this method to retrieve the presets.
+
+    // 		Audio Units are free to override this method to load their user presets via different means
+    // 		(e.g. from their iCloud container).
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSArray<AUAudioUnitPreset *> *userPresets API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+
+    // /*!	@method		saveUserPreset:error
+    // 	@brief		Persistently save the current state of the audio unit into a userPreset
+    // 	@discussion
+    // 		The new preset will be added to userPresets and will become selectable by assigning it
+    // 		to the currentPreset property.
+    // 		If a preset with the provided name already exists then it will be overwritten.
+
+    // 		For user presets, the preset number is required to be negative.
+    // 		If a positive number is passed, the sign will be changed to negative.
+    // 		If zero is passed, the number will be set to -1.
+    // 		These changes will be reflected on the userPreset argument.
+
+    // 		The default implementation of this method will save the user preset to an internal
+    // 		location.
+
+    // 		Audio Units are free to override this method to operate on a different location (e.g. their
+    // 		iCloud container).
+    // 	@param	userPreset
+    // 		The preset under which the current state will be saved.
+    // 	@param outError
+    // 		In the event of a failure, the method will return NO and outError will be set to an
+    // 		NSError, describing the problem.
+    // 		Some possible errors:
+    // 				- domain: NSOSStatusErrorDomain code: kAudioUnitErr_NoConnection
+    // 				- domain: NSOSStatusErrorDomain	code: kAudioUnitErr_InvalidFilePath
+    // 				- domain: NSOSStatusErrorDomain	code: kAudioUnitErr_MissingKey
+    // 	@return
+    // 		YES for success. NO in the event of a failure, in which case the error is returned in
+    // 		outError.
+    //  */
+    // - (BOOL)saveUserPreset:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+
+    // /*!	@method		deleteUserPreset:error
+    // 	@brief		Remove a user preset.
+    // 	@discussion
+    // 		The user preset will be removed from userPresets and will be permanently deleted.
+
+    // 		The default implementation of this method will delete the user preset from an internal
+    // 		location.
+
+    // 		Audio Units are free to override this method to operate on a different location (e.g. their
+    // 		iCloud container).
+    // 	@param	userPreset
+    // 		The preset to be deleted.
+    // 	@param	outError
+    // 		In the event of a failure, the method will return NO and outError will be set to an
+    // 		NSError, describing the problem.
+    // 		Some possible errors:
+    // 				- domain: NSOSStatusErrorDomain code: kAudioUnitErr_NoConnection
+    // 				- domain: NSPOSIXErrorDomain	code: ENOENT
+    // 				- domain: NSOSStatusErrorDomain	code: kAudioUnitErr_InvalidFilePath
+    // 	@return
+    // 		YES for success. NO in the event of a failure, in which case the error is returned in
+    // 		outError.
+    // */
+    // - (BOOL)deleteUserPreset:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+
+    // /*! @method		presetStateFor:error
+    // 	@brief		Retrieve the state stored in a user preset
+    //  	@discussion
+    // 		This method allows access to the contents of a preset without having to set that preset as
+    // 		current. The returned dictionary is assignable to the audio unit's fullState and/or
+    // 		fullStateForDocument properties.
+
+    // 		Audio units can override this method in order to vend user presets from a different location
+    // 		(e.g. their iCloud container).
+
+    // 		In order to restore the state from a user preset, the audio unit should override the setter
+    // 		for the currentPreset property and check the preset number to determine the type of preset.
+    // 		If the preset number is >= 0 then the preset is a factory preset.
+    // 		If the preset number is < 0 then it is a user preset.
+
+    // 		This method can then be called to retrieve the state stored in a user preset and the audio
+    // 		unit can assign this to fullState or fullStateForDocument.
+
+    // 	@param	userPreset
+    // 		The preset to be selected.
+    // 	@param	outError
+    // 		In the event of a failure, the method will return nil and outError will be set to an
+    // 		NSError, describing the problem.
+    // 		Some possible errors:
+    // 				- domain: NSOSStatusErrorDomain code: kAudioUnitErr_NoConnection
+    // 				- domain: NSPOSIXErrorDomain	code: ENOENT
+    // 				- domain: NSCocoaErrorDomain	code: NSCoderReadCorruptError
+    // 	@return
+    // 		Returns nil if there was an error, otherwise returns a dictionary containing the full state
+    // 		of the audio unit saved in the preset.
+    // 		For details on the possible keys present in the full state dictionary, please see the
+    // 		documentation for kAudioUnitProperty_ClassInfo.
+    //  		The minimal set of keys and their type is:	@kAUPresetTypeKey : NSNumber,
+    // 													@kAUPresetSubtypeKey : NSNumber,
+    //  													@kAUPresetManufacturerKey : NSNumber,
+    //  											   		@kAUPresetVersionKey : NSNumber,
+    //  													@kAUPresetNameKey : NSString,
+    //  													@kAUPresetNumberKey: NSNumber,
+    // 													@kAUPresetDataKey : NSData
+    // */
+    // - (nullable NSDictionary<NSString *, id> *)presetStateFor:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+
+    // /*!	@property	supportsUserPresets
+    // 	@brief		Specifies whether an audio unit supports loading and saving user presets
+    // 	@discussion
+    // 		The audio unit should set this property to YES if a user preset can be assigned to
+    // 		currentPreset.
+
+    // 		Audio unit host applications should query this property to determine whether the audio unit
+    // 		supports user presets.
+
+    // 		Assigning a user preset to the currentPreset property of an audio unit that does not support
+    // 		restoring state from user presets may result in incorrect behavior.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL supportsUserPresets API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
+
+    // /*!	@property	isLoadedInProcess
+    // 	@brief		Set to YES when an AUAudioUnit is loaded in-process
+    // 	@discussion
+    // 		If the AUAudioUnit is instantiated with kAudioComponentInstantiation_LoadInProcess, but the
+    // 		audio unit is not packaged properly to support loading in-process, the system will silently
+    // 		fall back to loading the audio unit out-of-process.
+
+    // 		This property can be used to determine whether the instantiation succeeded as intended and
+    // 		the audio unit is running in-process.
+
+    // 		The presence of an extension process is not sufficient indication that the audio unit failed
+    // 		to load in-process, since the framework might launch the audio unit extension process to
+    // 		fulfill auxiliary functionality. If the audio unit is loaded in-process then rendering is
+    // 		done in the host process. Other operations that are not essential to rendering audio, might
+    // 		be done in the audio unit's extension process.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL isLoadedInProcess API_AVAILABLE(macos(10.15)) API_UNAVAILABLE(ios, watchos, tvos);
+
+    // /*!	@property	currentPreset
+    // 	@brief		The audio unit's last-selected preset.
+    // 	@discussion
+    // 		Hosts can let the user select a preset by setting this property. Note that when getting
+    // 		this property, it does not reflect whether parameters may have been modified since the
+    // 		preset was selected.
+
+    // 		Bridged to the v2 property kAudioUnitProperty_PresentPreset.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, retain, nullable) AUAudioUnitPreset *currentPreset;
+
+    // /*!	@property	latency
+    // 	@brief		The audio unit's processing latency, in seconds.
+    // 	@discussion
+    // 		This property reflects the delay between when an impulse in the unit's audio unit stream
+    // 		arrives in the input vs. output streams. This should reflect the delay due
+    // 		to signal processing (e.g. filters, FFT's, etc.), not delay or reverberation which is
+    // 		being applied as an effect.
+
+    // 		Note that a latency that varies with parameter settings, including bypass, is generally not
+    // 		useful to hosts. A host is usually only prepared to add delays before starting to render and
+    // 		those delays need to be fixed. A variable delay would introduce artifacts even if the host
+    // 		could track it. If an algorithm has a variable latency it should be adjusted upwards to some
+    // 		fixed latency within the audio unit. If for some reason this is not possible, then latency
+    // 		could be regarded as an unavoidable consequence of the algorithm and left unreported (i.e.
+    // 		with a value of 0).
+
+    // 		Bridged to the v2 property kAudioUnitProperty_Latency.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) NSTimeInterval latency;
+
+    // /*!	@property	tailTime
+    // 	@brief		The audio unit's tail time, in seconds.
+    // 	@discussion
+    // 		This property reflects the time interval between when the input stream ends or otherwise
+    // 		transitions to silence, and when the output stream becomes silent. Unlike latency, this
+    // 		should reflect the duration of a delay or reverb effect.
+
+    // 		Bridged to the v2 property kAudioUnitProperty_TailTime.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) NSTimeInterval tailTime;
+
+    // /*!	@property	renderQuality
+    // 	@brief		Provides a trade-off between rendering quality and CPU load.
+    // 	@discussion
+    // 		The range of valid values is 0-127.
+
+    // 		Bridged to the v2 property kAudioUnitProperty_RenderQuality.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY) NSInteger renderQuality;
+
+    // /*!	@property	shouldBypassEffect
+    // 	@brief		Directs an effect to route input directly to output, without any processing.
+    // 	@discussion
+    // 		Bridged to the v2 property kAudioUnitProperty_BypassEffect.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY) BOOL shouldBypassEffect;
+
+    // /*!	@property	canProcessInPlace
+    // 	@brief		Expresses whether an audio unit can process in place.
+    // 	@discussion
+    // 		In-place processing is the ability for an audio unit to transform an input signal to an
+    // 		output signal in-place in the input buffer, without requiring a separate output buffer.
+
+    // 		A host can express its desire to process in place by using null mData pointers in the output
+    // 		buffer list. The audio unit may process in-place in the input buffers. See the discussion of
+    // 		renderBlock.
+
+    // 		Partially bridged to the v2 property kAudioUnitProperty_InPlaceProcessing; in v3 it is not
+    // 		settable.
+
+    // 		Defaults to NO. Subclassers can override to return YES.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL canProcessInPlace;
+
+    // /*!	@property	renderingOffline
+    // 	@brief		Communicates to an audio unit that it is rendering offline.
+    // 	@discussion
+    // 		A host should set this property when using an audio unit in a context where there are no
+    // 		realtime deadlines, before asking the unit to allocate render resources. An audio unit may
+    // 		respond by using a more expensive signal processing algorithm, or allowing itself to block
+    // 		at render time if data being generated on secondary work threads is not ready in time.
+    // 		(Normally, in a realtime thread, this data would have to be dropped).
+
+    // 		Bridged to the v2 property kAudioUnitProperty_OfflineRender.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, getter=isRenderingOffline) BOOL renderingOffline;
+
+    // /*!	@property	channelCapabilities
+    // 	@brief		Expresses valid combinations of input and output channel counts.
+    // 	@discussion
+    // 		Elements are NSNumber containing integers; [0]=input count, [1]=output count, [2]=2nd input
+    // 		count, [3]=2nd output count, etc.
+
+    // 		An input, output count of (2, 2) signifies that the audio unit can process 2 input channels
+    // 		to 2 output channels.
+
+    // 		Negative numbers (-1, -2) indicate *any* number of channels. (-1, -1) means any number
+    // 		of channels on input and output as long as they are the same. (-1, -2) means any number of
+    // 		channels on input or output, without the requirement that the counts are the same.
+
+    // 		A negative number less than -2 is used to indicate a total number of channels across every
+    // 		bus in that scope, regardless of how many channels are set on any particular bus. For
+    // 		example, (-16, 2) indicates that a unit can accept up to 16 channels of input across its
+    // 		input busses, but will only produce 2 channels of output.
+
+    // 		Zero on either side (though typically input) means "not applicable", because there are no
+    // 		elements on that side.
+
+    // 		Bridged to the v2 property kAudioUnitProperty_SupportedNumChannels.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<NSNumber *> *channelCapabilities;
+
+    // /*!	@property	musicalContextBlock
+    // 	@brief		A callback for the AU to call the host for musical context information.
+    // 	@discussion
+    // 		Note that an audio unit implementation accessing this property should cache it in
+    // 		realtime-safe storage before beginning to render.
+
+    // 		Bridged to the HostCallback_GetBeatAndTempo and HostCallback_GetMusicalTimeLocation
+    // 		callback members in kAudioUnitProperty_HostCallbacks.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUHostMusicalContextBlock musicalContextBlock;
+
+    // /*!	@property	transportStateBlock
+    // 	@brief		A callback for the AU to call the host for transport state information.
+    // 	@discussion
+    // 		Note that an audio unit implementation accessing this property should cache it in
+    // 		realtime-safe storage before beginning to render.
+
+    // 		Bridged to the HostCallback_GetTransportState and HostCallback_GetTransportState2
+    // 		callback members in kAudioUnitProperty_HostCallbacks.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUHostTransportStateBlock transportStateBlock;
+
+    // /*!	@property	contextName
+    // 	@brief		Information about the host context in which the audio unit is connected, for display
+    // 				in the audio unit's view.
+    // 	@discussion
+    // 		For example, a host could set "track 3" as the context, so that the audio unit's view could
+    // 		then display to the user "My audio unit on track 3".
+
+    // 		Bridged to the v2 property kAudioUnitProperty_ContextName.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *contextName;
+
+    // /*!	@property	supportsMPE
+    // 	@brief		Specifies whether an audio unit supports Multi-dimensional Polyphonic Expression.
+    // 	@discussion
+    // 		Bridged to the v2 property kAudioUnitProperty_SupportsMPE.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL supportsMPE API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
+
+    // /*!	@property	channelMap
+    // 	@brief		Specify a mapping of input channels to output channels.
+    // 	@discussion
+    // 		Converter and input/output audio units may support re-ordering or splitting of input
+    // 		channels to output channels. The number of channels in the channel map is the number of
+    // 		channels of the destination (output format). The channel map entries contain a channel
+    // 		number of the source channel that should be mapped to that destination channel. If -1 is
+    // 		specified, then that destination channel will not contain any channel from the source (so it
+    // 		will be silent).
+
+    // 		If the property value is nil, then the audio unit does not support this property.
+
+    // 		Bridged to the v2 property kAudioOutputUnitProperty_ChannelMap.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSArray<NSNumber *> *channelMap API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
+
+    // /*!	@method		profileStateForCable:channel:
+    // 	@brief		Given a MIDI cable and channel number, return the supported MIDI-CI Profiles.
+    // 	@param cable
+    // 		The virtual MIDI cable for which the profiles are requested.
+    // 	@param channel
+    // 		The MIDI channel for which the profiles are requested.
+    // 	@return
+    // 		A MIDICIProfileState object containing all the supported MIDI-CI profiles for this channel
+    // 		on this cable.
+    // */
+    // - (MIDICIProfileState *)profileStateForCable:(uint8_t)cable channel:(MIDIChannelNumber)channel API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
+
+    // /*!	@method		enableProfile:cable:onChannel:error:
+    // 	@brief		Enable a MIDI-CI Profile on the specified cable/channel.
+    // 	@param	profile
+    // 		The MIDI-CI profile to be enabled.
+    // 	@param cable
+    // 		The virtual MIDI cable.
+    // 	@param channel
+    // 		The MIDI channel.
+    // 	@param outError
+    // 		Returned in the event of failure.
+    // 	@return
+    // 		YES for success. NO in the event of a failure, in which case the error is returned
+    // 		in outError.
+    // */
+    // - (BOOL)enableProfile:(MIDICIProfile *)profile
+    //                 cable:(uint8_t)cable
+    //             onChannel:(MIDIChannelNumber)channel
+    //                 error:(NSError **)outError API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
+
+    // /*!	@method		disableProfile:cable:onChannel:error:
+    // 	@brief		Disable a MIDI-CI Profile on the specified cable/channel.
+    // 	@param	profile
+    // 		The MIDI-CI profile to be disabled.
+    // 	@param cable
+    // 		The virtual MIDI cable.
+    // 	@param channel
+    // 		The MIDI channel.
+    // 	@param outError
+    // 		Returned in the event of failure.
+    // 	@return
+    // 		YES for success. NO in the event of a failure, in which case the error is returned
+    // 		in outError.
+    // */
+    // - (BOOL)disableProfile:(MIDICIProfile *)profile
+    //                  cable:(uint8_t)cable
+    //              onChannel:(MIDIChannelNumber)channel
+    //                  error:(NSError **)outError API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
+
+    // /*!	@property	profileChangedBlock
+    // 	@brief		A block called when a device notifies that a MIDI-CI profile has been enabled or
+    // 				disabled.
+    // 	@discussion
+    // 		Since enabling / disabling MIDI-CI profiles is an asynchronous operation, the host can set
+    // 		this block and the audio unit is expected to call it every time the state of a MIDI-CI
+    // 		profile has changed.
+    // */
+    // @property (nonatomic, nullable) AUMIDICIProfileChangedBlock profileChangedBlock API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
+
+    // @end
 }
-// @interface AUAudioUnit : NSObject
-
-// - (instancetype)init NS_UNAVAILABLE;
-
-// /*!	@method		initWithComponentDescription:options:error:
-// 	@brief		Designated initializer.
-// 	@param componentDescription
-// 		A single AUAudioUnit subclass may implement multiple audio units, for example, an effect
-// 		that can also function as a generator, or a cluster of related effects. The component
-// 		description specifies the component which was instantiated.
-// 	@param options
-// 		Options for loading the unit in-process or out-of-process.
-// 	@param outError
-// 		Returned in the event of failure.
-// */
-// - (nullable instancetype)initWithComponentDescription:(AudioComponentDescription)componentDescription options:(AudioComponentInstantiationOptions)options error:(NSError **)outError NS_DESIGNATED_INITIALIZER;
-
-// /*!	@method		initWithComponentDescription:error:
-// 	@brief		Convenience initializer (omits options).
-// */
-// - (nullable instancetype)initWithComponentDescription:(AudioComponentDescription)componentDescription error:(NSError **)outError;
-
-// /*!	@method	instantiateWithComponentDescription:options:completionHandler:
-// 	@brief	Asynchronously create an AUAudioUnit instance.
-// 	@param componentDescription
-// 		The AudioComponentDescription of the audio unit to instantiate.
-// 	@param options
-// 		See the discussion of AudioComponentInstantiationOptions in AudioToolbox/AudioComponent.h.
-// 	@param completionHandler
-// 		Called in a thread/dispatch queue context internal to the implementation. The client should
-// 		retain the supplied AUAudioUnit.
-// 	@discussion
-// 		Certain types of AUAudioUnits must be instantiated asynchronously -- see
-// 		the discussion of kAudioComponentFlag_RequiresAsyncInstantiation in
-// 		AudioToolbox/AudioComponent.h.
-
-// 		Note: Do not block the main thread while waiting for the completion handler to be called;
-// 		this can deadlock.
-// */
-// + (void)instantiateWithComponentDescription:(AudioComponentDescription)componentDescription options:(AudioComponentInstantiationOptions)options completionHandler:(void (^)(AUAudioUnit * __nullable audioUnit, NSError * __nullable error))completionHandler;
-
-// /*!	@property	componentDescription
-// 	@brief		The AudioComponentDescription with which the audio unit was created.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) AudioComponentDescription componentDescription;
-
-// /*!	@property	component
-// 	@brief		The AudioComponent which was found based on componentDescription when the
-// 				audio unit was created.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) AudioComponent component;
-
-// /*!	@property	componentName
-// 	@brief		The unit's component's name.
-// 	@discussion
-// 		By convention, an audio unit's component name is its manufacturer's name, plus ": ",
-// 		plus the audio unit's name. The audioUnitName and manufacturerName properties are derived
-// 		from the component name.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *componentName;
-
-// /*!	@property	audioUnitName
-// 	@brief		The audio unit's name.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitName;
-
-// /*!	@property	manufacturerName
-// 	@brief		The manufacturer's name.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *manufacturerName;
-
-// /*!	@property	audioUnitShortName
-// 	@brief		A short name for the audio unit.
-// 	@discussion
-// 		Audio unit host applications can display this name in situations where the audioUnitName
-// 		might be too long. The recommended length is up to 16 characters. Host applications may
-// 		truncate it.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitShortName API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
-
-// /*!	@property	componentVersion
-// 	@brief		The unit's component's version.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) uint32_t componentVersion;
-
-// /*!	@method		allocateRenderResourcesAndReturnError:
-// 	@brief		Allocate resources required to render.
-// 	@discussion
-// 		Hosts must call this before beginning to render. Subclassers should call the superclass
-// 		implementation.
-
-// 		Bridged to the v2 API AudioUnitInitialize().
-// */
-// - (BOOL)allocateRenderResourcesAndReturnError:(NSError **)outError;
-
-// /*!	@method		deallocateRenderResources
-// 	@brief		Deallocate resources allocated by allocateRenderResourcesAndReturnError:
-// 	@discussion
-// 		Hosts should call this after finishing rendering. Subclassers should call the superclass
-// 		implementation.
-
-// 		Bridged to the v2 API AudioUnitUninitialize().
-// */
-// - (void)deallocateRenderResources;
-
-// /*!	@property	renderResourcesAllocated
-// 	@brief		returns YES if the unit has render resources allocated.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) BOOL renderResourcesAllocated;
-
-// /*!	@method		reset
-// 	@brief		Reset transitory rendering state to its initial state.
-// 	@discussion
-// 		Hosts should call this at the point of a discontinuity in the input stream being provided to
-// 		an audio unit, for example, when seeking forward or backward within a track. In response,
-// 		implementations should clear delay lines, filters, etc. Subclassers should call the
-// 		superclass implementation.
-
-// 		Bridged to the v2 API AudioUnitReset(), in the global scope.
-// */
-// - (void)reset;
-
-// /*!	@property	inputBusses
-// 	@brief		An audio unit's audio input connection points.
-// 	@discussion
-// 		Subclassers must override this property's getter. The implementation should return the same
-// 		object every time it is asked for it, since clients can install KVO observers on it.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusArray *inputBusses;
-
-// /*!	@property	outputBusses
-// 	@brief		An audio unit's audio output connection points.
-// 	@discussion
-// 		Subclassers must override this property's getter. The implementation should return the same
-// 		object every time it is asked for it, since clients can install KVO observers on it.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusArray *outputBusses;
-
-// /*!	@property	renderBlock
-// 	@brief		Block which hosts use to ask the unit to render.
-// 	@discussion
-// 		Before invoking an audio unit's rendering functionality, a host should fetch this block and
-// 		cache the result. The block can then be called from a realtime context without the
-// 		possibility of blocking and causing an overload at the Core Audio HAL level.
-
-// 		This block will call a subclass' internalRenderBlock, providing all realtime events
-// 		scheduled for the current render time interval, bracketed by calls to any render observers.
-
-// 		Subclassers should override internalRenderBlock, not this property.
-
-// 		Bridged to the v2 API AudioUnitRender().
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) AURenderBlock renderBlock;
-
-// /*!	@property	scheduleParameterBlock
-// 	@brief		Block which hosts use to schedule parameters.
-// 	@discussion
-// 		As with renderBlock, a host should fetch and cache this block before beginning to render,
-// 		if it intends to schedule parameters.
-
-// 		The block is safe to call from any thread context, including realtime audio render
-// 		threads.
-
-// 		Subclassers should not override this; it is implemented in the base class and will schedule
-// 		the events to be provided to the internalRenderBlock.
-
-// 		Bridged to the v2 API AudioUnitScheduleParameters().
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) AUScheduleParameterBlock scheduleParameterBlock;
-
-// /*!	@method		tokenByAddingRenderObserver:
-// 	@brief		Add a block to be called on each render cycle.
-// 	@discussion
-// 		The supplied block is called at the beginning and ending of each render cycle. It should
-// 		not make any blocking calls.
-
-// 		This method is implemented in the base class AUAudioUnit, and should not be overridden.
-
-// 		Bridged to the v2 API AudioUnitAddRenderNotify().
-// 	@param observer
-// 		The block to call.
-// 	@return
-// 		A token to be used when removing the observer.
-// */
-// - (NSInteger)tokenByAddingRenderObserver:(AURenderObserver)observer;
-
-// /*!	@method		removeRenderObserver:
-// 	@brief		Remove an observer block added via tokenByAddingRenderObserver:
-// 	@param token
-// 		The token previously returned by tokenByAddingRenderObserver:
-
-// 		Bridged to the v2 API AudioUnitRemoveRenderNotify().
-// */
-// - (void)removeRenderObserver:(NSInteger)token;
-
-// /*!	@property	maximumFramesToRender
-// 	@brief		The maximum number of frames which the audio unit can render at once.
-// 	@discussion
-// 		This must be set by the host before render resources are allocated. It cannot be changed
-// 		while render resources are allocated.
-
-// 		Bridged to the v2 property kAudioUnitProperty_MaximumFramesPerSlice.
-// */
-// @property (NS_NONATOMIC_IOSONLY) AUAudioFrameCount maximumFramesToRender;
-
-// /*!	@property	parameterTree
-// 	@brief		An audio unit's parameters, organized in a hierarchy.
-// 	@return
-// 		A parameter tree object, or nil if the unit has no parameters.
-// 	@discussion
-// 		Audio unit hosts can fetch this property to discover a unit's parameters. KVO notifications
-// 		are issued on this member to notify the host of changes to the set of available parameters.
-
-// 		AUAudioUnit has an additional pseudo-property, "allParameterValues", on which KVO
-// 		notifications are issued in response to certain events where potentially all parameter
-// 		values are invalidated. This includes changes to currentPreset, fullState, and
-// 		fullStateForDocument.
-
-// 		Hosts should not attempt to set this property.
-
-// 		Subclassers should implement the parameterTree getter to expose parameters to hosts. They
-// 		should cache as much as possible and send KVO notifications on "parameterTree" when altering
-// 		the structure of the tree or the static information (ranges, etc) of parameters.
-
-// 		This is similar to the v2 properties kAudioUnitProperty_ParameterList and
-// 		kAudioUnitProperty_ParameterInfo.
-
-// 		Note that it is not safe to modify this property in a real-time context.
-// */
-// @property (NS_NONATOMIC_IOSONLY, nullable, retain) AUParameterTree *parameterTree;
-
-// /*!	@method		parametersForOverviewWithCount:
-// 	@brief		Returns the audio unit's `count` most important parameters.
-// 	@discussion
-// 		This property allows a host to query an audio unit for some small number of parameters which
-// 		are its "most important", to be displayed in a compact generic view.
-
-// 		An audio unit subclass should return an array of NSNumbers representing the addresses
-// 		of the `count` most important parameters.
-
-// 		The base class returns an empty array regardless of count.
-
-// 		Partially bridged to kAudioUnitProperty_ParametersForOverview (v2 hosts can use that
-// 		property to access this v3 method of an audio unit).
-// */
-// - (NSArray<NSNumber *> *)parametersForOverviewWithCount:(NSInteger)count;
-
-// @property (NS_NONATOMIC_IOSONLY, readonly) BOOL allParameterValues;	/// special pseudo-property for KVO
-
-// /*!	@property	musicDeviceOrEffect
-// 	@brief		Specifies whether an audio unit responds to MIDI events.
-// 	@discussion
-// 		This is implemented in the base class and returns YES if the component type is music
-// 		device or music effect.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, getter=isMusicDeviceOrEffect) BOOL musicDeviceOrEffect;
-
-// /*!	@property	virtualMIDICableCount
-// 	@brief		The number of virtual MIDI cables implemented by a music device or effect.
-// 	@discussion
-// 		A music device or MIDI effect can support up to 256 virtual MIDI cables of input; this
-// 		property expresses the number of cables supported by the audio unit.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) NSInteger virtualMIDICableCount;
-
-// /*!	@property	scheduleMIDIEventBlock
-// 	@brief		Block used to schedule MIDI events.
-// 	@discussion
-// 		As with renderBlock, a host should fetch and cache this block before beginning to render,
-// 		if it intends to schedule MIDI events.
-
-// 		This is implemented in the base class. It is nil when musicDeviceOrEffect is NO.
-
-// 		Subclassers should not override. When hosts schedule events via this block, they are
-// 		delivered to the audio unit via the list of AURenderEvents delivered to
-// 		internalRenderBlock.
-
-// 		This bridged to the v2 API MusicDeviceMIDIEvent.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, nullable) AUScheduleMIDIEventBlock scheduleMIDIEventBlock;
-
-// /*!	@property	MIDIOutputNames
-// 	@brief		Count, and names of, a plug-in's MIDI outputs.
-// 	@discussion
-// 		A plug-in may override this method to inform hosts about its MIDI outputs. The size of the
-// 		array is the number of outputs the audio unit supports. Each item in the array is the name
-// 		of the MIDI output at that index.
-
-// 		This is bridged to the v2 API property kAudioUnitProperty_MIDIOutputCallbackInfo.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSArray<NSString *> *MIDIOutputNames API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
-
-// /*!	@property	providesUserInterface
-// 	@brief		Specifies whether an audio unit provides UI (normally in the form of a view controller).
-// 	@discussion
-// 		Implemented in the framework and should not be overridden by implementators. The
-// 		framework detects whether any subclass has implemented
-// 		`requestViewControllerWithCompletionHandler:` or is implemented by an AU extension whose
-// 		extension point identifier is `com.apple.AudioUnit-UI`. See also
-// 		`requestViewControllerWithCompletionHandler:` in <CoreAudioKit/AUViewController.h>
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) BOOL providesUserInterface API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
-
-// // ------------------------
-// // These properties and methods are generally optional.
-
-// /*!	@property	MIDIOutputEventBlock
-// 	@brief		Block used by the host to access the MIDI output generated by an audio unit.
-// 	@discussion
-//  		The host can set this block and the plug-in can call it in its renderBlock to provide to the
-//  		host the MIDI data associated with the current render cycle.
-
-//  		This is bridged to the v2 API property kAudioUnitProperty_MIDIOutputCallback.
-// */
-// @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUMIDIOutputEventBlock MIDIOutputEventBlock API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
-
-// /*!	@property	fullState
-// 	@brief		A persistable snapshot of the audio unit's properties and parameters, suitable for
-// 				saving as a user preset.
-// 	@discussion
-// 		Hosts may use this property to save and restore the state of an audio unit being used in a
-// 		user preset or document. The audio unit should not persist transitory properties such as
-// 		stream formats, but should save and restore all parameters and custom properties.
-
-// 		The base class implementation of this property saves the values of all parameters
-// 		currently in the parameter tree. A subclass which dynamically produces multiple variants
-// 		of the parameter tree needs to be aware that the serialization method does a depth-first
-// 		preorder traversal of the tree.
-
-// 		Bridged to the v2 property kAudioUnitProperty_ClassInfo.
-// */
-// @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSDictionary<NSString *, id> *fullState;
-
-// /*!	@property	fullStateForDocument
-// 	@brief		A persistable snapshot of the audio unit's properties and parameters, suitable for
-// 				saving in a user's document.
-// 	@discussion
-// 		This property is distinct from fullState in that some state is suitable for saving in user
-// 		presets, while other state is not. For example, a synthesizer's master tuning setting could
-// 		be considered global state, inappropriate for storing in reusable presets, but desirable
-// 		for storing in a document for a specific live performance.
-
-// 		Hosts saving documents should use this property. If the audio unit does not implement it,
-// 		the base class simply sets/gets fullState.
-
-// 		Bridged to the v2 property kAudioUnitProperty_ClassInfoFromDocument.
-// */
-// @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSDictionary<NSString *, id> *fullStateForDocument;
-
-// /*!	@property	factoryPresets
-// 	@brief		A collection of presets provided by the audio unit's developer.
-// 	@discussion
-// 		A preset provides users of an audio unit with an easily-selectable, fine-tuned set of
-// 		parameters provided by the developer. This property returns all of the available factory presets.
-
-// 		Bridged to the v2 property kAudioUnitProperty_FactoryPresets.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<AUAudioUnitPreset *> *factoryPresets;
-
-// /*!	@property	userPresets
-// 	@brief		A collection of presets saved by the user
-// 	@discussion
-// 		In addition to factory presets, provided by the audio unit vendor, users have the ability to
-// 		save the values of the parameters of an audio unit into a user preset. These users presets
-// 		can be accessed using this property.
-
-// 		The default implementation of this method will load the user presets from an internal
-// 		location that might not be directly accessible to the audio unit host application or to the
-// 		audio unit. Instead of accessing this path directly, the audio unit should rely on the
-// 		superclass implementation of this method to retrieve the presets.
-
-// 		Audio Units are free to override this method to load their user presets via different means
-// 		(e.g. from their iCloud container).
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSArray<AUAudioUnitPreset *> *userPresets API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
-
-// /*!	@method		saveUserPreset:error
-// 	@brief		Persistently save the current state of the audio unit into a userPreset
-// 	@discussion
-// 		The new preset will be added to userPresets and will become selectable by assigning it
-// 		to the currentPreset property.
-// 		If a preset with the provided name already exists then it will be overwritten.
-
-// 		For user presets, the preset number is required to be negative.
-// 		If a positive number is passed, the sign will be changed to negative.
-// 		If zero is passed, the number will be set to -1.
-// 		These changes will be reflected on the userPreset argument.
-
-// 		The default implementation of this method will save the user preset to an internal
-// 		location.
-
-// 		Audio Units are free to override this method to operate on a different location (e.g. their
-// 		iCloud container).
-// 	@param	userPreset
-// 		The preset under which the current state will be saved.
-// 	@param outError
-// 		In the event of a failure, the method will return NO and outError will be set to an
-// 		NSError, describing the problem.
-// 		Some possible errors:
-// 				- domain: NSOSStatusErrorDomain code: kAudioUnitErr_NoConnection
-// 				- domain: NSOSStatusErrorDomain	code: kAudioUnitErr_InvalidFilePath
-// 				- domain: NSOSStatusErrorDomain	code: kAudioUnitErr_MissingKey
-// 	@return
-// 		YES for success. NO in the event of a failure, in which case the error is returned in
-// 		outError.
-//  */
-// - (BOOL)saveUserPreset:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
-
-// /*!	@method		deleteUserPreset:error
-// 	@brief		Remove a user preset.
-// 	@discussion
-// 		The user preset will be removed from userPresets and will be permanently deleted.
-
-// 		The default implementation of this method will delete the user preset from an internal
-// 		location.
-
-// 		Audio Units are free to override this method to operate on a different location (e.g. their
-// 		iCloud container).
-// 	@param	userPreset
-// 		The preset to be deleted.
-// 	@param	outError
-// 		In the event of a failure, the method will return NO and outError will be set to an
-// 		NSError, describing the problem.
-// 		Some possible errors:
-// 				- domain: NSOSStatusErrorDomain code: kAudioUnitErr_NoConnection
-// 				- domain: NSPOSIXErrorDomain	code: ENOENT
-// 				- domain: NSOSStatusErrorDomain	code: kAudioUnitErr_InvalidFilePath
-// 	@return
-// 		YES for success. NO in the event of a failure, in which case the error is returned in
-// 		outError.
-// */
-// - (BOOL)deleteUserPreset:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
-
-// /*! @method		presetStateFor:error
-// 	@brief		Retrieve the state stored in a user preset
-//  	@discussion
-// 		This method allows access to the contents of a preset without having to set that preset as
-// 		current. The returned dictionary is assignable to the audio unit's fullState and/or
-// 		fullStateForDocument properties.
-
-// 		Audio units can override this method in order to vend user presets from a different location
-// 		(e.g. their iCloud container).
-
-// 		In order to restore the state from a user preset, the audio unit should override the setter
-// 		for the currentPreset property and check the preset number to determine the type of preset.
-// 		If the preset number is >= 0 then the preset is a factory preset.
-// 		If the preset number is < 0 then it is a user preset.
-
-// 		This method can then be called to retrieve the state stored in a user preset and the audio
-// 		unit can assign this to fullState or fullStateForDocument.
-
-// 	@param	userPreset
-// 		The preset to be selected.
-// 	@param	outError
-// 		In the event of a failure, the method will return nil and outError will be set to an
-// 		NSError, describing the problem.
-// 		Some possible errors:
-// 				- domain: NSOSStatusErrorDomain code: kAudioUnitErr_NoConnection
-// 				- domain: NSPOSIXErrorDomain	code: ENOENT
-// 				- domain: NSCocoaErrorDomain	code: NSCoderReadCorruptError
-// 	@return
-// 		Returns nil if there was an error, otherwise returns a dictionary containing the full state
-// 		of the audio unit saved in the preset.
-// 		For details on the possible keys present in the full state dictionary, please see the
-// 		documentation for kAudioUnitProperty_ClassInfo.
-//  		The minimal set of keys and their type is:	@kAUPresetTypeKey : NSNumber,
-// 													@kAUPresetSubtypeKey : NSNumber,
-//  													@kAUPresetManufacturerKey : NSNumber,
-//  											   		@kAUPresetVersionKey : NSNumber,
-//  													@kAUPresetNameKey : NSString,
-//  													@kAUPresetNumberKey: NSNumber,
-// 													@kAUPresetDataKey : NSData
-// */
-// - (nullable NSDictionary<NSString *, id> *)presetStateFor:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
-
-// /*!	@property	supportsUserPresets
-// 	@brief		Specifies whether an audio unit supports loading and saving user presets
-// 	@discussion
-// 		The audio unit should set this property to YES if a user preset can be assigned to
-// 		currentPreset.
-
-// 		Audio unit host applications should query this property to determine whether the audio unit
-// 		supports user presets.
-
-// 		Assigning a user preset to the currentPreset property of an audio unit that does not support
-// 		restoring state from user presets may result in incorrect behavior.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) BOOL supportsUserPresets API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
-
-// /*!	@property	isLoadedInProcess
-// 	@brief		Set to YES when an AUAudioUnit is loaded in-process
-// 	@discussion
-// 		If the AUAudioUnit is instantiated with kAudioComponentInstantiation_LoadInProcess, but the
-// 		audio unit is not packaged properly to support loading in-process, the system will silently
-// 		fall back to loading the audio unit out-of-process.
-
-// 		This property can be used to determine whether the instantiation succeeded as intended and
-// 		the audio unit is running in-process.
-
-// 		The presence of an extension process is not sufficient indication that the audio unit failed
-// 		to load in-process, since the framework might launch the audio unit extension process to
-// 		fulfill auxiliary functionality. If the audio unit is loaded in-process then rendering is
-// 		done in the host process. Other operations that are not essential to rendering audio, might
-// 		be done in the audio unit's extension process.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) BOOL isLoadedInProcess API_AVAILABLE(macos(10.15)) API_UNAVAILABLE(ios, watchos, tvos);
-
-// /*!	@property	currentPreset
-// 	@brief		The audio unit's last-selected preset.
-// 	@discussion
-// 		Hosts can let the user select a preset by setting this property. Note that when getting
-// 		this property, it does not reflect whether parameters may have been modified since the
-// 		preset was selected.
-
-// 		Bridged to the v2 property kAudioUnitProperty_PresentPreset.
-// */
-// @property (NS_NONATOMIC_IOSONLY, retain, nullable) AUAudioUnitPreset *currentPreset;
-
-// /*!	@property	latency
-// 	@brief		The audio unit's processing latency, in seconds.
-// 	@discussion
-// 		This property reflects the delay between when an impulse in the unit's audio unit stream
-// 		arrives in the input vs. output streams. This should reflect the delay due
-// 		to signal processing (e.g. filters, FFT's, etc.), not delay or reverberation which is
-// 		being applied as an effect.
-
-// 		Note that a latency that varies with parameter settings, including bypass, is generally not
-// 		useful to hosts. A host is usually only prepared to add delays before starting to render and
-// 		those delays need to be fixed. A variable delay would introduce artifacts even if the host
-// 		could track it. If an algorithm has a variable latency it should be adjusted upwards to some
-// 		fixed latency within the audio unit. If for some reason this is not possible, then latency
-// 		could be regarded as an unavoidable consequence of the algorithm and left unreported (i.e.
-// 		with a value of 0).
-
-// 		Bridged to the v2 property kAudioUnitProperty_Latency.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) NSTimeInterval latency;
-
-// /*!	@property	tailTime
-// 	@brief		The audio unit's tail time, in seconds.
-// 	@discussion
-// 		This property reflects the time interval between when the input stream ends or otherwise
-// 		transitions to silence, and when the output stream becomes silent. Unlike latency, this
-// 		should reflect the duration of a delay or reverb effect.
-
-// 		Bridged to the v2 property kAudioUnitProperty_TailTime.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) NSTimeInterval tailTime;
-
-// /*!	@property	renderQuality
-// 	@brief		Provides a trade-off between rendering quality and CPU load.
-// 	@discussion
-// 		The range of valid values is 0-127.
-
-// 		Bridged to the v2 property kAudioUnitProperty_RenderQuality.
-// */
-// @property (NS_NONATOMIC_IOSONLY) NSInteger renderQuality;
-
-// /*!	@property	shouldBypassEffect
-// 	@brief		Directs an effect to route input directly to output, without any processing.
-// 	@discussion
-// 		Bridged to the v2 property kAudioUnitProperty_BypassEffect.
-// */
-// @property (NS_NONATOMIC_IOSONLY) BOOL shouldBypassEffect;
-
-// /*!	@property	canProcessInPlace
-// 	@brief		Expresses whether an audio unit can process in place.
-// 	@discussion
-// 		In-place processing is the ability for an audio unit to transform an input signal to an
-// 		output signal in-place in the input buffer, without requiring a separate output buffer.
-
-// 		A host can express its desire to process in place by using null mData pointers in the output
-// 		buffer list. The audio unit may process in-place in the input buffers. See the discussion of
-// 		renderBlock.
-
-// 		Partially bridged to the v2 property kAudioUnitProperty_InPlaceProcessing; in v3 it is not
-// 		settable.
-
-// 		Defaults to NO. Subclassers can override to return YES.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) BOOL canProcessInPlace;
-
-// /*!	@property	renderingOffline
-// 	@brief		Communicates to an audio unit that it is rendering offline.
-// 	@discussion
-// 		A host should set this property when using an audio unit in a context where there are no
-// 		realtime deadlines, before asking the unit to allocate render resources. An audio unit may
-// 		respond by using a more expensive signal processing algorithm, or allowing itself to block
-// 		at render time if data being generated on secondary work threads is not ready in time.
-// 		(Normally, in a realtime thread, this data would have to be dropped).
-
-// 		Bridged to the v2 property kAudioUnitProperty_OfflineRender.
-// */
-// @property (NS_NONATOMIC_IOSONLY, getter=isRenderingOffline) BOOL renderingOffline;
-
-// /*!	@property	channelCapabilities
-// 	@brief		Expresses valid combinations of input and output channel counts.
-// 	@discussion
-// 		Elements are NSNumber containing integers; [0]=input count, [1]=output count, [2]=2nd input
-// 		count, [3]=2nd output count, etc.
-
-// 		An input, output count of (2, 2) signifies that the audio unit can process 2 input channels
-// 		to 2 output channels.
-
-// 		Negative numbers (-1, -2) indicate *any* number of channels. (-1, -1) means any number
-// 		of channels on input and output as long as they are the same. (-1, -2) means any number of
-// 		channels on input or output, without the requirement that the counts are the same.
-
-// 		A negative number less than -2 is used to indicate a total number of channels across every
-// 		bus in that scope, regardless of how many channels are set on any particular bus. For
-// 		example, (-16, 2) indicates that a unit can accept up to 16 channels of input across its
-// 		input busses, but will only produce 2 channels of output.
-
-// 		Zero on either side (though typically input) means "not applicable", because there are no
-// 		elements on that side.
-
-// 		Bridged to the v2 property kAudioUnitProperty_SupportedNumChannels.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<NSNumber *> *channelCapabilities;
-
-// /*!	@property	musicalContextBlock
-// 	@brief		A callback for the AU to call the host for musical context information.
-// 	@discussion
-// 		Note that an audio unit implementation accessing this property should cache it in
-// 		realtime-safe storage before beginning to render.
-
-// 		Bridged to the HostCallback_GetBeatAndTempo and HostCallback_GetMusicalTimeLocation
-// 		callback members in kAudioUnitProperty_HostCallbacks.
-// */
-// @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUHostMusicalContextBlock musicalContextBlock;
-
-// /*!	@property	transportStateBlock
-// 	@brief		A callback for the AU to call the host for transport state information.
-// 	@discussion
-// 		Note that an audio unit implementation accessing this property should cache it in
-// 		realtime-safe storage before beginning to render.
-
-// 		Bridged to the HostCallback_GetTransportState and HostCallback_GetTransportState2
-// 		callback members in kAudioUnitProperty_HostCallbacks.
-// */
-// @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUHostTransportStateBlock transportStateBlock;
-
-// /*!	@property	contextName
-// 	@brief		Information about the host context in which the audio unit is connected, for display
-// 				in the audio unit's view.
-// 	@discussion
-// 		For example, a host could set "track 3" as the context, so that the audio unit's view could
-// 		then display to the user "My audio unit on track 3".
-
-// 		Bridged to the v2 property kAudioUnitProperty_ContextName.
-// */
-// @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *contextName;
-
-// /*!	@property	supportsMPE
-// 	@brief		Specifies whether an audio unit supports Multi-dimensional Polyphonic Expression.
-// 	@discussion
-// 		Bridged to the v2 property kAudioUnitProperty_SupportsMPE.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) BOOL supportsMPE API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
-
-// /*!	@property	channelMap
-// 	@brief		Specify a mapping of input channels to output channels.
-// 	@discussion
-// 		Converter and input/output audio units may support re-ordering or splitting of input
-// 		channels to output channels. The number of channels in the channel map is the number of
-// 		channels of the destination (output format). The channel map entries contain a channel
-// 		number of the source channel that should be mapped to that destination channel. If -1 is
-// 		specified, then that destination channel will not contain any channel from the source (so it
-// 		will be silent).
-
-// 		If the property value is nil, then the audio unit does not support this property.
-
-// 		Bridged to the v2 property kAudioOutputUnitProperty_ChannelMap.
-// */
-// @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSArray<NSNumber *> *channelMap API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
-
-// /*!	@method		profileStateForCable:channel:
-// 	@brief		Given a MIDI cable and channel number, return the supported MIDI-CI Profiles.
-// 	@param cable
-// 		The virtual MIDI cable for which the profiles are requested.
-// 	@param channel
-// 		The MIDI channel for which the profiles are requested.
-// 	@return
-// 		A MIDICIProfileState object containing all the supported MIDI-CI profiles for this channel
-// 		on this cable.
-// */
-// - (MIDICIProfileState *)profileStateForCable:(uint8_t)cable channel:(MIDIChannelNumber)channel API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
-
-// /*!	@method		enableProfile:cable:onChannel:error:
-// 	@brief		Enable a MIDI-CI Profile on the specified cable/channel.
-// 	@param	profile
-// 		The MIDI-CI profile to be enabled.
-// 	@param cable
-// 		The virtual MIDI cable.
-// 	@param channel
-// 		The MIDI channel.
-// 	@param outError
-// 		Returned in the event of failure.
-// 	@return
-// 		YES for success. NO in the event of a failure, in which case the error is returned
-// 		in outError.
-// */
-// - (BOOL)enableProfile:(MIDICIProfile *)profile
-//                 cable:(uint8_t)cable
-//             onChannel:(MIDIChannelNumber)channel
-//                 error:(NSError **)outError API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
-
-// /*!	@method		disableProfile:cable:onChannel:error:
-// 	@brief		Disable a MIDI-CI Profile on the specified cable/channel.
-// 	@param	profile
-// 		The MIDI-CI profile to be disabled.
-// 	@param cable
-// 		The virtual MIDI cable.
-// 	@param channel
-// 		The MIDI channel.
-// 	@param outError
-// 		Returned in the event of failure.
-// 	@return
-// 		YES for success. NO in the event of a failure, in which case the error is returned
-// 		in outError.
-// */
-// - (BOOL)disableProfile:(MIDICIProfile *)profile
-//                  cable:(uint8_t)cable
-//              onChannel:(MIDIChannelNumber)channel
-//                  error:(NSError **)outError API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
-
-// /*!	@property	profileChangedBlock
-// 	@brief		A block called when a device notifies that a MIDI-CI profile has been enabled or
-// 				disabled.
-// 	@discussion
-// 		Since enabling / disabling MIDI-CI profiles is an asynchronous operation, the host can set
-// 		this block and the audio unit is expected to call it every time the state of a MIDI-CI
-// 		profile has changed.
-// */
-// @property (nonatomic, nullable) AUMIDICIProfileChangedBlock profileChangedBlock API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
-
-// @end
 
 // // =================================================================================================
 
@@ -1352,7 +1358,7 @@ impl AUAudioUnitRef {
     // */
     // - (void)stopHardware;
     pub fn stop_hardware(&self) {
-         unsafe { msg_send![self, stopHardware] }
+        unsafe { msg_send![self, stopHardware] }
     }
 
     // /*!	@property	osWorkgroup
@@ -1392,6 +1398,14 @@ impl AUAudioUnitRef {
 // API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
 // @interface AUAudioUnitBusArray : NSObject <NSFastEnumeration>
 
+pub enum AUAudioUnitBusArrayFFI {}
+
+foreign_obj_type! {
+    type CType = AUAudioUnitBusArrayFFI;
+    pub struct AUAudioUnitBusArray;
+    pub struct AUAudioUnitBusArrayRef;
+}
+
 // - (instancetype)init NS_UNAVAILABLE;
 
 // /*!	@method		initWithAudioUnit:busType:busses:
@@ -1404,43 +1418,48 @@ impl AUAudioUnitRef {
 // */
 // - (instancetype)initWithAudioUnit:(AUAudioUnit *)owner busType:(AUAudioUnitBusType)busType;
 
-// /*!	@property	count
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) NSUInteger count;
+impl AUAudioUnitBusArrayRef {
+    // /*!	@property	count
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) NSUInteger count;
+    pub fn count(&self) -> NSUInteger {
+        unsafe { msg_send![self, count] }
+    }
 
-// /*!	@method		objectAtIndexedSubscript:
-// */
-// - (AUAudioUnitBus *)objectAtIndexedSubscript:(NSUInteger)index;
+    // /*!	@method		objectAtIndexedSubscript:
+    // */
+    // - (AUAudioUnitBus *)objectAtIndexedSubscript:(NSUInteger)index;
 
-// /*!	@property	countChangeable
-// 	@brief		Whether the array can have a variable number of busses.
-// 	@discussion
-// 		The base implementation returns false.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, getter=isCountChangeable) BOOL countChangeable;
+    // /*!	@property	countChangeable
+    // 	@brief		Whether the array can have a variable number of busses.
+    // 	@discussion
+    // 		The base implementation returns false.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, getter=isCountChangeable) BOOL countChangeable;
 
-// /*!	@property	setBusCount:error:
-// 	@brief		Change the number of busses in the array.
-// */
-// - (BOOL)setBusCount:(NSUInteger)count error:(NSError **)outError;
+    // /*!	@property	setBusCount:error:
+    // 	@brief		Change the number of busses in the array.
+    // */
+    // - (BOOL)setBusCount:(NSUInteger)count error:(NSError **)outError;
 
-// /*!	@method		addObserverToAllBusses:forKeyPath:options:context:
-// 	@brief		Add a KVO observer for a property on all busses in the array.
-// */
-// - (void)addObserverToAllBusses:(NSObject *)observer forKeyPath:(NSString *)keyPath options:(NSKeyValueObservingOptions)options context:(void * __nullable)context;
+    // /*!	@method		addObserverToAllBusses:forKeyPath:options:context:
+    // 	@brief		Add a KVO observer for a property on all busses in the array.
+    // */
+    // - (void)addObserverToAllBusses:(NSObject *)observer forKeyPath:(NSString *)keyPath options:(NSKeyValueObservingOptions)options context:(void * __nullable)context;
 
-// /*!	@method		removeObserverFromAllBusses:forKeyPath:context:
-// 	@brief		Remove a KVO observer for a property on all busses in the array.
-// */
-// - (void)removeObserverFromAllBusses:(NSObject *)observer forKeyPath:(NSString *)keyPath context:(void * __nullable)context;
+    // /*!	@method		removeObserverFromAllBusses:forKeyPath:context:
+    // 	@brief		Remove a KVO observer for a property on all busses in the array.
+    // */
+    // - (void)removeObserverFromAllBusses:(NSObject *)observer forKeyPath:(NSString *)keyPath context:(void * __nullable)context;
 
-// /// The audio unit that owns the bus.
-// @property (NS_NONATOMIC_IOSONLY, readonly, assign) AUAudioUnit *ownerAudioUnit;
+    // /// The audio unit that owns the bus.
+    // @property (NS_NONATOMIC_IOSONLY, readonly, assign) AUAudioUnit *ownerAudioUnit;
 
-// /// Which bus array this is (input or output).
-// @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusType busType;
+    // /// Which bus array this is (input or output).
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusType busType;
 
-// @end
+    // @end
+}
 
 // // =================================================================================================
 
