@@ -1,9 +1,13 @@
-// use crate::{AudioFormat, AudioNodeBus};
-use crate::AVAudioFramePosition;
 use objc::runtime::{
     NO,
     YES,
 };
+
+use crate::{
+    AVAudioFramePosition,
+    AudioTimeStamp,
+};
+
 pub enum AVAudioTimeFFI {}
 
 foreign_obj_type! {
@@ -13,8 +17,6 @@ foreign_obj_type! {
 }
 
 impl AVAudioTimeRef {
-
-
     // pub fn audioTimeStamp(&self) -> AudioTimeStamp {
     //     unsafe { msg_send![self, audioTimeStamp] }
     //  }
@@ -148,4 +150,7 @@ impl AVAudioTimeRef {
     // 		This may be useful for compatibility with lower-level CoreAudio and AudioToolbox API's.
     // */
     // @property (readonly, nonatomic) AudioTimeStamp audioTimeStamp;
+    pub fn audio_time_stamp(&self) -> AudioTimeStamp {
+        unsafe { msg_send![self, audioTimeStamp] }
+    }
 }
