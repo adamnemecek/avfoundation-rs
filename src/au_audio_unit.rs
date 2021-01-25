@@ -1607,24 +1607,33 @@ impl AUAudioUnitBusRef {
 
 // // =================================================================================================
 
-// /*!	@class	AUAudioUnitPreset
-// 	@brief	A collection of parameter settings provided by the audio unit implementor, producing a
-// 			useful sound or starting point.
-// */
-// API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
-// @interface AUAudioUnitPreset : NSObject <NSSecureCoding>
+pub enum AUAudioUnitPresetFFI {}
 
-// /*!	@property	number
-// 	@brief		The preset's unique numeric identifier.
-// */
-// @property (NS_NONATOMIC_IOSONLY) NSInteger number;
+foreign_obj_type! {
+    type CType = AUAudioUnitPresetFFI;
+    pub struct AUAudioUnitPreset;
+    pub struct AUAudioUnitPresetRef;
+}
+impl AUAudioUnitPresetRef {
+    // /*!	@class	AUAudioUnitPreset
+    // 	@brief	A collection of parameter settings provided by the audio unit implementor, producing a
+    // 			useful sound or starting point.
+    // */
+    // API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
+    // @interface AUAudioUnitPreset : NSObject <NSSecureCoding>
 
-// /*!	@property	name
-// 	@brief		The preset's name.
-// */
-// @property (NS_NONATOMIC_IOSONLY, copy) NSString *name;
+    // /*!	@property	number
+    // 	@brief		The preset's unique numeric identifier.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY) NSInteger number;
 
-// @end
+    // /*!	@property	name
+    // 	@brief		The preset's name.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, copy) NSString *name;
+
+    // @end
+}
 
 // NS_ASSUME_NONNULL_END
 
