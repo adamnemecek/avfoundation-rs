@@ -17,8 +17,6 @@
 // typedef NSViewController AUViewControllerBase;
 // #endif
 
-
-
 // NS_ASSUME_NONNULL_BEGIN
 
 // API_AVAILABLE(macos(10.11), ios(9.0)) API_UNAVAILABLE(watchos)
@@ -37,50 +35,61 @@ foreign_obj_type! {
 // 	@brief	Properties of the configuration that a host uses to embed the view of an audio unit.
 // 	@discussion
 // 		Hosts may support embedding the view of an audio unit in different configurations. These
-// 		configurations may vary in the size reserved for the audio unit's view and the additional 
-// 		control surfaces that are displayed along with it. The host can propose several view 
+// 		configurations may vary in the size reserved for the audio unit's view and the additional
+// 		control surfaces that are displayed along with it. The host can propose several view
 // 		configurations and the audio unit should report the ones which it supports.
 
 // 		See the documentation for supportedViewConfigurations.
 // */
-// API_AVAILABLE(macos(10.13), ios(11.0)) API_UNAVAILABLE(watchos)
-// @interface AUAudioUnitViewConfiguration : NSObject <NSSecureCoding>
+pub enum AUAudioUnitViewConfigurationFFI {}
 
-// /*!	@method		initWithWidth
-// 	@brief		Designated initializer.
-// 	@param		width
-// 		The width associated with this view configuration.
-// 	@param		height
-// 		The height associated with this view configuration.
-// 	@param		hostHasController
-// 		This property controls whether the host shows its own control surface in this view 
-// 		configuration.
-// 	@return		Returns the newly created view configuration object.
-// */
-// - (instancetype)initWithWidth:(CGFloat)width height:(CGFloat)height hostHasController:(BOOL)hostHasController;
+foreign_obj_type! {
+    type CType = AUAudioUnitViewConfigurationFFI;
+    pub struct AUAudioUnitViewConfiguration;
+    pub struct AUAudioUnitViewConfigurationRef;
+}
 
-// /*!	@property	width
-// 	@brief		The width of the view, measured in points.
-// 	@discussion
-// 		Setting the width to 0 will match any width.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) CGFloat width;
+impl AUAudioUnitViewConfiguration {
+    // API_AVAILABLE(macos(10.13), ios(11.0)) API_UNAVAILABLE(watchos)
+    // @interface AUAudioUnitViewConfiguration : NSObject <NSSecureCoding>
 
-// /*!	@property	height
-// 	@brief		The height of the view, measured in points.
-// 	@discussion
-// 		Setting the height to 0 will match any height.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) CGFloat height;
+    // /*!	@method		initWithWidth
+    // 	@brief		Designated initializer.
+    // 	@param		width
+    // 		The width associated with this view configuration.
+    // 	@param		height
+    // 		The height associated with this view configuration.
+    // 	@param		hostHasController
+    // 		This property controls whether the host shows its own control surface in this view
+    // 		configuration.
+    // 	@return		Returns the newly created view configuration object.
+    // */
+    // - (instancetype)initWithWidth:(CGFloat)width height:(CGFloat)height hostHasController:(BOOL)hostHasController;
+}
 
-// /*!	@property	hostHasController
-// 	@brief		Boolean property specifying whether the host displays its own control surface
-// 				when showing the view of the audio unit.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) BOOL hostHasController;
+impl AUAudioUnitViewConfigurationRef {
+    // /*!	@property	width
+    // 	@brief		The width of the view, measured in points.
+    // 	@discussion
+    // 		Setting the width to 0 will match any width.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) CGFloat width;
 
-// @end
+    // /*!	@property	height
+    // 	@brief		The height of the view, measured in points.
+    // 	@discussion
+    // 		Setting the height to 0 will match any height.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) CGFloat height;
 
+    // /*!	@property	hostHasController
+    // 	@brief		Boolean property specifying whether the host displays its own control surface
+    // 				when showing the view of the audio unit.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL hostHasController;
+
+    // @end
+}
 // API_AVAILABLE(macos(10.12), ios(9.0)) API_UNAVAILABLE(watchos)
 // @interface AUAudioUnit (AUAudioUnit_ViewController)
 // /*!	@method	requestViewControllerWithCompletionHandler:
@@ -107,12 +116,12 @@ foreign_obj_type! {
 // 		of the audio unit. The host will call this method and pass an array of supported
 // 		configurations.
 
-// 		The audio unit should override this method and implement its own logic to report all the 
-// 		view configurations it supports. The size of the view in the selected configuration should 
-// 		be large enough to fit the view of the audio unit, otherwise it might be truncated and a 
+// 		The audio unit should override this method and implement its own logic to report all the
+// 		view configurations it supports. The size of the view in the selected configuration should
+// 		be large enough to fit the view of the audio unit, otherwise it might be truncated and a
 // 		scroll bar might be necessary to navigate it.
 
-// 		In case an empty set is returned from this method, it is considered that the plugin only 
+// 		In case an empty set is returned from this method, it is considered that the plugin only
 // 		supports the largest available view configuration.
 // */
 // - (NSIndexSet *)supportedViewConfigurations:(NSArray<AUAudioUnitViewConfiguration *> *)availableViewConfigurations API_AVAILABLE(macosx(10.13), ios(11.0)) API_UNAVAILABLE(watchos, tvos);
@@ -121,15 +130,15 @@ foreign_obj_type! {
 // 	@param		viewConfiguration
 //         The requested view configuration.
 
-//         The view configuration passed to this method should be one which was indicated as supported 
-//         via supportedViewConfigurations. If any other, unsupported, view configuration is passed or 
-//         if supportedViewConfigurations returns an empty set, the audio unit implementation should 
+//         The view configuration passed to this method should be one which was indicated as supported
+//         via supportedViewConfigurations. If any other, unsupported, view configuration is passed or
+//         if supportedViewConfigurations returns an empty set, the audio unit implementation should
 //         fall back to its default (largest available) view configuration.
 
 // 	@brief		Request a view configuration from the audio unit.
 // 	@discussion
 // 		The host can use this method to switch the audio unit's view into a new configuration.
-// 		Audio Units should override this method with the logic needed to adapt their view controller 
+// 		Audio Units should override this method with the logic needed to adapt their view controller
 // 		to the requested configuration.
 // */
 // - (void)selectViewConfiguration:(AUAudioUnitViewConfiguration *)viewConfiguration API_AVAILABLE(macosx(10.13), ios(11.0)) API_UNAVAILABLE(watchos, tvos);
@@ -139,4 +148,3 @@ foreign_obj_type! {
 // NS_ASSUME_NONNULL_END
 
 // #endif
-

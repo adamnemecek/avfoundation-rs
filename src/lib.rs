@@ -1,7 +1,6 @@
 #![link(name = "AudioToolbox", kind = "framework")]
 #![link(name = "AVFoundation", kind = "framework")]
 #![link(name = "CoreAudioKit", kind = "framework")]
-
 #![deny(unused_must_use)]
 
 #[macro_use]
