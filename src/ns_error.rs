@@ -6,7 +6,16 @@ foreign_obj_type! {
     pub struct NSErrorRef;
 }
 
+impl std::fmt::Display for NSError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // write!(f, "{}", self.inner)
+        todo!()
+    }
+}
 
+impl std::error::Error for NSError {
+
+}
 
 impl NSErrorRef {
     // pub fn new(raw: id) -> Option<Self> {
@@ -23,6 +32,9 @@ impl NSErrorRef {
     // }
 
     // pub fn localized_description(&self) -> &str {
+    //     unsafe {
+    //         let s = msg_send![self, localizedDescription]
+    //     }
     //     unsafe {
     //         CStr::from_ptr(self.0.localizedDescription().UTF8String()).to_str().unwrap_or(&"")
     //     }
