@@ -13,6 +13,20 @@ impl std::fmt::Display for NSError {
     }
 }
 
+// #[macro_export]
+// macro_rules! ns_err {
+//     ($expr: expr) => {
+//         let mut err: *mut NSError = std::ptr::null_mut();
+//         let res = $expr;
+//         if err.is_null() {
+//             Ok(res)
+//         } else {
+//             let e = err.as_ref().unwrap();
+//             Err(e.to_owned())
+//         }
+//     };
+// }
+
 impl std::error::Error for NSError {}
 
 impl NSErrorRef {
