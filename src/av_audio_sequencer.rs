@@ -47,6 +47,13 @@ impl AVAudioSequencer {
 pub struct AVMusicSequenceLoadOptions {
     inner: NSUInteger,
 }
+
+impl AVMusicSequenceLoadOptions {
+    pub fn empty() -> Self {
+        Self { inner: 0 }
+    }
+}
+
 impl AVAudioSequencerRef {
     // /*! @method loadFromURL:options:error:
     //     @abstract Load the file referenced by the URL and add the events to the sequence
@@ -63,6 +70,7 @@ impl AVAudioSequencerRef {
         url: std::path::PathBuf,
         options: AVMusicSequenceLoadOptions,
     ) -> bool {
+        let url = crate::path_to_url(url);
         unsafe {
             match msg_send![self, loadFromURL: url options: options error: nil] {
                 YES => true,
@@ -82,6 +90,17 @@ impl AVAudioSequencerRef {
     //         on exit, if an error occurs, a description of the error
     // */
     // - (BOOL)loadFromData:(NSData *)data options:(AVMusicSequenceLoadOptions)options error:(NSError **)outError;
+    pub fn load_from_data(&self, data: &[u8], options: AVMusicSequenceLoadOptions) -> bool {
+        todo!()
+        // let url = crate::path_to_url(url);
+        // unsafe {
+        //     match msg_send![self, loadFromURL: url options: options error: nil] {
+        //         YES => true,
+        //         NO => false,
+        //         _ => unreachable!(),
+        //     }
+        // }
+    }
 
     // /*! @method writeToURL:SMPTEResolution:replaceExisting:error:
     //     @abstract Create and write a MIDI file from the events in the sequence
@@ -102,6 +121,21 @@ impl AVAudioSequencerRef {
     //         - pass in zero to use default - this will be the value that is currently set on the tempo track
     // */
     // - (BOOL)writeToURL:(NSURL *)fileURL SMPTEResolution:(NSInteger)resolution replaceExisting:(BOOL)replace error:(NSError **)outError;
+    pub fn write_to_url(
+        &self,
+        url: std::path::PathBuf,
+        options: AVMusicSequenceLoadOptions,
+    ) -> bool {
+        todo!()
+        // let url = crate::path_to_url(url);
+        // unsafe {
+        //     match msg_send![self, loadFromURL: url options: options error: nil] {
+        //         YES => true,
+        //         NO => false,
+        //         _ => unreachable!(),
+        //     }
+        // }
+    }
 
     // /*!    @method dataWithSMPTEResolution:error:
     //     @abstract Return a data object containing the events from the sequence

@@ -1,6 +1,7 @@
 use avfoundation::{
     AVAudioEngine,
     AVAudioSequencer,
+    AVMusicSequenceLoadOptions,
 };
 
 fn main() {
@@ -8,6 +9,12 @@ fn main() {
     let bank = std::path::PathBuf::from("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
     let engine = AVAudioEngine::new();
     let sequencer = AVAudioSequencer::with_engine(&engine);
+    sequencer.load_from_url(path, AVMusicSequenceLoadOptions::empty());
+    let tracks = sequencer.tracks();
+    for t in tracks {
+        println!("is_soloed {:?}", t.is_soloed());
+    }
+    println!("here");
 
     // println!("player {:?}", player.duration());
     // player.set_rate(1.5);
