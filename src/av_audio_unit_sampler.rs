@@ -124,10 +124,10 @@ impl AVAudioUnitSamplerRef {
     ) -> Result<bool, NSError> {
         let url = crate::path_to_url(instrument_url);
         unsafe {
-            let err: *mut NSError = std::ptr::null_mut();
+            let mut err: *mut NSError = std::ptr::null_mut();
             let res = match msg_send![self,
                loadInstrumentAtURL: url
-               error: &err
+               error: &mut err
             ] {
                 YES => true,
                 NO => false,

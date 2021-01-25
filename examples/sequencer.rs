@@ -9,7 +9,11 @@ fn main() {
     let bank = std::path::PathBuf::from("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
     let engine = AVAudioEngine::new();
     let sequencer = AVAudioSequencer::with_engine(&engine);
-    sequencer.load_from_url(path, AVMusicSequenceLoadOptions::empty());
+
+    match sequencer.load_from_url(path, Default::default()) {
+        Ok(res) => {println!("ok")},
+        Err(e) => { println!("err")},
+    } ;
     let tracks = sequencer.tracks();
     for t in tracks {
         println!("is_soloed {:?}", t.is_soloed());

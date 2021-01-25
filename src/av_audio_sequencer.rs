@@ -8,6 +8,7 @@ use crate::{
     AVAudioEngineRef,
     AVAudioUnitRef,
     NSTimeInterval,
+    NSError,
 };
 use cocoa_foundation::{
     base::nil,
@@ -43,7 +44,7 @@ impl AVAudioSequencer {
 }
 
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Default)]
 pub struct AVMusicSequenceLoadOptions {
     inner: NSUInteger,
 }
@@ -53,6 +54,8 @@ impl AVMusicSequenceLoadOptions {
         Self { inner: 0 }
     }
 }
+
+
 
 impl AVAudioSequencerRef {
     // /*! @method loadFromURL:options:error:
@@ -69,13 +72,21 @@ impl AVAudioSequencerRef {
         &self,
         url: std::path::PathBuf,
         options: AVMusicSequenceLoadOptions,
-    ) -> bool {
+    ) -> Result<bool, NSError> {
         let url = crate::path_to_url(url);
         unsafe {
-            match msg_send![self, loadFromURL: url options: options error: nil] {
+            let mut err: *mut NSError = std::ptr::null_mut();
+            let res = match msg_send![self, loadFromURL: url options: options error: &mut err] {
                 YES => true,
                 NO => false,
                 _ => unreachable!(),
+            };
+
+            if err.is_null() {
+                Ok(res)
+            } else {
+                let e = err.as_ref().unwrap();
+                Err(e.to_owned())
             }
         }
     }
