@@ -176,7 +176,15 @@ impl AVMusicTrackRef {
     //     unsafe { msg_send![self, destinationAudioUnit] }
     // }
 
+    // pub fn set_destination_audio_unit(&self) -> &AVAudioUnit {
+    //     unsafe { msg_send![self, destinationAudioUnit] }
+    // }
+
     // pub fn destination_midi_endpoint(&self) -> MIDIEndpointRef {
+    //     unsafe { msg_send![self, destinationMIDIEndpoint] }
+    // }
+
+    // pub fn set_destination_midi_endpoint(&self) -> MIDIEndpointRef {
     //     unsafe { msg_send![self, destinationMIDIEndpoint] }
     // }
 
@@ -184,11 +192,23 @@ impl AVMusicTrackRef {
     //     unsafe { msg_send![self, lengthInBeats] }
     // }
 
+    // pub fn set_length_in_beats(&self) -> AVMusicTimeStamp {
+    //     unsafe { msg_send![self, lengthInBeats] }
+    // }
+
     // pub fn length_in_seconds(&self) -> TimeInterval {
     //     unsafe { msg_send![self, lengthInSeconds] }
     // }
 
+    // pub fn set_length_in_seconds(&self) -> TimeInterval {
+    //     unsafe { msg_send![self, lengthInSeconds] }
+    // }
+
     // pub fn loop_range(&self) -> AVBeatRange {
+    //     unsafe { msg_send![self, loopRange] }
+    // }
+
+    // pub fn set_loop_range(&self) -> AVBeatRange {
     //     unsafe { msg_send![self, loopRange] }
     // }
 
@@ -202,6 +222,10 @@ impl AVMusicTrackRef {
         }
     }
 
+    pub fn set_looping_enabled(&self, v: bool) {
+        todo!()
+    }
+
     pub fn is_muted(&self) -> bool {
         unsafe {
             match msg_send![self, isMuted] {
@@ -210,6 +234,10 @@ impl AVMusicTrackRef {
                 _ => unreachable!(),
             }
         }
+    }
+
+    pub fn set_is_muted(&self, v: bool) {
+        todo!()
     }
 
     pub fn number_of_loops(&self) -> ! {
