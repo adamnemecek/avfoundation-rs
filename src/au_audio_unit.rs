@@ -1210,6 +1210,15 @@ impl AUAudioUnitRef {
 // 				object in a real time context.
 // */
 // typedef void (^AUInputHandler)(AudioUnitRenderActionFlags *actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger inputBusNumber);
+pub type AUInputHandler = block::Block<
+    (
+        *const AudioUnitRenderActionFlags,
+        *const AudioTimeStamp,
+        AUAudioFrameCount,
+        NSInteger,
+    ),
+    (),
+>;
 
 // /*!	@brief		Additional methods for audio units which can do input/output.
 // 	@discussion	These methods will fail if the audio unit is not an input/output audio unit.
@@ -1406,17 +1415,19 @@ foreign_obj_type! {
     pub struct AUAudioUnitBusArrayRef;
 }
 
-// - (instancetype)init NS_UNAVAILABLE;
+impl AUAudioUnitBusArray {
+    // - (instancetype)init NS_UNAVAILABLE;
 
-// /*!	@method		initWithAudioUnit:busType:busses:
-// 	@brief		Initializes by making a copy of the supplied bus array.
-// */
-// - (instancetype)initWithAudioUnit:(AUAudioUnit *)owner busType:(AUAudioUnitBusType)busType busses:(NSArray <AUAudioUnitBus *> *)busArray NS_DESIGNATED_INITIALIZER;
+    // /*!	@method		initWithAudioUnit:busType:busses:
+    // 	@brief		Initializes by making a copy of the supplied bus array.
+    // */
+    // - (instancetype)initWithAudioUnit:(AUAudioUnit *)owner busType:(AUAudioUnitBusType)busType busses:(NSArray <AUAudioUnitBus *> *)busArray NS_DESIGNATED_INITIALIZER;
 
-// /*!	@method		initWithAudioUnit:busType:
-// 	@brief		Initializes an empty bus array.
-// */
-// - (instancetype)initWithAudioUnit:(AUAudioUnit *)owner busType:(AUAudioUnitBusType)busType;
+    // /*!	@method		initWithAudioUnit:busType:
+    // 	@brief		Initializes an empty bus array.
+    // */
+    // - (instancetype)initWithAudioUnit:(AUAudioUnit *)owner busType:(AUAudioUnitBusType)busType;
+}
 
 impl AUAudioUnitBusArrayRef {
     // /*!	@property	count
@@ -1469,121 +1480,130 @@ impl AUAudioUnitBusArrayRef {
 // API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
 // @interface AUAudioUnitBus : NSObject
 
-// /*!	@property	format
-// 	@brief		The audio format and channel layout of audio being transferred on the bus.
-// 	@discussion
-// 		Bridged to the v2 property kAudioUnitProperty_StreamFormat.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) AVAudioFormat *format;
+pub enum AUAudioUnitBusFFI {}
+foreign_obj_type! {
+    type CType = AUAudioUnitBusFFI;
+    pub struct AUAudioUnitBus;
+    pub struct AUAudioUnitBusRef;
+}
 
-// /*!	@property	setFormat:error:
-// 	@brief		Sets the bus's audio format.
-// 	@discussion
-// 		Audio units can generally be expected to support AVAudioFormat's standard format
-// 		(deinterleaved 32-bit float), at any sample rate. Channel counts can be more complex;
-// 		see AUAudioUnit.channelCapabilities.
-// */
-// - (BOOL)setFormat:(AVAudioFormat *)format error:(NSError **)outError;
+impl AUAudioUnitBusRef {
+    // /*!	@property	format
+    // 	@brief		The audio format and channel layout of audio being transferred on the bus.
+    // 	@discussion
+    // 		Bridged to the v2 property kAudioUnitProperty_StreamFormat.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AVAudioFormat *format;
 
-// /*! @property	shouldAllocateBuffer
-//     @brief		Controls the audio unit's allocation strategy for a bus.
-//     @discussion
-//         Hosts can set this flag to communicate whether an audio unit should allocate its own buffer.
-//         By default this flag is set to true.
+    // /*!	@property	setFormat:error:
+    // 	@brief		Sets the bus's audio format.
+    // 	@discussion
+    // 		Audio units can generally be expected to support AVAudioFormat's standard format
+    // 		(deinterleaved 32-bit float), at any sample rate. Channel counts can be more complex;
+    // 		see AUAudioUnit.channelCapabilities.
+    // */
+    // - (BOOL)setFormat:(AVAudioFormat *)format error:(NSError **)outError;
 
-//         On the output side, shouldAllocateBuffer=false means the AU can assume that it will be
-//         called with non-null output buffers. If shouldAllocateBuffer=true (the default), the AU must
-//         be prepared to be called with null pointers and replace them with pointers to its internally
-//         allocated buffer.
+    // /*! @property	shouldAllocateBuffer
+    //     @brief		Controls the audio unit's allocation strategy for a bus.
+    //     @discussion
+    //         Hosts can set this flag to communicate whether an audio unit should allocate its own buffer.
+    //         By default this flag is set to true.
 
-//         On the input side, shouldAllocateBuffer=false means the AU can pull for input using a buffer
-//         list with null buffer pointers, and assume that the pull input block will provide pointers.
-//         If shouldAllocateBuffer=true (the default), the AU must pull with non-null pointers while
-//         still being prepared for the source to replace them with pointers of its own.
+    //         On the output side, shouldAllocateBuffer=false means the AU can assume that it will be
+    //         called with non-null output buffers. If shouldAllocateBuffer=true (the default), the AU must
+    //         be prepared to be called with null pointers and replace them with pointers to its internally
+    //         allocated buffer.
 
-//         Bridged to the v2 property kAudioUnitProperty_ShouldAllocateBuffer.
-// */
-// @property (NS_NONATOMIC_IOSONLY) BOOL shouldAllocateBuffer API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    //         On the input side, shouldAllocateBuffer=false means the AU can pull for input using a buffer
+    //         list with null buffer pointers, and assume that the pull input block will provide pointers.
+    //         If shouldAllocateBuffer=true (the default), the AU must pull with non-null pointers while
+    //         still being prepared for the source to replace them with pointers of its own.
 
-// /*!	@property	enabled
-// 	@brief		Whether the bus is active.
-// 	@discussion
-// 		Hosts must enable input busses before using them. The reason for this is to allow a unit
-// 		such as a mixer to be prepared to render a large number of inputs, but avoid the work
-// 		of preparing to pull inputs which are not in use.
+    //         Bridged to the v2 property kAudioUnitProperty_ShouldAllocateBuffer.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY) BOOL shouldAllocateBuffer API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
 
-// 		Bridged to the v2 properties kAudioUnitProperty_MakeConnection and
-// 		kAudioUnitProperty_SetRenderCallback.
-// */
-// @property (NS_NONATOMIC_IOSONLY, getter=isEnabled) BOOL enabled;
+    // /*!	@property	enabled
+    // 	@brief		Whether the bus is active.
+    // 	@discussion
+    // 		Hosts must enable input busses before using them. The reason for this is to allow a unit
+    // 		such as a mixer to be prepared to render a large number of inputs, but avoid the work
+    // 		of preparing to pull inputs which are not in use.
 
-// /*!	@property	name
-// 	@brief		A name for the bus. Can be set by host.
-// */
-// @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *name;
+    // 		Bridged to the v2 properties kAudioUnitProperty_MakeConnection and
+    // 		kAudioUnitProperty_SetRenderCallback.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, getter=isEnabled) BOOL enabled;
 
-// /*! @property   index
-//     @brief      The index of this bus in the containing array.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) NSUInteger index;
+    // /*!	@property	name
+    // 	@brief		A name for the bus. Can be set by host.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *name;
 
-// /*! @property   busType
-//     @brief      The AUAudioUnitBusType.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusType busType;
+    // /*! @property   index
+    //     @brief      The index of this bus in the containing array.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) NSUInteger index;
 
-// /*! @property   ownerAudioUnit
-// 	@brief      The audio unit that owns the bus.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, assign) AUAudioUnit *ownerAudioUnit;
+    // /*! @property   busType
+    //     @brief      The AUAudioUnitBusType.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusType busType;
 
-// /*!	@property	supportedChannelLayoutTags
-// 	@discussion
-// 		This is an array of NSNumbers representing AudioChannelLayoutTag.
-// */
-// @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<NSNumber *> *supportedChannelLayoutTags;
+    // /*! @property   ownerAudioUnit
+    // 	@brief      The audio unit that owns the bus.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, assign) AUAudioUnit *ownerAudioUnit;
 
-// /*!	@property	contextPresentationLatency
-// 	@brief		Information about latency in the audio unit's processing context.
-// 	@discussion
-// 		This should not be confused with the audio unit's latency property, where the audio unit
-// 		describes to the host any processing latency it introduces between its input and its output.
+    // /*!	@property	supportedChannelLayoutTags
+    // 	@discussion
+    // 		This is an array of NSNumbers representing AudioChannelLayoutTag.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<NSNumber *> *supportedChannelLayoutTags;
 
-// 		A host may set this property to describe to the audio unit the presentation latency of its
-// 		input and/or output audio data. Latency is described in seconds. A value of zero means
-// 		either no latency or an unknown latency.
+    // /*!	@property	contextPresentationLatency
+    // 	@brief		Information about latency in the audio unit's processing context.
+    // 	@discussion
+    // 		This should not be confused with the audio unit's latency property, where the audio unit
+    // 		describes to the host any processing latency it introduces between its input and its output.
 
-// 		A host should set this property on each active bus, since, for example, the audio routing
-// 		path to each of multiple output busses may differ.
+    // 		A host may set this property to describe to the audio unit the presentation latency of its
+    // 		input and/or output audio data. Latency is described in seconds. A value of zero means
+    // 		either no latency or an unknown latency.
 
-// 		For input busses:
-// 			Describes how long ago the audio arriving on this bus was acquired. For instance, when
-// 			reading from a file to the first audio unit in a chain, the input presentation latency
-// 			is zero. For audio input from a device, this initial input latency is the presentation
-// 			latency of the device itself, i.e. the device's safety offset and latency.
+    // 		A host should set this property on each active bus, since, for example, the audio routing
+    // 		path to each of multiple output busses may differ.
 
-// 			A second chained audio unit's input presentation latency will be the input presentation
-// 			latency of the first unit, plus the processing latency of the first unit.
+    // 		For input busses:
+    // 			Describes how long ago the audio arriving on this bus was acquired. For instance, when
+    // 			reading from a file to the first audio unit in a chain, the input presentation latency
+    // 			is zero. For audio input from a device, this initial input latency is the presentation
+    // 			latency of the device itself, i.e. the device's safety offset and latency.
 
-// 		For output busses:
-// 			Describes how long it will be before the output audio of an audio unit is presented. For
-// 			instance, when writing to a file, the output presentation latency of the last audio unit
-// 			in a chain is zero. When the audio from that audio unit is to be played to a device,
-// 			then that initial presentation latency will be the presentation latency of the device
-// 			itself, which is the I/O buffer size, plus the device's safety offset and latency
+    // 			A second chained audio unit's input presentation latency will be the input presentation
+    // 			latency of the first unit, plus the processing latency of the first unit.
 
-// 			A previous chained audio unit's output presentation latency is the last unit's
-// 			presentation latency plus its processing latency.
+    // 		For output busses:
+    // 			Describes how long it will be before the output audio of an audio unit is presented. For
+    // 			instance, when writing to a file, the output presentation latency of the last audio unit
+    // 			in a chain is zero. When the audio from that audio unit is to be played to a device,
+    // 			then that initial presentation latency will be the presentation latency of the device
+    // 			itself, which is the I/O buffer size, plus the device's safety offset and latency
 
-// 		So, for a given audio unit anywhere within a mixing graph, the input and output presentation
-// 		latencies describe to that unit how long from the moment of generation it has taken for its
-// 		input to arrive, and how long it will take for its output to be presented.
+    // 			A previous chained audio unit's output presentation latency is the last unit's
+    // 			presentation latency plus its processing latency.
 
-// 		Bridged to the v2 property kAudioUnitProperty_PresentationLatency.
-// */
-// @property (NS_NONATOMIC_IOSONLY) NSTimeInterval contextPresentationLatency;
+    // 		So, for a given audio unit anywhere within a mixing graph, the input and output presentation
+    // 		latencies describe to that unit how long from the moment of generation it has taken for its
+    // 		input to arrive, and how long it will take for its output to be presented.
 
-// @end
+    // 		Bridged to the v2 property kAudioUnitProperty_PresentationLatency.
+    // */
+    // @property (NS_NONATOMIC_IOSONLY) NSTimeInterval contextPresentationLatency;
+
+    // @end
+}
 
 // // =================================================================================================
 
