@@ -116,7 +116,10 @@ impl AVAudioUnitSamplerRef {
     //
     //  */
     // - (BOOL)loadInstrumentAtURL:(NSURL *)instrumentURL error:(NSError **)outError;
-    pub fn load_instrument_at_url(&self, instrument_url: std::path::PathBuf) -> bool {
+    pub fn load_instrument_at_url(
+        &self,
+        instrument_url: std::path::PathBuf,
+    ) -> Result<bool, NSError> {
         use cocoa_foundation::base::{
             nil,
             NO,
@@ -124,8 +127,8 @@ impl AVAudioUnitSamplerRef {
         };
         let url = crate::path_to_url(instrument_url);
         unsafe {
-            let mut err = nil;
-            match msg_send![self,
+            let mut err: *mut NSError = std::ptr::null_mut();
+            let res = match msg_send![self,
                loadInstrumentAtURL: url
                error: &err
             ] {
@@ -133,8 +136,14 @@ impl AVAudioUnitSamplerRef {
                 NO => false,
                 _ => unimplemented!(),
             };
+
+            if err.is_null() {
+                Ok(res)
+            } else {
+                let e = err.as_ref().unwrap();
+                Err(e.to_owned())
+            }
         }
-        todo!();
     }
     //
     // /*! @method loadAudioFilesAtURLs:error:
