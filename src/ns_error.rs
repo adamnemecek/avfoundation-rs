@@ -35,13 +35,15 @@ impl NSErrorRef {
     //     todo!()
     // }
 
-    // pub fn code(&self) -> usize {
-    //     unsafe { self.0.code() as usize }
-    // }
+    pub fn code(&self) -> usize {
+        unsafe { msg_send![self, code] }
+    }
 
-    // pub fn domain(&self) -> &str {
-    //     unsafe { CStr::from_ptr(self.0.domain().UTF8String()).to_str().unwrap_or(&"") }
-    // }
+    pub fn domain(&self) -> &str {
+        unsafe {
+            crate::nsstring_as_str(msg_send![self, domain])
+        }
+    }
 
     pub fn localized_description(&self) -> &str {
         unsafe {
