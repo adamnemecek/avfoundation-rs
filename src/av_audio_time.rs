@@ -1,4 +1,5 @@
 // use crate::{AudioFormat, AudioNodeBus};
+use crate::AVAudioFramePosition;
 use objc::runtime::{
     NO,
     YES,
@@ -12,29 +13,7 @@ foreign_obj_type! {
 }
 
 impl AVAudioTimeRef {
-    pub fn is_host_time_valid(&self) -> bool {
-        unsafe {
-            match msg_send![self, isHostTimeValid] {
-                YES => true,
-                NO => false,
-                _ => unreachable!(),
-            }
-        }
-    }
 
-    pub fn host_time(&self) -> u64 {
-        unsafe { msg_send![self, hostTime] }
-    }
-
-    pub fn is_sample_time_valid(&self) -> bool {
-        unsafe {
-            match msg_send![self, isSampleTimeValid] {
-                YES => true,
-                NO => false,
-                _ => unreachable!(),
-            }
-        }
-    }
 
     // pub fn audioTimeStamp(&self) -> AudioTimeStamp {
     //     unsafe { msg_send![self, audioTimeStamp] }
@@ -112,16 +91,38 @@ impl AVAudioTimeRef {
     // 	@abstract Whether the hostTime property is valid.
     // */
     // @property (nonatomic, readonly, getter=isHostTimeValid) BOOL hostTimeValid;
+    pub fn is_host_time_valid(&self) -> bool {
+        unsafe {
+            match msg_send![self, isHostTimeValid] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
     // /*! @property hostTime
     // 	@abstract The host time.
     // */
     // @property (nonatomic, readonly) uint64_t hostTime;
+    pub fn host_time(&self) -> u64 {
+        unsafe { msg_send![self, hostTime] }
+    }
 
     // /*! @property sampleTimeValid
     // 	@abstract Whether the sampleTime and sampleRate properties are valid.
     // */
     // @property (nonatomic, readonly, getter=isSampleTimeValid) BOOL sampleTimeValid;
+
+    pub fn is_sample_time_valid(&self) -> bool {
+        unsafe {
+            match msg_send![self, isSampleTimeValid] {
+                YES => true,
+                NO => false,
+                _ => unreachable!(),
+            }
+        }
+    }
 
     // /*!	@property sampleTime
     // 	@abstract The time as a number of audio samples, as tracked by the current audio device.
