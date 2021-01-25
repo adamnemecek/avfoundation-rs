@@ -9,6 +9,7 @@ use crate::{
     AVAudioUnitRef,
     NSTimeInterval,
     NSError,
+    NSErrorRef,
 };
 use cocoa_foundation::{
     base::nil,
@@ -55,8 +56,6 @@ impl AVMusicSequenceLoadOptions {
     }
 }
 
-
-
 impl AVAudioSequencerRef {
     // /*! @method loadFromURL:options:error:
     //     @abstract Load the file referenced by the URL and add the events to the sequence
@@ -75,7 +74,7 @@ impl AVAudioSequencerRef {
     ) -> Result<bool, NSError> {
         let url = crate::path_to_url(url);
         unsafe {
-            let mut err: *mut NSError = std::ptr::null_mut();
+            let mut err: *mut NSErrorRef = std::ptr::null_mut();
             let res = match msg_send![self, loadFromURL: url options: options error: &mut err] {
                 YES => true,
                 NO => false,

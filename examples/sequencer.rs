@@ -12,7 +12,7 @@ fn main() {
 
     match sequencer.load_from_url(path, Default::default()) {
         Ok(res) => {println!("ok")},
-        Err(e) => { println!("err")},
+        Err(e) => println!("err {:?}", e.localized_description()),
     } ;
     let tracks = sequencer.tracks();
     for t in tracks {

@@ -43,12 +43,9 @@ impl NSErrorRef {
     //     unsafe { CStr::from_ptr(self.0.domain().UTF8String()).to_str().unwrap_or(&"") }
     // }
 
-    // pub fn localized_description(&self) -> &str {
-    //     unsafe {
-    //         let s = msg_send![self, localizedDescription]
-    //     }
-    //     unsafe {
-    //         CStr::from_ptr(self.0.localizedDescription().UTF8String()).to_str().unwrap_or(&"")
-    //     }
-    // }
+    pub fn localized_description(&self) -> &str {
+        unsafe {
+            crate::nsstring_as_str(msg_send![self, localizedDescription])
+        }
+    }
 }
