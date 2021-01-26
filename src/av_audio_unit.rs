@@ -114,7 +114,7 @@ impl AVAudioUnitRef {
     // @property (nonatomic, readonly) AUAudioUnit *AUAudioUnit API_AVAILABLE(macos(10.11), ios(9.0), tvos(9.0));
 
     pub fn au_audio_unit(&self) -> &AUAudioUnitRef {
-        unsafe { msg_send![self, auAudioUnit] }
+        unsafe { msg_send![self, AUAudioUnit] }
     }
     // #endif // __OBJC2__
 
