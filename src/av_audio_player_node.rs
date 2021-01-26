@@ -70,7 +70,7 @@ pub enum AVAudioPlayerNodeCompletionCallbackType {
 ///     completion handler block, calls should be synchronised to the same thread/queue.
 
 pub type AVAudioPlayerNodeCompletionHandler =
-    block::Block<AVAudioPlayerNodeCompletionCallbackType, ()>;
+    block::RcBlock<AVAudioPlayerNodeCompletionCallbackType, ()>;
 pub enum AVAudioPlayerNodeFFI {}
 
 foreign_obj_type! {

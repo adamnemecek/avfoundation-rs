@@ -20,7 +20,8 @@ use crate::{
 //    @discussion
 //        CAUTION: This callback may be invoked on a thread other than the main thread.
 
-pub type AVAudioNodeTapBlock<'a> = block::Block<(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef), ()>;
+pub type AVAudioNodeTapBlock<'a> =
+    block::RcBlock<(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef), ()>;
 pub type AVAudioNodeTapFn<'a> =
     std::rc::Rc<dyn Fn(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef) -> ()>;
 

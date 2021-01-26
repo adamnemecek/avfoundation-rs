@@ -44,7 +44,7 @@ impl AVAudioIONodeRef {
 }
 
 /// todo:
-pub type AVAudioIONodeInputBlock = block::Block<(), ()>;
+pub type AVAudioIONodeInputBlock = block::RcBlock<(), ()>;
 /// @class AVAudioInputNode
 ///     @abstract
 ///         A node that performs audio input in the engine.

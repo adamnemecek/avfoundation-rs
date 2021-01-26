@@ -139,7 +139,7 @@ pub enum AudioEngineManualRenderingMode {
 
 // API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
 // typedef AVAudioEngineManualRenderingStatus (^AVAudioEngineManualRenderingBlock)(AVAudioFrameCount numberOfFrames, AudioBufferList *outBuffer, OSStatus *outError);
-pub type AVAudioEngineManualRenderingBlock<'a> = block::Block<
+pub type AVAudioEngineManualRenderingBlock<'a> = block::RcBlock<
     (AVAudioFrameCount, &'a AudioBufferListRef, OSStatus),
     AVAudioEngineManualRenderingStatus,
 >;

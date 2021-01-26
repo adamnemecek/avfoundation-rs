@@ -1,11 +1,14 @@
 use avfoundation::{
     AVAudioEngine,
+    AVAudioUnit,
     AVAudioUnitComponentManager,
     AVAudioUnitMIDIInstrument,
-    ShouldStop,
-    AVAudioUnit,
     AVAudioUnitRef,
+    NSErrorRef,
+    ShouldStop,
 };
+
+use block::ConcreteBlock;
 
 fn main() {
     let manager = AVAudioUnitComponentManager::shared();
@@ -25,4 +28,12 @@ fn main() {
 
     // println!("{:?}", components.first());
     // let midi = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
+    let block =
+        block::ConcreteBlock::new(move |unit: &AVAudioUnitRef, &NSErrorRef| println!("callback"))
+            .copy();
+    let unit = AVAudioUnit::with_component_description(desc, Default::default(), block);
+
+    // RunLoop.main.run()
+    use cocoa_foundation::foundation::NSRunLoop;
+    let l = NSRunLoop::currentRunLoop();
 }

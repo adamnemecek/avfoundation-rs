@@ -230,7 +230,7 @@ union AURenderEvent {
 // 	const AURenderEvent *__nullable 						realtimeEventListHead,
 // 	AURenderPullInputBlock __nullable __unsafe_unretained	pullInputBlock);
 use cocoa_foundation::foundation::NSInteger;
-pub type AUInternalRenderBlock = block::Block<
+pub type AUInternalRenderBlock = block::RcBlock<
     (
         *const AudioUnitRenderActionFlags,
         *const AudioTimeStamp,

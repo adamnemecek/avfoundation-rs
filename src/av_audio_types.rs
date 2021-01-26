@@ -4,7 +4,7 @@ pub type AVAudioFrameCount = u32;
 pub type AVAudioPacketCount = u32;
 pub type AVAudioChannelCount = u32;
 
-pub type AVAudioNodeCompletionHandler = block::Block<(), ()>;
+pub type AVAudioNodeCompletionHandler = block::RcBlock<(), ()>;
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct AVAudioNodeBus {

@@ -2,6 +2,7 @@ use crate::{
     AUAudioUnitRef,
     AVAudioNodeRef,
     AudioComponentDescription,
+    NSErrorRef,
 };
 
 // /*! @class AVAudioUnit
@@ -18,6 +19,15 @@ foreign_obj_type! {
     pub struct AVAudioUnitRef;
     type ParentType = AVAudioNodeRef;
 }
+
+#[repr(C)]
+#[derive(Clone, Copy, Default)]
+pub struct AudioComponentInstantiationOptions {
+    inner: u32,
+}
+
+pub type AVAudioUnitInitCompletionHandler<'a> =
+    block::RcBlock<(&'a AVAudioUnitRef, &'a NSErrorRef), ()>;
 
 impl AVAudioUnit {
     // /*!	@method	instantiateWithComponentDescription:options:completionHandler:
@@ -39,15 +49,16 @@ impl AVAudioUnit {
     // 		according to the component's type.
     // */
     // + (void)instantiateWithComponentDescription:(AudioComponentDescription)audioComponentDescription options:(AudioComponentInstantiationOptions)options completionHandler:(void (^)(__kindof AVAudioUnit * __nullable audioUnit, NSError * __nullable error))completionHandler API_AVAILABLE(macos(10.11), ios(9.0), tvos(9.0));
-    pub fn with_component_description(desc: AudioComponentDescription) -> Self {
+    pub fn with_component_description(
+        desc: AudioComponentDescription,
+        options: AudioComponentInstantiationOptions,
+        completion_handler: AVAudioUnitInitCompletionHandler,
+    ) -> Self {
         unsafe {
-            // let self_: Self = msg_send![class!(AVMIDIPlayer), alloc];
-            // let ptr: *mut Object = msg_send![self_.as_ref(), initWithContentsOfURL: path_url
-            //                                                            soundBankURL: bank_url
-            //                                                                   error: nil];
-            let self_: Self = msg_send![class!(AVMIDIPlayer), instantiateWithComponentDescription: desc];
+            let self_: Self = msg_send![class!(AVAudioUnit), instantiateWithComponentDescription: desc
+                                                                                         options: options
+                                                                               completionHandler: completion_handler];
             self_
-
         }
     }
 }

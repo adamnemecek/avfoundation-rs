@@ -77,7 +77,7 @@ pub struct AUParameterAutomationEvent {
 ///        The current value of the parameter.
 
 // typedef void (^AUParameterObserver)(AUParameterAddress address, AUValue value);
-pub type AUParameterObserver = block::Block<(AUParameterAddress, AUValue), ()>;
+pub type AUParameterObserver = block::RcBlock<(AUParameterAddress, AUValue), ()>;
 
 ///    @typedef    AUParameterRecordingObserver
 ///    @brief        A block called to record parameter changes as automation events.
@@ -90,7 +90,7 @@ pub type AUParameterObserver = block::Block<(AUParameterAddress, AUValue), ()>;
 // typedef void (^AUParameterRecordingObserver)(NSInteger numberEvents, const AURecordedParameterEvent *events);
 use cocoa_foundation::foundation::NSInteger;
 pub type AUParameterRecordingObserver =
-    block::Block<(NSInteger, *const AURecordedParameterEvent), ()>;
+    block::RcBlock<(NSInteger, *const AURecordedParameterEvent), ()>;
 
 ///    @typedef    AUParameterAutomationObserver
 ///    @brief        A block called to record parameter changes as automation events.
@@ -103,7 +103,7 @@ pub type AUParameterRecordingObserver =
 
 // typedef void (^AUParameterAutomationObserver)(NSInteger numberEvents, const AUParameterAutomationEvent *events);
 pub type AUParameterAutomationObserver =
-    block::Block<(NSInteger, *const AUParameterAutomationEvent), ()>;
+    block::RcBlock<(NSInteger, *const AUParameterAutomationEvent), ()>;
 
 ///    @typedef    AUParameterObserverToken
 ///    @brief        A token representing an installed AUParameterObserver, AUParameterRecordingObserver,

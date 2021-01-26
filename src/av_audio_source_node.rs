@@ -5,7 +5,7 @@ use crate::{
     AVAudioStereoMixing,
 };
 
-pub type AVAudioSourceNodeRenderBlock = block::Block<(), ()>;
+pub type AVAudioSourceNodeRenderBlock = block::RcBlock<(), ()>;
 
 pub enum AVAudioSourceNodeFFI {}
 

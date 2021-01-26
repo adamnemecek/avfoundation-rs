@@ -101,7 +101,7 @@ impl AVMIDIPlayer {
     }
 }
 
-pub type AVMIDIPlayerCompletionHandler = block::Block<(), ()>;
+pub type AVMIDIPlayerCompletionHandler = block::RcBlock<(), ()>;
 
 impl AVMIDIPlayerRef {
     // /* transport control */

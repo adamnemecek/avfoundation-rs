@@ -97,7 +97,7 @@ use cocoa_foundation::base::{
     nil,
 };
 
-pub type RequestAUAudioUnitViewController = block::Block<id, ()>;
+pub type RequestAUAudioUnitViewController = block::RcBlock<id, ()>;
 
 impl AUAudioUnitRef {
     // API_AVAILABLE(macos(10.12), ios(9.0)) API_UNAVAILABLE(watchos)

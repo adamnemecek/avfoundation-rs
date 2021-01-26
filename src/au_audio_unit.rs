@@ -161,7 +161,7 @@ use cocoa_foundation::foundation::{
 pub struct AudioTimeStamp {}
 
 pub struct AudioUnitRenderActionFlags {}
-pub type AURenderPullInputBlock = block::Block<
+pub type AURenderPullInputBlock = block::RcBlock<
     (
         AudioUnitRenderActionFlags,
         *const AudioTimeStamp,
@@ -204,7 +204,7 @@ pub type AURenderPullInputBlock = block::Block<
 // 		to be invalid.
 // */
 // typedef AUAudioUnitStatus (^AURenderBlock)(AudioUnitRenderActionFlags *actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger outputBusNumber, AudioBufferList *outputData, AURenderPullInputBlock __nullable pullInputBlock);
-pub type AURenderBlock = block::Block<
+pub type AURenderBlock = block::RcBlock<
     (
         *const AudioUnitRenderActionFlags,
         *const AudioTimeStamp,
@@ -226,7 +226,7 @@ pub type AURenderBlock = block::Block<
 // 		The parameters are identical to those of AURenderBlock.
 // */
 // typedef void (^AURenderObserver)(AudioUnitRenderActionFlags actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger outputBusNumber);
-pub type AURenderObserver = block::Block<
+pub type AURenderObserver = block::RcBlock<
     (
         AudioUnitRenderActionFlags,
         *const AudioTimeStamp,
@@ -255,7 +255,7 @@ pub type AURenderObserver = block::Block<
 // 		of the scheduled ramp.
 // */
 // typedef void (^AUScheduleParameterBlock)(AUEventSampleTime eventSampleTime, AUAudioFrameCount rampDurationSampleFrames, AUParameterAddress parameterAddress, AUValue value);
-pub type AUScheduleParameterBlock = block::Block<
+pub type AUScheduleParameterBlock = block::RcBlock<
     (
         AUEventSampleTime,
         *const AudioTimeStamp,
@@ -281,7 +281,8 @@ pub type AUScheduleParameterBlock = block::Block<
 // 		in the chunk. Also, running status is not allowed.
 // */
 // typedef void (^AUScheduleMIDIEventBlock)(AUEventSampleTime eventSampleTime, uint8_t cable, NSInteger length, const uint8_t *midiBytes);
-pub type AUScheduleMIDIEventBlock = block::Block<(AUEventSampleTime, u8, NSInteger, *const u8), ()>;
+pub type AUScheduleMIDIEventBlock =
+    block::RcBlock<(AUEventSampleTime, u8, NSInteger, *const u8), ()>;
 
 // /*!	@typedef	AUMIDIOutputEventBlock
 // 	@brief		Block to provide MIDI output events to the host.
@@ -297,7 +298,7 @@ pub type AUScheduleMIDIEventBlock = block::Block<(AUEventSampleTime, u8, NSInteg
 // */
 // typedef OSStatus (^AUMIDIOutputEventBlock)(AUEventSampleTime eventSampleTime, uint8_t cable, NSInteger length, const uint8_t *midiBytes);
 pub type AUMIDIOutputEventBlock =
-    block::Block<(AUEventSampleTime, u8, NSInteger, *const u8), OSStatus>;
+    block::RcBlock<(AUEventSampleTime, u8, NSInteger, *const u8), OSStatus>;
 
 // /*!	@typedef	AUHostMusicalContextBlock
 // 	@brief		Block by which hosts provide musical tempo, time signature, and beat position.
@@ -326,7 +327,7 @@ pub type AUMIDIOutputEventBlock =
 // */
 // typedef BOOL (^AUHostMusicalContextBlock)(double * __nullable currentTempo, double * __nullable timeSignatureNumerator, NSInteger * __nullable timeSignatureDenominator, double * __nullable currentBeatPosition, NSInteger * __nullable sampleOffsetToNextBeat, double * __nullable currentMeasureDownbeatPosition);
 use cocoa_foundation::base::BOOL;
-pub type AUHostMusicalContextBlock = block::Block<
+pub type AUHostMusicalContextBlock = block::RcBlock<
     (
         *const f32,
         *const f32,
@@ -358,7 +359,7 @@ pub struct MIDICIProfile {
     //todo
 }
 pub type AUMIDICIProfileChangedBlock =
-    block::Block<(u8, MIDIChannelNumber, *const MIDICIProfile, BOOL), OSStatus>;
+    block::RcBlock<(u8, MIDIChannelNumber, *const MIDICIProfile, BOOL), OSStatus>;
 
 // /*!	@enum		AUHostTransportStateFlags
 // 	@brief		Flags describing the host's transport state.
@@ -409,7 +410,7 @@ pub enum AUHostTransportStateFlags {
 // 		in that particular piece of information.
 // */
 // typedef BOOL (^AUHostTransportStateBlock)(AUHostTransportStateFlags * __nullable transportStateFlags, double * __nullable currentSamplePosition, double * __nullable cycleStartBeatPosition, double * __nullable cycleEndBeatPosition);
-pub type AUHostTransportStateBlock = block::Block<
+pub type AUHostTransportStateBlock = block::RcBlock<
     (
         *const AUHostTransportStateFlags,
         *const f64,
@@ -1438,7 +1439,7 @@ impl AUAudioUnitRef {
 // 				object in a real time context.
 // */
 // typedef void (^AUInputHandler)(AudioUnitRenderActionFlags *actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger inputBusNumber);
-pub type AUInputHandler = block::Block<
+pub type AUInputHandler = block::RcBlock<
     (
         *const AudioUnitRenderActionFlags,
         *const AudioTimeStamp,
