@@ -28,7 +28,7 @@ fn main() {
     let manager = AVAudioUnitComponentManager::shared();
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
     let components = manager.components_passing_test(|unit| {
-        if unit.name().contains("Serum") {
+        if unit.name().contains("DLS") {
             (true, ShouldStop::Stop)
         } else {
             (false, ShouldStop::Continue)
@@ -43,13 +43,13 @@ fn main() {
     // println!("{:?}", components.first());
 
     // let midi = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
-    let block = block::ConcreteBlock::new(move |unit: &AVAudioUnitRef, NSError| {
+    let block = block::ConcreteBlock::new(move |unit: &AVAudioUnitRef, err: avfoundation::NSError| {
         let desc = unsafe {
             let cls: id = msg_send![unit, class];
             let desc: id = msg_send![cls, description];
             nsstring_as_str(desc.as_ref().unwrap())
         };
-        println!("callback {:?}", desc);
+        println!("callback {:?} {:?}", desc, err.localized_description());
         let ui_block = block::ConcreteBlock::new(move |id: &avfoundation::NSViewControllerRef| {
             println!("ui block");
         })
