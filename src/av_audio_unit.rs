@@ -2,6 +2,7 @@ use crate::{
     AUAudioUnitRef,
     AVAudioNodeRef,
     AudioComponentDescription,
+    NSError,
     NSErrorRef,
 };
 
@@ -26,8 +27,7 @@ pub struct AudioComponentInstantiationOptions {
     inner: u32,
 }
 
-pub type AVAudioUnitInitCompletionHandler<'a> =
-    block::RcBlock<(&'a AVAudioUnitRef, &'a NSErrorRef), ()>;
+pub type AVAudioUnitInitCompletionHandler<'a> = block::RcBlock<(&'a AVAudioUnitRef, NSError), ()>;
 
 impl AVAudioUnit {
     // /*!	@method	instantiateWithComponentDescription:options:completionHandler:

@@ -21,7 +21,7 @@ use std::os::raw::c_void;
 pub use cocoa_foundation::foundation::NSUInteger;
 use objc::runtime::Object;
 
-fn nsstring_as_str(nsstr: &objc::runtime::Object) -> &str {
+pub fn nsstring_as_str(nsstr: &objc::runtime::Object) -> &str {
     let bytes = unsafe {
         let bytes: *const std::os::raw::c_char = msg_send![nsstr, UTF8String];
         bytes as *const u8
