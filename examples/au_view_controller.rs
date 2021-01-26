@@ -3,6 +3,8 @@ use avfoundation::{
     AVAudioUnitComponentManager,
     AVAudioUnitMIDIInstrument,
     ShouldStop,
+    AVAudioUnit,
+    AVAudioUnitRef,
 };
 
 fn main() {
@@ -20,6 +22,7 @@ fn main() {
     let desc = components.first().unwrap().audio_component_description();
 
     let engine = AVAudioEngine::new();
+
     // println!("{:?}", components.first());
     // let midi = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
 }

@@ -1,6 +1,7 @@
 use crate::{
     AUAudioUnitRef,
     AVAudioNodeRef,
+    AudioComponentDescription,
 };
 
 // /*! @class AVAudioUnit
@@ -38,6 +39,17 @@ impl AVAudioUnit {
     // 		according to the component's type.
     // */
     // + (void)instantiateWithComponentDescription:(AudioComponentDescription)audioComponentDescription options:(AudioComponentInstantiationOptions)options completionHandler:(void (^)(__kindof AVAudioUnit * __nullable audioUnit, NSError * __nullable error))completionHandler API_AVAILABLE(macos(10.11), ios(9.0), tvos(9.0));
+    pub fn with_component_description(desc: AudioComponentDescription) -> Self {
+        unsafe {
+            // let self_: Self = msg_send![class!(AVMIDIPlayer), alloc];
+            // let ptr: *mut Object = msg_send![self_.as_ref(), initWithContentsOfURL: path_url
+            //                                                            soundBankURL: bank_url
+            //                                                                   error: nil];
+            let self_: Self = msg_send![class!(AVMIDIPlayer), instantiateWithComponentDescription: desc];
+            self_
+
+        }
+    }
 }
 
 impl AVAudioUnitRef {
