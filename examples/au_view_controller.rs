@@ -1,9 +1,8 @@
-
 use avfoundation::{
+    AVAudioEngine,
     AVAudioUnitComponentManager,
     AVAudioUnitMIDIInstrument,
     ShouldStop,
-    AVAudioEngine,
 };
 
 fn main() {
