@@ -97,7 +97,15 @@ use cocoa_foundation::base::{
     nil,
 };
 
-pub type RequestAUAudioUnitViewController = block::RcBlock<id, ()>;
+pub enum NSViewControllerFFI {}
+
+foreign_obj_type! {
+    type CType = NSViewControllerFFI;
+    pub struct NSViewController;
+    pub struct NSViewControllerRef;
+}
+
+pub type RequestAUAudioUnitViewController<'a> = block::RcBlock<(&'a NSViewControllerRef,), ()>;
 
 impl AUAudioUnitRef {
     // API_AVAILABLE(macos(10.12), ios(9.0)) API_UNAVAILABLE(watchos)
@@ -110,7 +118,7 @@ impl AUAudioUnitRef {
     // 		a view controller, or nil in the case of an audio unit without a custom view controller.
     // */
     // - (void)requestViewControllerWithCompletionHandler:(void (^)(AUViewControllerBase * __nullable viewController))completionHandler;
-    pub fn request_view_controller(&self, block: &RequestAUAudioUnitViewController) {
+    pub fn request_view_controller(&self, block: RequestAUAudioUnitViewController) {
         unsafe { msg_send![self, requestViewControllerWithCompletionHandler: block] }
     }
 

@@ -1,5 +1,5 @@
 use crate::{
-    AVAudioNodeRef,
+    AVAudioUnitRef,
     AudioComponentDescription,
 };
 
@@ -9,7 +9,7 @@ foreign_obj_type! {
     type CType = AVAudioUnitMIDIInstrumentFFI;
     pub struct AVAudioUnitMIDIInstrument;
     pub struct AVAudioUnitMIDIInstrumentRef;
-    type ParentType = AVAudioNodeRef;
+    type ParentType = AVAudioUnitRef;
 }
 
 // impl MIXING for AVAudioUnitMIDIInstrumentRef {}
