@@ -560,9 +560,11 @@ impl AVAudioEngineRef {
         format: &AVAudioFormatRef,
         maximum_frame_count: AVAudioFrameCount,
     ) {
-        unsafe { msg_send![self, enableManualRenderingMode: mode
+        unsafe {
+            msg_send![self, enableManualRenderingMode: mode
                                                     format: format
-                                         maximumFrameCount: maximum_frame_count] }
+                                         maximumFrameCount: maximum_frame_count]
+        }
     }
 
     pub fn disable_manual_rendering_mode(&self) {
