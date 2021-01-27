@@ -1,4 +1,7 @@
-use crate::prelude::*;
+use crate::{
+    nsarray_to_vec,
+    prelude::*,
+};
 
 ///    @typedef    AUValue
 ///    @brief      A value of an audio unit parameter.
@@ -264,7 +267,7 @@ impl AUParameterGroupRef {
     /// Returns a flat array of all parameters in the group, including those in child groups.
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSArray<AUParameter *> *allParameters;
     pub fn all_parameters(&self) -> Vec<AUParameter> {
-        todo!()
+        unsafe { nsarray_to_vec(msg_send![self, allParameters]) }
     }
 }
 

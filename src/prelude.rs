@@ -85,4 +85,5 @@ pub use crate::{
     AudioUnitParameterID,
     NSViewController,
     NSViewControllerRef,
+    ShouldStop,
 };

@@ -128,7 +128,7 @@ macro_rules! foreign_obj_type {
         }
     };
 }
-mod prelude;
+pub mod prelude;
 
 mod au_component;
 pub use au_component::*;

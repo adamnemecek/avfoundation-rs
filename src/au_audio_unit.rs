@@ -1,4 +1,6 @@
 use crate::{
+    AUParameterTree,
+    AUParameterTreeRef,
     AURenderEventHeader,
     AVAudioFormatRef,
     AudioBufferList,
@@ -11,6 +13,7 @@ use crate::{
 
 use cocoa_foundation::{
     base::{
+        nil,
         NO,
         YES,
     },
@@ -762,8 +765,16 @@ impl AUAudioUnitRef {
     // 		Note that it is not safe to modify this property in a real-time context.
     // */
     // @property (NS_NONATOMIC_IOSONLY, nullable, retain) AUParameterTree *parameterTree;
-    pub fn parameter_tree(&self) -> ! {
-        todo!()
+    pub fn parameter_tree(&self) -> Option<&AUParameterTreeRef> {
+        unsafe {
+            // let mut ptr: AUParameterTreeRef = nil;
+            let mut ptr: *mut AUParameterTreeRef = msg_send![self, parameterTree];
+            if ptr.is_null() {
+                None
+            } else {
+                ptr.as_ref()
+            }
+        }
     }
 
     // /*!	@method		parametersForOverviewWithCount:

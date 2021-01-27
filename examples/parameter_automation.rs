@@ -1,4 +1,5 @@
-use avfoundation::AVAudioEngine;
+use avfoundation::prelude::*;
+
 fn main() {
     let e = AVAudioEngine::new();
     let manager = AVAudioUnitComponentManager::shared();
@@ -10,8 +11,12 @@ fn main() {
         }
     });
     let serum = components.first().unwrap();
-    println!("serum {:?}", serum);
+    println!("dls {:?}", serum);
 
     let desc = serum.audio_component_description();
-    let midi = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
+    let plugin = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
+    let unit = plugin.au_audio_unit();
+    let tree = unit.parameter_tree().unwrap();
+    let params = tree.all_parameters();
+    println!("{:?}", params);
 }
