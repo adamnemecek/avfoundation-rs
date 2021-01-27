@@ -330,6 +330,7 @@ pub type AUMIDIOutputEventBlock =
 // */
 // typedef BOOL (^AUHostMusicalContextBlock)(double * __nullable currentTempo, double * __nullable timeSignatureNumerator, NSInteger * __nullable timeSignatureDenominator, double * __nullable currentBeatPosition, NSInteger * __nullable sampleOffsetToNextBeat, double * __nullable currentMeasureDownbeatPosition);
 use cocoa_foundation::base::BOOL;
+use objc::runtime::Object;
 pub type AUHostMusicalContextBlock = block::RcBlock<
     (
         *const f32,
@@ -573,8 +574,17 @@ impl AUAudioUnitRef {
     // 		truncate it.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitShortName API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
-    pub fn audio_unit_short_name(&self) -> ! {
-        todo!()
+    pub fn audio_unit_short_name(&self) -> Option<&str> {
+        use objc::runtime::Object;
+        unsafe {
+            let mut s: *mut Object = std::ptr::null_mut();
+            s = msg_send![self, audioUnitShortName];
+            if s.is_null() {
+                None
+            } else {
+                todo!()
+            }
+        }
     }
 
     // /*!	@property	componentVersion
