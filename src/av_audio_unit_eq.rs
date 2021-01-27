@@ -73,6 +73,21 @@
 //      AVAudioUnitEQFilterTypeResonantHighShelf = 10,
 //  } NS_ENUM_AVAILABLE(10_10, 8_0);
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum AVAudioUnitEQFilterType {
+    Parametric = 0,
+    LowPass = 1,
+    HighPass = 2,
+    ResonantLowPass = 3,
+    ResonantHighPass = 4,
+    BandPass = 5,
+    BandStop = 6,
+    LowShelf = 7,
+    HighShelf = 8,
+    ResonantLowShelf = 9,
+    ResonantHighShelf = 10,
+}
+
 //  /*! @class AVAudioUnitEQFilterParameters
 //      @abstract Filter parameters used by AVAudioUnitEQ.
 //      @discussion
