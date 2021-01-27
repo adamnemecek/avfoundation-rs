@@ -79,7 +79,6 @@ impl AVAudioSequencerRef {
             let res = match msg_send![self, loadFromURL: url options: options error: &mut err] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             };
 
             if err.is_null() {

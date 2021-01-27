@@ -98,7 +98,6 @@ impl AVAudioTimeRef {
             match msg_send![self, isHostTimeValid] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -121,7 +120,6 @@ impl AVAudioTimeRef {
             match msg_send![self, isSampleTimeValid] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }

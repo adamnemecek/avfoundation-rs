@@ -57,7 +57,6 @@ impl AVAudioPlayerRef {
             match msg_send![self, play] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -70,7 +69,6 @@ impl AVAudioPlayerRef {
             match msg_send![self, playAtTime: time] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -135,7 +133,6 @@ impl AVAudioPlayerRef {
             match msg_send![self, enableRate] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }

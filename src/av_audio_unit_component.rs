@@ -109,7 +109,6 @@ impl AVAudioUnitComponentRef {
             match msg_send![self, hasMIDIOutput] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -119,7 +118,6 @@ impl AVAudioUnitComponentRef {
             match msg_send![self, hasMIDIInput] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -129,7 +127,6 @@ impl AVAudioUnitComponentRef {
             match msg_send![self, hasCustomView] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }

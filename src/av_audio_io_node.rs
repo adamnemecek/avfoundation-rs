@@ -103,7 +103,6 @@ impl AVAudioInputNodeRef {
             {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -120,7 +119,6 @@ impl AVAudioInputNodeRef {
             match msg_send![self, isVoiceProcessingBypassed] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }

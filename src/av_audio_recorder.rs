@@ -23,7 +23,6 @@ impl AVAudioRecorderRef {
             match msg_send![self, prepareToRecord] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -33,7 +32,6 @@ impl AVAudioRecorderRef {
             match msg_send![self, record] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -55,7 +53,6 @@ impl AVAudioRecorderRef {
             match msg_send![self, deleteRecording] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -65,7 +62,6 @@ impl AVAudioRecorderRef {
             match msg_send![self, isRecording] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }

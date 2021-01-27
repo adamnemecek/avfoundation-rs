@@ -125,7 +125,6 @@ impl AVAudioFormatRef {
             match msg_send![self, isStandard] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
@@ -147,7 +146,6 @@ impl AVAudioFormatRef {
             match msg_send![self, isInterleaved] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }

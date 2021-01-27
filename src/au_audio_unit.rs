@@ -1717,7 +1717,6 @@ impl AUAudioUnitBusArrayRef {
             match msg_send![self, countChangeable: count error: &mut err] {
                 YES => true,
                 NO => false,
-                _ => unreachable!(),
             }
         }
     }
