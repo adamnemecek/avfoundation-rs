@@ -139,8 +139,8 @@ pub enum AVAudioEngineManualRenderingMode {
 
 // API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
 // typedef AVAudioEngineManualRenderingStatus (^AVAudioEngineManualRenderingBlock)(AVAudioFrameCount numberOfFrames, AudioBufferList *outBuffer, OSStatus *outError);
-pub type AVAudioEngineManualRenderingBlock<'a> = block::RcBlock<
-    (AVAudioFrameCount, &'a AudioBufferListRef, *mut OSStatus),
+pub type AVAudioEngineManualRenderingBlock = block::RcBlock<
+    (AVAudioFrameCount, AudioBufferList, *mut OSStatus),
     AVAudioEngineManualRenderingStatus,
 >;
 
@@ -708,9 +708,10 @@ impl AVAudioEngineRef {
     // 	All the rules outlined in `renderOffline:toBuffer:error:` are applicable here as well.
     // */
     // @available(OSX 10.13, *)
-    // pub fn manual_rendering_block<'a>(&'a self) -> AVAudioEngineManualRenderingBlock<'a> {
-    //     unsafe { msg_send![self, manualRenderingBlock] }
-    // }
+    // @property (readonly, nonatomic) AVAudioEngineManualRenderingBlock manualRenderingBlock API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    pub fn manual_rendering_block(&self) -> AVAudioEngineManualRenderingBlock {
+        unsafe { msg_send![self, manualRenderingBlock] }
+    }
 
     // /*! @property isInManualRenderingMode
     // 	@abstract
@@ -752,12 +753,27 @@ impl AVAudioEngineRef {
 
     // @available(OSX 10.13, *)
     // open var manualRenderingMaximumFrameCount: AVAudioFrameCount { get }
+// /*! @property manualRenderingMaximumFrameCount
+// 	@abstract
+// 		The maximum number of PCM sample frames the engine can produce in any single render call in 
+// 		the manual rendering mode.
+
+// 	Querying this property when the engine is not in manual rendering mode will return zero.
+// */
     pub fn manual_rendering_maximum_frame_count(&self) -> AVAudioFrameCount {
         unsafe { msg_send![self, manualRenderingMaximumFrameCount] }
     }
 
     // @available(OSX 10.13, *)
     // open var manualRenderingSampleTime: AVAudioFramePosition { get }
+// /*! @property manualRenderingSampleTime
+// 	@abstract
+// 		Indicates where the engine is on its render timeline in manual rendering mode.
+
+// 	The timeline in manual rendering mode starts at a sample time of zero, and is in terms
+// 	of the render format's sample rate. Resetting the engine (see `reset`) will reset the
+// 	timeline back to zero.
+// */
     pub fn manual_rendering_sample_time(&self) -> AVAudioFramePosition {
         unsafe { msg_send![self, manualRenderingSampleTime] }
     }
