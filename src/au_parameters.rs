@@ -259,10 +259,11 @@ foreign_obj_type! {
 
 impl AUParameterGroupRef {
     /// The group's child nodes (AUParameterGroupNode).
-    pub fn children(&self) -> Vec<AUParameterNode> {
-        todo!()
-    }
+
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSArray<AUParameterNode *> *children;
+    pub fn children(&self) -> Vec<AUParameterNode> {
+        unsafe { nsarray_to_vec(msg_send![self, children]) }
+    }
 
     /// Returns a flat array of all parameters in the group, including those in child groups.
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSArray<AUParameter *> *allParameters;
@@ -362,8 +363,8 @@ impl AUParameterRef {
 
     /// The parameter's address.
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUParameterAddress address;
-    pub fn address(&self) -> AUValue {
-        todo!()
+    pub fn address(&self) -> AUParameterAddress {
+        unsafe { msg_send![self, address] }
     }
 
     /// For parameters with kAudioUnitParameterUnit_Indexed, localized strings corresponding
@@ -386,7 +387,7 @@ impl AUParameterRef {
     /// The parameter's current value.
     // @property (NS_NONATOMIC_IOSONLY) AUValue value;
     pub fn value(&self) -> AUValue {
-        todo!()
+        unsafe { msg_send![self, value] }
     }
 
     ///
@@ -395,7 +396,15 @@ impl AUParameterRef {
     ///            Bridged to the v2 function AudioUnitSetParameter.
 
     // - (void)setValue:(AUValue)value originator:(AUParameterObserverToken __nullable)originator;
-    pub fn set_value(&self) {}
+    pub fn set_value(&self, value: AUValue, originator: AUParameterObserverToken) {
+        unsafe {
+            msg_send![
+                self,
+                setValue: value
+                originator: originator.0
+            ]
+        }
+    }
 
     ///    @brief    Convenience for setValue:originator:atHostTime:eventType:
     ///    @discussion
@@ -424,7 +433,7 @@ impl AUParameterRef {
         &self,
         originator: AUParameterObserverToken,
         at: u64,
-        event: AUParameterAutomationEventType,
+        event_type: AUParameterAutomationEventType,
     ) {
         todo!()
     }
@@ -436,7 +445,7 @@ impl AUParameterRef {
     ///        kAudioUnitParameterFlag_ValuesHaveStrings.
 
     // - (NSString *)stringFromValue:(const AUValue *__nullable)value;
-    pub fn string_for_value(&self, value: *const AUValue) {
+    pub fn string_for_value(&self, value: Option<AUValue>) -> &str {
         todo!()
     }
 

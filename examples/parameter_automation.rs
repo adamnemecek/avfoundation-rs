@@ -17,6 +17,10 @@ fn main() {
     let plugin = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
     let unit = plugin.au_audio_unit();
     let tree = unit.parameter_tree().unwrap();
-    let params = tree.all_parameters();
-    println!("{:?}", params);
+    let param = tree.all_parameters().first().unwrap().to_owned();
+    println!("address: {:?}", param.address());
+    println!("value: {:?}", param.value());
+    println!("min_value: {:?}", param.min_value());
+    println!("max_value: {:?}", param.max_value());
+
 }
