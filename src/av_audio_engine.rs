@@ -97,7 +97,7 @@ pub enum AVAudioEngineManualRenderingStatus {
 ///            (see `AVAudioEngine(manualRenderingBlock)`.
 
 #[repr(i64)]
-pub enum AudioEngineManualRenderingMode {
+pub enum AVAudioEngineManualRenderingMode {
     Offline = 0,
     RealTime = 1,
 }
@@ -554,11 +554,16 @@ impl AVAudioEngineRef {
         todo!()
     }
 
-    // pub fn enable_manual_rendering_mode(&self, mode: AVAudioEngineManualRenderingMode, format pcmFormat: AVAudioFormat, maximumFrameCount: AVAudioFrameCount) throws {
-    //    unsafe {
-    //      msg_send![self, enableManualRenderingMode]
-    //    }
-    //}
+    pub fn enable_manual_rendering_mode(
+        &self,
+        mode: AVAudioEngineManualRenderingMode,
+        format: &AVAudioFormatRef,
+        maximum_frame_count: AVAudioFrameCount,
+    ) {
+        unsafe { msg_send![self, enableManualRenderingMode: mode
+                                                    format: format
+                                         maximumFrameCount: maximum_frame_count] }
+    }
 
     pub fn disable_manual_rendering_mode(&self) {
         unsafe { msg_send![self, disableManualRenderingMode] }
@@ -591,19 +596,25 @@ impl AVAudioEngineRef {
 
     // @available(OSX 10.13, *)
     // open var manualRenderingMode: AVAudioEngineManualRenderingMode { get }
+    pub fn manual_rendering_mode(&self) -> bool {
+        unsafe {
+            match msg_send![self, manualRenderingMode] {
+                YES => true,
+                NO => false,
+            }
+        }
+    }
 
     // @available(OSX 10.13, *)
     // open var manualRenderingFormat: AVAudioFormat { get }
-    // pub fn manualRenderingFormat(&self) -> bool {
-    //     unsafe {
-    //         let res: BOOL = msg_send![self, manualRenderingFormat];
-    //         match res {
-    //             YES => true,
-    //             NO => false,
-    //             _ => unreachable!(),
-    //         }
-    //     }
-    // }
+    pub fn manual_rendering_format(&self) -> bool {
+        unsafe {
+            match msg_send![self, manualRenderingFormat] {
+                YES => true,
+                NO => false,
+            }
+        }
+    }
 
     // @available(OSX 10.13, *)
     // open var manualRenderingMaximumFrameCount: AVAudioFrameCount { get }
