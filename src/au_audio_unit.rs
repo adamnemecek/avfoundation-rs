@@ -71,8 +71,19 @@ pub type AUAudioUnitStatus = OSStatus;
 // typedef int64_t AUEventSampleTime;
 pub type AUEventSampleTime = i64;
 
+pub trait AUEventSampleTimeExt {
+    fn immediate() -> Self;
+}
+
 #[allow(non_upper_case_globals, overflowing_literals)]
 pub const AUEventSampleTimeImmediate: i64 = 0xffffffff00000000;
+
+impl AUEventSampleTimeExt for AUEventSampleTime {
+    fn immediate() -> Self {
+        AUEventSampleTimeImmediate
+    }
+}
+
 // pub trait AUEventSampleTimeExt {
 //     fn immediate() -> Self;
 // }

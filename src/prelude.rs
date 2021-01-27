@@ -10,6 +10,8 @@ pub use crate::{
     AUAudioUnitViewConfiguration,
     AUAudioUnitViewConfigurationRef,
     AUEventSampleTime,
+    // AUEventSampleTime,
+    AUEventSampleTimeExt,
     AUParameter,
     AUParameterGroup,
     AUParameterGroupRef,
