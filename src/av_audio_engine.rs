@@ -731,6 +731,13 @@ impl AVAudioEngineRef {
 
     // @available(OSX 10.13, *)
     // open var manualRenderingMode: AVAudioEngineManualRenderingMode { get }
+    // /*! @property manualRenderingMode
+    // 	@abstract
+    // 		The manual rendering mode configured on the engine
+
+    // 	This property is meaningful only when the engine is operating in manual rendering mode,
+    // 	i.e. when `isInManualRenderingMode` returns true.
+    // */
     pub fn manual_rendering_mode(&self) -> bool {
         unsafe {
             match msg_send![self, manualRenderingMode] {
@@ -742,6 +749,13 @@ impl AVAudioEngineRef {
 
     // @available(OSX 10.13, *)
     // open var manualRenderingFormat: AVAudioFormat { get }
+    // /*! @property manualRenderingFormat
+    // 	@abstract
+    // 		The render format of the engine in manual rendering mode.
+
+    // 	Querying this property when the engine is not in manual rendering mode will return an
+    // 	invalid format, with zero sample rate and channel count.
+    // */
     pub fn manual_rendering_format(&self) -> bool {
         unsafe {
             match msg_send![self, manualRenderingFormat] {
@@ -753,27 +767,27 @@ impl AVAudioEngineRef {
 
     // @available(OSX 10.13, *)
     // open var manualRenderingMaximumFrameCount: AVAudioFrameCount { get }
-// /*! @property manualRenderingMaximumFrameCount
-// 	@abstract
-// 		The maximum number of PCM sample frames the engine can produce in any single render call in 
-// 		the manual rendering mode.
+    // /*! @property manualRenderingMaximumFrameCount
+    // 	@abstract
+    // 		The maximum number of PCM sample frames the engine can produce in any single render call in
+    // 		the manual rendering mode.
 
-// 	Querying this property when the engine is not in manual rendering mode will return zero.
-// */
+    // 	Querying this property when the engine is not in manual rendering mode will return zero.
+    // */
     pub fn manual_rendering_maximum_frame_count(&self) -> AVAudioFrameCount {
         unsafe { msg_send![self, manualRenderingMaximumFrameCount] }
     }
 
     // @available(OSX 10.13, *)
     // open var manualRenderingSampleTime: AVAudioFramePosition { get }
-// /*! @property manualRenderingSampleTime
-// 	@abstract
-// 		Indicates where the engine is on its render timeline in manual rendering mode.
+    // /*! @property manualRenderingSampleTime
+    // 	@abstract
+    // 		Indicates where the engine is on its render timeline in manual rendering mode.
 
-// 	The timeline in manual rendering mode starts at a sample time of zero, and is in terms
-// 	of the render format's sample rate. Resetting the engine (see `reset`) will reset the
-// 	timeline back to zero.
-// */
+    // 	The timeline in manual rendering mode starts at a sample time of zero, and is in terms
+    // 	of the render format's sample rate. Resetting the engine (see `reset`) will reset the
+    // 	timeline back to zero.
+    // */
     pub fn manual_rendering_sample_time(&self) -> AVAudioFramePosition {
         unsafe { msg_send![self, manualRenderingSampleTime] }
     }
