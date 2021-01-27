@@ -643,8 +643,8 @@ impl AUAudioUnitRef {
     // 		object every time it is asked for it, since clients can install KVO observers on it.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusArray *inputBusses;
-    pub fn input_busses(&self) -> ! {
-        todo!()
+    pub fn input_busses(&self) -> &AUAudioUnitBusArray {
+        unsafe { msg_send![self, inputBusses] }
     }
 
     // /*!	@property	outputBusses
@@ -654,8 +654,8 @@ impl AUAudioUnitRef {
     // 		object every time it is asked for it, since clients can install KVO observers on it.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusArray *outputBusses;
-    pub fn output_busses(&self) -> ! {
-        todo!()
+    pub fn output_busses(&self) -> &AUAudioUnitBusArrayRef {
+        unsafe { msg_send![self, outputBusses] }
     }
 
     // /*!	@property	renderBlock
@@ -723,7 +723,7 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitRemoveRenderNotify().
     // */
     // - (void)removeRenderObserver:(NSInteger)token;
-    pub fn remove_render_observer(&self) -> ! {
+    pub fn remove_render_observer(&self, token: NSInteger) {
         todo!()
     }
 

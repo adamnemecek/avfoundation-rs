@@ -190,6 +190,7 @@ impl AUParameterNodeRef {
     ///        A block to call after the value of a parameter has changed.
     ///    @return
     ///        A token which can be passed to removeParameterObserver: or to -[AUParameter setValue:originator:]
+    /// - (AUParameterObserverToken)tokenByAddingParameterObserver:(AUParameterObserver)observer;
     pub fn token_by_adding_parameter_observer<F>(&self, observer: F)
     where
         F: FnMut(AUParameterAddress, AUValue) -> (),
