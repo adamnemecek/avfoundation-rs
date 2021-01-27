@@ -1,4 +1,7 @@
-use cocoa_foundation::foundation::NSUInteger;
+use cocoa_foundation::{
+    base::nil,
+    foundation::NSUInteger,
+};
 use objc::runtime::{
     NO,
     YES,
@@ -106,7 +109,11 @@ impl AVAudioPlayerNodeRef {
         buffer: &AVAudioPCMBufferRef,
         completion_handler: Option<AVAudioNodeCompletionHandler>,
     ) {
-        unsafe { msg_send![self, scheduleBuffer: buffer completionHandler: completion_handler] }
+        if let Some(handler) = completion_handler {
+            unsafe { msg_send![self, scheduleBuffer: buffer completionHandler: handler] }
+        } else {
+            unsafe { msg_send![self, scheduleBuffer: buffer completionHandler: nil] }
+        }
     }
     /// @method scheduleBuffer:completionCallbackType:completionHandler:
     ///    @abstract Schedule playing samples from an AVAudioBuffer.

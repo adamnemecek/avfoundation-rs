@@ -13,7 +13,7 @@ sequencer.load_from_url(path, );
 * AUParameterObserver
 
 # how to get a reference to plugin view?
-* AUParameterObserver
+* 
 
 # parameter automation
 * AUParameterAutomationEvent

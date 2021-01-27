@@ -24,6 +24,8 @@ extern crate objc;
 //     };
 // }
 
+// use std::sync::mpsc::channel;
+
 fn main() {
     let manager = AVAudioUnitComponentManager::shared();
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
@@ -33,7 +35,6 @@ fn main() {
         } else {
             (false, ShouldStop::Continue)
         }
-        // (true, ShouldStop::Continue)
     });
 
     let desc = components.first().unwrap().audio_component_description();
@@ -43,20 +44,22 @@ fn main() {
     // println!("{:?}", components.first());
 
     // let midi = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
-    let block = block::ConcreteBlock::new(move |unit: &AVAudioUnitRef, err: avfoundation::NSError| {
-        let desc = unsafe {
-            let cls: id = msg_send![unit, class];
-            let desc: id = msg_send![cls, description];
-            nsstring_as_str(desc.as_ref().unwrap())
-        };
-        println!("callback {:?} {:?}", desc, err.localized_description());
-        let ui_block = block::ConcreteBlock::new(move |id: &avfoundation::NSViewControllerRef| {
-            println!("ui block");
+    let block =
+        block::ConcreteBlock::new(move |unit: &AVAudioUnitRef, err: avfoundation::NSError| {
+            let desc = unsafe {
+                let cls: id = msg_send![unit, class];
+                let desc: id = msg_send![cls, description];
+                nsstring_as_str(desc.as_ref().unwrap())
+            };
+            println!("callback {:?} {:?}", desc, err.localized_description());
+            let ui_block =
+                block::ConcreteBlock::new(move |id: &avfoundation::NSViewControllerRef| {
+                    println!("ui block");
+                })
+                .copy();
+            unit.au_audio_unit().request_view_controller(ui_block);
         })
         .copy();
-        unit.au_audio_unit().request_view_controller(ui_block);
-    })
-    .copy();
     let unit = AVAudioUnit::with_component_description(desc, Default::default(), block);
 
     run_main_loop();
