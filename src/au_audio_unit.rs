@@ -1,4 +1,5 @@
 use crate::{
+    nsstring_as_str,
     AUParameterTree,
     AUParameterTreeRef,
     AURenderEventHeader,
@@ -575,14 +576,13 @@ impl AUAudioUnitRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitShortName API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
     pub fn audio_unit_short_name(&self) -> Option<&str> {
-        use objc::runtime::Object;
         unsafe {
             let mut s: *mut Object = std::ptr::null_mut();
             s = msg_send![self, audioUnitShortName];
             if s.is_null() {
                 None
             } else {
-                todo!()
+                Some(nsstring_as_str(s.as_ref().unwrap()))
             }
         }
     }
