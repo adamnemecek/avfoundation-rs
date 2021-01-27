@@ -1,19 +1,4 @@
-use crate::{
-    AVAudioConnectionPoint,
-    AVAudioConnectionPointRef,
-    AVAudioFormatRef,
-    AVAudioFrameCount,
-    AVAudioFramePosition,
-    AVAudioInputNodeRef,
-    AVAudioMixerNodeRef,
-    AVAudioNodeBus,
-    AVAudioNodeRef,
-    AVAudioOutputNodeRef,
-    AVAudioPCMBuffer,
-    AudioBufferList,
-    AudioBufferListRef,
-    OSStatus,
-};
+use crate::prelude::*;
 
 pub struct MusicSequenceRef {}
 use objc::runtime::{
@@ -679,15 +664,18 @@ impl AVAudioEngineRef {
     // 	must not be used, an error is returned otherwise. Use the block based render call
     // 	(`manualRenderingBlock`) in that mode instead.
     // */
+    // - (AVAudioEngineManualRenderingStatus)renderOffline:(AVAudioFrameCount)numberOfFrames toBuffer:(AVAudioPCMBuffer *)buffer error:(NSError **)outError API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0)) __attribute__((swift_error(nonnull_error)));
     pub fn render_offline(
         &self,
         number_of_frames: AVAudioFrameCount,
-        buffer: AVAudioPCMBuffer,
-    ) -> AVAudioEngineManualRenderingStatus {
-        //    unsafe {
-        //      msg_send![self, renderOffline]
-        //    }
-        todo!()
+        buffer: &AVAudioPCMBufferRef,
+    ) -> Result<AVAudioEngineManualRenderingStatus, NSError> {
+        unsafe {
+            // let err = std::ptr::null_mut();
+
+            // msg_send![self, renderOffline: number_of_frames toBuffer: buffer]
+            todo!()
+        }
     }
 
     // /*!	@property manualRenderingBlock
