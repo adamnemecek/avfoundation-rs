@@ -140,7 +140,7 @@ pub enum AVAudioEngineManualRenderingMode {
 // API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
 // typedef AVAudioEngineManualRenderingStatus (^AVAudioEngineManualRenderingBlock)(AVAudioFrameCount numberOfFrames, AudioBufferList *outBuffer, OSStatus *outError);
 pub type AVAudioEngineManualRenderingBlock<'a> = block::RcBlock<
-    (AVAudioFrameCount, &'a AudioBufferListRef, OSStatus),
+    (AVAudioFrameCount, &'a AudioBufferListRef, *mut OSStatus),
     AVAudioEngineManualRenderingStatus,
 >;
 
@@ -208,6 +208,7 @@ impl AVAudioEngineRef {
     ///    // when destroying engine (without ARC)
     ///    [_player release];
     ///    ```
+    /// - (void)attachNode:(AVAudioNode *)node;
 
     pub fn attach_node(&self, node: &AVAudioNodeRef) {
         unsafe { msg_send![self, attachNode: node] }
@@ -219,6 +220,7 @@ impl AVAudioEngineRef {
     ///
     ///    If necessary, the engine will safely disconnect the node before detaching it.
 
+    /// - (void)detachNode:(AVAudioNode *)node;
     pub fn detach_node(&self, node: &AVAudioNodeRef) {
         unsafe { msg_send![self, detachNode: node] }
     }
@@ -536,6 +538,25 @@ impl AVAudioEngineRef {
         }
     }
 
+    // /*! @property autoShutdownEnabled
+    // 	@abstract
+    // 		When auto shutdown is enabled, the engine can start and stop the audio hardware dynamically,
+    // 		to conserve power. This is the enforced behavior on watchOS and can be optionally enabled on
+    // 		other platforms.
+
+    // 	To conserve power, it is advised that the client pause/stop the engine when not in use.
+    // 	But when auto shutdown is enabled, the engine will stop the audio hardware if it was running
+    // 	idle for a certain duration, and restart it later when required.
+    // 	Note that, because this operation is dynamic, it may affect the start times of the source
+    // 	nodes (e.g. `AVAudioPlayerNode`), if the engine has to resume from its shutdown state.
+
+    // 	On watchOS, auto shutdown is always enabled. On other platforms, it is disabled by
+    // 	default, but the client can enable it if needed.
+
+    // 	This property is applicable only when the engine is rendering to/from an audio device. If
+    // 	the value is changed when the engine is in manual rendering mode, it will take effect
+    // 	whenever the engine is switched to render to/from the audio device.
+    // */
     // open var isAutoShutdownEnabled: Bool
     pub fn is_auto_shutdown_enabled(&self) -> bool {
         unsafe {
@@ -554,6 +575,47 @@ impl AVAudioEngineRef {
         todo!()
     }
 
+    //     /*!	@method enableManualRenderingMode:format:maximumFrameCount:error:
+    // 	@abstract
+    // 		Set the engine to operate in a manual rendering mode with the specified render format and
+    // 		maximum frame count.
+    // 	@param mode
+    // 		The manual rendering mode to use.
+    // 	@param pcmFormat
+    // 		The format of the output PCM audio data from the engine.
+    // 	@param maximumFrameCount
+    // 		The maximum number of PCM sample frames the engine will be asked to produce in any single
+    // 		render call.
+    //  	@param outError
+    // 		On exit, if the engine cannot switch to the manual rendering mode, a description of the
+    // 		error (see `AVAudioEngineManualRenderingError` for the possible errors).
+    // 	@return
+    // 		YES for success.
+
+    // 	Use this method to configure the engine to render in response to requests from the client.
+
+    // 	The engine must be in a stopped state before calling this method.
+    // 	The render format must be a PCM format and match the format of the buffer to which
+    // 	the engine is asked to render (see `renderOffline:toBuffer:error:`).
+
+    // 	It is advised to enable manual rendering mode soon after the engine is created, and
+    // 	before accessing any of mainMixerNode, inputNode or outputNode of the engine.
+    // 	Otherwise, accessing or interacting with the engine before enabling manual rendering
+    // 	mode could have the unintended side-effect of configuring the hardware for device-rendering
+    // 	mode.
+
+    // 	The input data in manual rendering mode can be supplied through the source nodes, e.g.
+    // 	`AVAudioPlayerNode`, `AVAudioInputNode` etc.
+
+    // 	When switching to manual rendering mode, the engine:
+    // 	1. Switches the input and output nodes to manual rendering mode. Their input and output
+    // 	   formats may change.
+    // 	2. Removes any taps previously installed on the input and output nodes.
+    // 	3. Maintains all the engine connections as is.
+
+    // 	Reasons for potential failure when switching to manual rendering mode include:
+    // 	- Engine is not in a stopped state.
+    // */
     pub fn enable_manual_rendering_mode(
         &self,
         mode: AVAudioEngineManualRenderingMode,
@@ -567,10 +629,56 @@ impl AVAudioEngineRef {
         }
     }
 
+    // /*!	@method disableManualRenderingMode
+    // 	@abstract
+    // 		Set the engine to render to/from an audio device.
+
+    // 	When disabling the manual rendering mode, the engine:
+    // 	1. Stops and resets itself (see `stop` and `reset`).
+    // 	2. Switches the output/input nodes to render to/from an audio device. Their input and
+    // 	   output formats may change.
+    // 	3. Removes any taps previously installed on the input and output nodes.
+    // 	4. Maintains all the engine connections as is.
+
+    // 	Calling this method when the engine is already rendering to/from an audio device has no
+    // 	effect.
+    // */
     pub fn disable_manual_rendering_mode(&self) {
         unsafe { msg_send![self, disableManualRenderingMode] }
     }
 
+    // /*!	@method renderOffline:toBuffer:error:
+    // 	@abstract
+    // 		Render call to the engine operating in the offline manual rendering mode
+    // 	@param numberOfFrames
+    // 		The number of PCM sample frames to be rendered
+    // 	@param buffer
+    // 		The PCM buffer to which the engine must render the audio
+    // 	@param outError
+    // 		On exit, if an error occurs during rendering, a description of the error (see
+    // 		`AVAudioEngineManualRenderingError` for the possible errors)
+    // 	@return
+    // 		One of the status codes from `AVAudioEngineManualRenderingStatus`. Irrespective of the
+    // 		returned status code, on exit, the output buffer's frameLength will indicate the number of
+    // 		PCM samples rendered by the engine
+
+    // 	The engine must be in the offline manual rendering mode
+    // 	(`AVAudioEngineManualRenderingModeOffline`) and started before calling this method.
+
+    // 	The format of the buffer must match the render format set through
+    // 	`enableManualRenderingMode:format:maximumFrameCount:error:`. The buffer capacity must be
+    // 	greater than or equal to the number of samples asked to render.
+    // 	On exit, the buffer's frameLength will indicate the number of PCM samples rendered by the
+    // 	engine.
+
+    // 	The engine's timeline in manual rendering mode starts at a sample time of zero, and is in
+    // 	terms of the render format's sample rate. Resetting the engine (see `reset`) will reset the
+    // 	timeline back to zero.
+
+    // 	When rendering in `AVAudioEngineManualRenderingModeRealtime`, this ObjC render method
+    // 	must not be used, an error is returned otherwise. Use the block based render call
+    // 	(`manualRenderingBlock`) in that mode instead.
+    // */
     pub fn render_offline(
         &self,
         number_of_frames: AVAudioFrameCount,
@@ -582,9 +690,33 @@ impl AVAudioEngineRef {
         todo!()
     }
 
-    // @available(OSX 10.13, *)
-    // open var manualRenderingBlock: AVAudioEngineManualRenderingBlock { get }
+    // /*!	@property manualRenderingBlock
+    // 	@abstract
+    // 		Block to render the engine operating in manual rendering mode
 
+    // 	This block based render call must be used to render the engine when operating in
+    // 	`AVAudioEngineManualRenderingModeRealtime`. In this mode, the engine operates under
+    // 	realtime constraints and will not make any blocking call (e.g. calling libdispatch, blocking
+    // 	on a mutex, allocating memory etc.) while rendering.
+
+    // 	Before invoking the rendering functionality, client must fetch this block and cache the
+    // 	result. The block can then be called from a realtime context, without any possibility of
+    // 	blocking.
+
+    // 	When rendering in `AVAudioEngineManualRenderingModeOffline`, either this block based render
+    // 	call or	`renderOffline:toBuffer:error:` ObjC method can be used.
+    // 	All the rules outlined in `renderOffline:toBuffer:error:` are applicable here as well.
+    // */
+    // @available(OSX 10.13, *)
+    // pub fn manual_rendering_block<'a>(&'a self) -> AVAudioEngineManualRenderingBlock<'a> {
+    //     unsafe { msg_send![self, manualRenderingBlock] }
+    // }
+
+    // /*! @property isInManualRenderingMode
+    // 	@abstract
+    // 		Whether or not the engine is operating in manual rendering mode, i.e. not connected
+    // 		to an audio device and rendering in response to the requests from the client
+    // */
     // @available(OSX 10.13, *)
     // open var isInManualRenderingMode: Bool { get }
     pub fn is_in_manual_rendering_mode(&self) -> bool {

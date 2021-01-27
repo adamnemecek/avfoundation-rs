@@ -88,6 +88,15 @@ pub enum AVAudioUnitEQFilterType {
     ResonantHighShelf = 10,
 }
 
+// pub enum
+// foreign_obj_type! {
+//     type CType = NSWindowControllerFFI;
+//     pub struct NSWindowController;
+//     pub struct NSWindowControllerRef;
+//     type ParentType = NSResponderRef;
+
+// }
+
 //  /*! @class AVAudioUnitEQFilterParameters
 //      @abstract Filter parameters used by AVAudioUnitEQ.
 //      @discussion
