@@ -244,12 +244,11 @@ impl AVAudioEngineRef {
     ) {
         unsafe {
             msg_send![
-                self,
-                connect: from
-                to: to
-                fromBus: from_bus
-                toBus: to_bus
-                format: format
+                self, connect: from
+                           to: to
+                      fromBus: from_bus
+                        toBus: to_bus
+                       format: format
             ]
         }
     }
@@ -609,8 +608,8 @@ impl AVAudioEngineRef {
     ) {
         unsafe {
             msg_send![self, enableManualRenderingMode: mode
-                                                    format: format
-                                         maximumFrameCount: maximum_frame_count]
+                                               format: format
+                                    maximumFrameCount: maximum_frame_count]
         }
     }
 
@@ -673,7 +672,8 @@ impl AVAudioEngineRef {
         unsafe {
             let mut err: *mut NSError = std::ptr::null_mut();
 
-            let res: AVAudioEngineManualRenderingStatus = msg_send![self, renderOffline: number_of_frames toBuffer: buffer error: &mut err];
+            let res: AVAudioEngineManualRenderingStatus =
+                msg_send![self, renderOffline: number_of_frames toBuffer: buffer error: &mut err];
             if err.is_null() {
                 Ok(res)
             } else {

@@ -193,10 +193,13 @@ impl AUParameterNodeRef {
     /// - (AUParameterObserverToken)tokenByAddingParameterObserver:(AUParameterObserver)observer;
     pub fn token_by_adding_parameter_observer<F>(&self, observer: F)
     where
-        F: FnMut(AUParameterAddress, AUValue) -> (),
+        F: Fn(AUParameterAddress, AUValue) -> () + 'static,
     {
-        // unsafe { crate::nsstring_as_str(msg_send![self, tokenByAddingParameterObserver]) }
-        todo!()
+        let block = block::ConcreteBlock::new(move |address: AUParameterAddress, value: AUValue| {
+            observer(address, value);
+        })
+        .copy();
+        unsafe { msg_send![self, tokenByAddingParameterObserver: block] }
     }
     ///    @method tokenByAddingParameterRecordingObserver:
     ///    @brief    Add a recording observer for a parameter or all parameters in a group/tree.
