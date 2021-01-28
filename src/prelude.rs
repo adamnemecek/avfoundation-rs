@@ -98,7 +98,6 @@ pub use crate::{
     NSErrorRef,
     NSViewController,
     NSViewControllerRef,
-    NSViewControllerRef,
     OSStatus,
     RequestAUAudioUnitViewController,
     ShouldStop,
