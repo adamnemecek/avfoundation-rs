@@ -191,14 +191,15 @@ impl AUParameterNodeRef {
     ///    @return
     ///        A token which can be passed to removeParameterObserver: or to -[AUParameter setValue:originator:]
     /// - (AUParameterObserverToken)tokenByAddingParameterObserver:(AUParameterObserver)observer;
-    pub fn token_by_adding_parameter_observer<F>(&self, observer: F)
+    pub fn token_by_adding_parameter_observer<F>(&self, observer: F) -> AUParameterObserverToken
     where
         F: Fn(AUParameterAddress, AUValue) -> () + 'static,
     {
-        let block = block::ConcreteBlock::new(move |address: AUParameterAddress, value: AUValue| {
-            observer(address, value);
-        })
-        .copy();
+        let block =
+            block::ConcreteBlock::new(move |address: AUParameterAddress, value: AUValue| {
+                observer(address, value);
+            })
+            .copy();
         unsafe { msg_send![self, tokenByAddingParameterObserver: block] }
     }
     ///    @method tokenByAddingParameterRecordingObserver:
