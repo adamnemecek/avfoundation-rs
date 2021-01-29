@@ -218,9 +218,7 @@ impl AUParameterNodeRef {
     {
         let block = block::ConcreteBlock::new(
             move |len: NSInteger, data: *const AURecordedParameterEvent| {
-                let slice = unsafe {
-                    std::slice::from_raw_parts(data, len as _)
-                };
+                let slice = unsafe { std::slice::from_raw_parts(data, len as _) };
                 // observer(len, data);
                 observer(slice);
             },
@@ -251,10 +249,11 @@ impl AUParameterNodeRef {
     ///        setValue:originator:]
 
     // - (AUParameterObserverToken)tokenByAddingParameterAutomationObserver:(AUParameterAutomationObserver)observer API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
-    pub fn token_by_adding_parameter_automation_observer(&self, observer: AUParameterAutomationObserver) -> AUParameterObserverToken {
-        unsafe {
-            msg_send![self, tokenByAddingParameterAutomationObserver: observer]
-        }
+    pub fn token_by_adding_parameter_automation_observer(
+        &self,
+        observer: AUParameterAutomationObserver,
+    ) -> AUParameterObserverToken {
+        unsafe { msg_send![self, tokenByAddingParameterAutomationObserver: observer] }
     }
 
     ///    @method removeParameterObserver:
@@ -265,11 +264,8 @@ impl AUParameterNodeRef {
     ///        will block until any callbacks currently in flight have completed.
     // - (void)removeParameterObserver:(AUParameterObserverToken)token;
     pub fn remove_parameter_observer(&self, token: AUParameterObserverToken) {
-        unsafe {
-            msg_send![self, removeParameterObserver: token]
-        }
+        unsafe { msg_send![self, removeParameterObserver: token] }
     }
-
 }
 
 ///    @class    AUParameterGroup

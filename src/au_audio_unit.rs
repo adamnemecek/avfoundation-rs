@@ -1,8 +1,10 @@
 use crate::{
     nsstring_as_str,
+    AUParameterAddress,
     AUParameterTree,
     AUParameterTreeRef,
     AURenderEventHeader,
+    AUValue,
     AVAudioFormatRef,
     AudioBufferList,
     AudioComponentDescription,
@@ -272,10 +274,10 @@ pub type AURenderObserver = block::RcBlock<
 // typedef void (^AUScheduleParameterBlock)(AUEventSampleTime eventSampleTime, AUAudioFrameCount rampDurationSampleFrames, AUParameterAddress parameterAddress, AUValue value);
 pub type AUScheduleParameterBlock = block::RcBlock<
     (
-        AUEventSampleTime,
-        *const AudioTimeStamp,
-        AUAudioFrameCount,
-        NSInteger,
+        AUEventSampleTime,  // eventSampleTime,
+        AUAudioFrameCount,  // rampDurationSampleFrames,
+        AUParameterAddress, // parameterAddress,
+        AUValue,            // value
     ),
     (),
 >;
@@ -713,8 +715,8 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitScheduleParameters().
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUScheduleParameterBlock scheduleParameterBlock;
-    pub fn schedule_parameter_block(&self) -> ! {
-        todo!()
+    pub fn schedule_parameter_block(&self) -> AUScheduleParameterBlock {
+        unsafe { msg_send![self, scheduleParameterBlock] }
     }
 
     // /*!	@method		tokenByAddingRenderObserver:
