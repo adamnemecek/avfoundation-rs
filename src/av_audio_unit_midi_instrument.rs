@@ -14,12 +14,9 @@ foreign_obj_type! {
 
 impl PartialEq for AVAudioUnitMIDIInstrumentRef {
     fn eq(&self, other: &Self) -> bool {
-        unsafe {
-            msg_send![self, isEqual: other]
-        }
+        unsafe { msg_send![self, isEqual: other] }
     }
 }
-
 
 // impl PartialEq for AVAudioUnitMIDIInstrument {
 //     fn eq(&self, other: &Self) -> bool {

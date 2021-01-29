@@ -212,7 +212,18 @@ impl AUParameterNodeRef {
     ///        release.
 
     // - (AUParameterObserverToken)tokenByAddingParameterRecordingObserver:(AUParameterRecordingObserver)observer;
-    fn thing1() {}
+    pub fn token_by_adding_parameter_recording_observer<F>(&self, observer: F)
+    where
+        F: Fn(NSInteger, *const AURecordedParameterEvent) -> () + 'static,
+    {
+        let block = block::ConcreteBlock::new(
+            move |len: NSInteger, data: *const AURecordedParameterEvent| {
+                observer(len, data);
+            },
+        )
+        .copy();
+        unsafe { msg_send![self, tokenByAddingParameterRecordingObserver: block] }
+    }
 
     ///    @method tokenByAddingParameterAutomationObserver:
     ///    @brief    Add a recording observer for a parameter or all parameters in a group/tree.
@@ -349,6 +360,7 @@ impl AUParameterRef {
     pub fn max_value(&self) -> AUValue {
         unsafe { msg_send![self, maxValue] }
     }
+
     /// The parameter's unit of measurement.
     // @property (NS_NONATOMIC_IOSONLY, readonly) AudioUnitParameterUnit unit;
     pub fn unit(&self) -> crate::AudioUnitParameterUnit {
