@@ -214,11 +214,15 @@ impl AUParameterNodeRef {
     // - (AUParameterObserverToken)tokenByAddingParameterRecordingObserver:(AUParameterRecordingObserver)observer;
     pub fn token_by_adding_parameter_recording_observer<F>(&self, observer: F)
     where
-        F: Fn(NSInteger, *const AURecordedParameterEvent) -> () + 'static,
+        F: Fn(&[AURecordedParameterEvent]) -> () + 'static,
     {
         let block = block::ConcreteBlock::new(
             move |len: NSInteger, data: *const AURecordedParameterEvent| {
-                observer(len, data);
+                let slice = unsafe {
+                    std::slice::from_raw_parts(data, len as _)
+                };
+                // observer(len, data);
+                observer(slice);
             },
         )
         .copy();
@@ -247,7 +251,11 @@ impl AUParameterNodeRef {
     ///        setValue:originator:]
 
     // - (AUParameterObserverToken)tokenByAddingParameterAutomationObserver:(AUParameterAutomationObserver)observer API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
-    fn thing2() {}
+    pub fn token_by_adding_parameter_automation_observer(&self, observer: AUParameterAutomationObserver) -> AUParameterObserverToken {
+        unsafe {
+            msg_send![self, tokenByAddingParameterAutomationObserver: observer]
+        }
+    }
 
     ///    @method removeParameterObserver:
     ///    @brief    Remove an observer created with tokenByAddingParameterObserver,
@@ -256,7 +264,12 @@ impl AUParameterNodeRef {
     ///        This call will remove the callback corresponding to the supplied token. Note that this
     ///        will block until any callbacks currently in flight have completed.
     // - (void)removeParameterObserver:(AUParameterObserverToken)token;
-    fn thing3() {}
+    pub fn remove_parameter_observer(&self, token: AUParameterObserverToken) {
+        unsafe {
+            msg_send![self, removeParameterObserver: token]
+        }
+    }
+
 }
 
 ///    @class    AUParameterGroup
