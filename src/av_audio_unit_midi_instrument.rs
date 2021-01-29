@@ -12,6 +12,20 @@ foreign_obj_type! {
     type ParentType = AVAudioUnitRef;
 }
 
+impl PartialEq for AVAudioUnitMIDIInstrumentRef {
+    fn eq(&self, other: &Self) -> bool {
+        unsafe {
+            msg_send![self, isEqual: other]
+        }
+    }
+}
+
+
+// impl PartialEq for AVAudioUnitMIDIInstrument {
+//     fn eq(&self, other: &Self) -> bool {
+//         todo!()
+//     }
+// }
 // impl MIXING for AVAudioUnitMIDIInstrumentRef {}
 
 /*

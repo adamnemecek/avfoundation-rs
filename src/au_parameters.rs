@@ -291,6 +291,7 @@ impl AUParameterGroupRef {
 ///        issue a KVO notification on the audio unit's parameterTree property. The tree's elements are
 ///        mostly immutable (except for values and implementor hooks); the only way to modify them
 ///        is to publish a new tree.
+
 pub enum AUParameterTreeFFI {}
 
 foreign_obj_type! {
@@ -436,11 +437,17 @@ impl AUParameterRef {
     // - (void)setValue:(AUValue)value originator:(AUParameterObserverToken __nullable)originator atHostTime:(uint64_t)hostTime eventType:(AUParameterAutomationEventType)eventType API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
     pub fn set_value_at(
         &self,
+        value: AUValue,
         originator: AUParameterObserverToken,
         at: u64,
         event_type: AUParameterAutomationEventType,
     ) {
-        todo!()
+        unsafe {
+            let _: () = msg_send![self, setValue: value
+                                      originator: originator
+                                      atHostTime: at
+                                       eventType: event_type];
+        }
     }
 
     ///    @brief Get a textual representation of a value for the parameter. Use value==nil to use the
