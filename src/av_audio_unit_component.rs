@@ -132,6 +132,25 @@ impl AVAudioUnitComponentRef {
     }
 }
 
+// /*!
+// 	@class	AVAudioUnitComponentManager
+// 	@brief	A singleton object that provides an easy way to find audio components that are
+// 			registered with the system.
+
+// 	AVAudioUnitComponentManager provides methods to search and query various information about the
+// 	audio components without opening them.
+
+// 	Currently audio components that are audio units can only be searched.
+
+// 	The class also supports predefined system tags and arbitrary user tags. Each audio unit can be
+// 	tagged as part of its definition. Refer to AudioComponent.h for more details. AudioUnit Hosts
+// 	such as Logic or GarageBand can present groupings of audio units based on the tags.
+
+// 	Searching for audio units can be done in various ways
+// 		- using a NSPredicate that contains search strings for tags or descriptions
+// 		- using a block to match on custom criteria
+// 		- using an AudioComponentDescription
+// */
 pub enum AVAudioUnitComponentManagerFFI {}
 
 foreign_obj_type! {
@@ -150,6 +169,8 @@ pub enum ShouldStop {
 // type AudioUnitPredicate<'a> = Block<(&'a AVAudioUnitComponentRef, *mut bool), bool>;
 
 impl AVAudioUnitComponentManager {
+    // + (instancetype)sharedAudioUnitComponentManager;
+
     pub fn shared<'a>() -> &'a AVAudioUnitComponentManagerRef {
         unsafe {
             let class = class!(AVAudioUnitComponentManager);
@@ -159,7 +180,37 @@ impl AVAudioUnitComponentManager {
 }
 
 impl AVAudioUnitComponentManagerRef {
-    // first return value is accept, second is stop
+    // /*! @discussion
+    //  		returns all tags associated with the current user as well as all system tags defined by
+    // 		the audio unit(s).
+    // */
+    // @property (nonatomic, readonly) NSArray<NSString *>		*tagNames;
+
+    // /*! @discussion
+    // 		returns the localized standard system tags defined by the audio unit(s).
+    // */
+    // @property (nonatomic, readonly) NSArray<NSString *>		*standardLocalizedTagNames;
+
+    // /* returns singleton instance of AVAudioUnitComponentManager */
+    // /*!
+    //  @method componentsMatchingPredicate:
+    //  @abstract	returns an array of AVAudioUnitComponent objects that match the search predicate.
+    //  @discussion
+    //  		AudioComponent's information or tags can be used to build a search criteria.
+    //  		For example, "typeName CONTAINS 'Effect'" or tags IN {'Sampler', 'MIDI'}"
+    // */
+    // - (NSArray<AVAudioUnitComponent *> *)componentsMatchingPredicate:(NSPredicate *)predicate;
+
+    // /*!
+    //  @method componentsPassingTest:
+    //  @abstract	returns an array of AVAudioUnitComponent objects that pass the user provided block method.
+    //  @discussion
+    // 		For each AudioComponent found by the manager, the block method will be called. If the return
+    //  		value is YES then the AudioComponent is added to the resulting array else it will excluded.
+    //  		This gives more control to the block provider to filter out the components returned.
+    // */
+    // - (NSArray<AVAudioUnitComponent *> *)componentsPassingTest:(BOOL(^)(AVAudioUnitComponent *comp, BOOL *stop))testHandler;
+
     pub fn components_passing_test(
         &self,
         test: fn(&AVAudioUnitComponentRef) -> (bool, ShouldStop),
@@ -189,6 +240,16 @@ impl AVAudioUnitComponentManagerRef {
         }
     }
 
+    // #if AVAUDIOUNITCOMPONENT_HAVE_AUDIOCOMPONENT
+    // /*!
+    //  @method componentsMatchingDescription:
+    //  @abstract	returns an array of AVAudioUnitComponent objects that match the description.
+    //  @discussion
+    //  		This method provides a mechanism to search for AudioComponents using AudioComponentDescription
+    // 		structure. The type, subtype and manufacturer fields are used to search for audio units. A
+    //  		value of 0 for any of these fields is a wildcard and returns the first match found.
+    // */
+    // - (NSArray<AVAudioUnitComponent *> *)componentsMatchingDescription:(AudioComponentDescription)desc;
     pub fn components_matching_description(
         &self,
         desc: AudioComponentDescription,

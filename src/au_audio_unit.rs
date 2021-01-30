@@ -482,9 +482,7 @@ foreign_obj_type! {
     pub struct AUAudioUnitRef;
 }
 
-impl AUAudioUnitRef {
-    // @interface AUAudioUnit : NSObject
-
+impl AUAudioUnit {
     // - (instancetype)init NS_UNAVAILABLE;
 
     // /*!	@method		initWithComponentDescription:options:error:
@@ -523,6 +521,10 @@ impl AUAudioUnitRef {
     // 		this can deadlock.
     // */
     // + (void)instantiateWithComponentDescription:(AudioComponentDescription)componentDescription options:(AudioComponentInstantiationOptions)options completionHandler:(void (^)(AUAudioUnit * __nullable audioUnit, NSError * __nullable error))completionHandler;
+}
+
+impl AUAudioUnitRef {
+    // @interface AUAudioUnit : NSObject
 
     // /*!	@property	componentDescription
     // 	@brief		The AudioComponentDescription with which the audio unit was created.
@@ -759,8 +761,8 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_MaximumFramesPerSlice.
     // */
     // @property (NS_NONATOMIC_IOSONLY) AUAudioFrameCount maximumFramesToRender;
-    pub fn maximum_frames_to_render(&self) -> ! {
-        todo!()
+    pub fn maximum_frames_to_render(&self) -> AUAudioFrameCount {
+        unsafe { msg_send![self, maximumFramesToRender] }
     }
 
     // /*!	@property	parameterTree
@@ -910,8 +912,24 @@ impl AUAudioUnitRef {
     //  		This is bridged to the v2 API property kAudioUnitProperty_MIDIOutputCallback.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUMIDIOutputEventBlock MIDIOutputEventBlock API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
-    pub fn midi_output_event_block(&self) -> ! {
+    pub fn midi_output_event_block(&self) -> Option<&AUMIDIOutputEventBlock> {
+        unsafe {
+            let ptr: *const AUMIDIOutputEventBlock = msg_send![self, MIDIOutputEventBlock];
+            if ptr.is_null() {
+                None
+            } else {
+                ptr.as_ref()
+            }
+        }
+    }
+
+    pub fn set_midi_output_event_block(&self, block: Option<&AUMIDIOutputEventBlock>) {
         todo!()
+        // let block = if let Some(block) = block {
+        //     block.as_ptr()
+        // } else {
+        //     nil
+        // };
     }
 
     // /*!	@property	fullState

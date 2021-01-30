@@ -17,3 +17,6 @@ sequencer.load_from_url(path, );
 
 # parameter automation
 * AUParameterAutomationEvent
+
+# MIDIOutputEventBlock
+# AUScheduleParameterBlock
