@@ -1,6 +1,9 @@
 use crate::{
     AVAudioFormatRef,
+    AVAudioFrameCount,
     AVAudioFramePosition,
+    AVAudioPCMBufferRef,
+    NSError,
 };
 ///    @class AVAudioFile
 ///    @abstract
@@ -104,6 +107,10 @@ impl AVAudioFileRef {
     //         return, the buffer's length indicates the number of sample frames successfully read.
     // */
     // - (BOOL)readIntoBuffer:(AVAudioPCMBuffer *)buffer error:(NSError **)outError;
+    #[must_use]
+    pub fn read_into_buffer(&self, buffer: &AVAudioPCMBufferRef) -> Result<(), NSError> {
+        todo!()
+    }
 
     // /*! @method readIntoBuffer:frameCount:error:
     //     @abstract Read a portion of a buffer.
@@ -121,6 +128,15 @@ impl AVAudioFileRef {
     // */
     // - (BOOL)readIntoBuffer:(AVAudioPCMBuffer *)buffer frameCount:(AVAudioFrameCount)frames error:(NSError **)outError;
 
+    #[must_use]
+    pub fn read_frames_into_buffer(
+        &self,
+        buffer: &AVAudioPCMBufferRef,
+        frame_count: AVAudioFrameCount,
+    ) -> Result<(), NSError> {
+        todo!()
+    }
+
     // /*! @method writeFromBuffer:error:
     //     @abstract Write a buffer.
     //     @param buffer
@@ -134,6 +150,11 @@ impl AVAudioFileRef {
     //         Writes sequentially. The buffer's frameLength signifies how much of the buffer is to be written.
     // */
     // - (BOOL)writeFromBuffer:(const AVAudioPCMBuffer *)buffer error:(NSError **)outError;
+
+    #[must_use]
+    pub fn write_from_buffer(&self, buffer: &AVAudioPCMBufferRef) -> Result<(), NSError> {
+        todo!()
+    }
 
     // /*!    @property url
     //     @abstract The URL the file is reading or writing.

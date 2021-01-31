@@ -139,11 +139,12 @@ impl AVAudioSequencerRef {
     //         - pass in zero to use default - this will be the value that is currently set on the tempo track
     // */
     // - (BOOL)writeToURL:(NSURL *)fileURL SMPTEResolution:(NSInteger)resolution replaceExisting:(BOOL)replace error:(NSError **)outError;
+    #[must_use]
     pub fn write_to_url(
         &self,
         url: std::path::PathBuf,
         options: AVMusicSequenceLoadOptions,
-    ) -> bool {
+    ) -> Result<(), NSError> {
         todo!()
         // let url = crate::path_to_url(url);
         // unsafe {
@@ -162,6 +163,10 @@ impl AVAudioSequencerRef {
     //         The returned NSData lifetime is controlled by the client.
     // */
     // - (NSData *)dataWithSMPTEResolution:(NSInteger)SMPTEResolution error:(NSError **)outError;
+    #[must_use]
+    pub fn data_with_smpte_resolution(&self) -> Result<(), NSError> {
+        todo!()
+    }
 
     // /*!    @method secondsForBeats:
     //     @abstract Get the time in seconds for the given beat position (timestamp) in the track

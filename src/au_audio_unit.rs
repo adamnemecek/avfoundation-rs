@@ -1643,6 +1643,14 @@ impl AUAudioUnitRef {
     // 		Returned in the event of failure.
     // */
     // - (BOOL)startHardwareAndReturnError:(NSError **)outError;
+    #[must_use]
+    pub fn start_hardware(&self) -> Result<(), NSError> {
+        unsafe {
+            try_bool_objc! { err =>
+                msg_send![self, startHardwareAndReturnError: &mut err]
+            }
+        }
+    }
 
     // /*!	@method		stopHardware
     // 	@brief		Stops the audio hardware.
@@ -1763,19 +1771,23 @@ impl AUAudioUnitBusArrayRef {
     //         }
     //     }
     // }
-    pub fn set_bus_count(&self, count: NSUInteger, error: Option<&NSErrorRef>) -> bool {
+    #[must_use]
+    pub fn set_bus_count(&self, count: NSUInteger) -> Result<(), NSError> {
         unsafe {
-            let mut err: *mut NSError = std::ptr::null_mut();
-            // msg_send![self, countChangeable: count error: &mut err];
-            // if !err.is_null() {
-
-            // }
-
-            match msg_send![self, countChangeable: count error: &mut err] {
-                YES => true,
-                NO => false,
-            }
+            try_objc! { err => msg_send![self, setBusCount: count error: &mut err] }
         }
+        // unsafe {
+        //     let mut err: *mut NSError = std::ptr::null_mut();
+        //     // msg_send![self, countChangeable: count error: &mut err];
+        //     // if !err.is_null() {
+
+        //     // }
+
+        //     match msg_send![self, countChangeable: count error: &mut err] {
+        //         YES => true,
+        //         NO => false,
+        //     }
+        // }
     }
 
     // /*!	@method		addObserverToAllBusses:forKeyPath:options:context:
