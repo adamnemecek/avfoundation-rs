@@ -522,9 +522,7 @@ impl AVAudioEngineRef {
     ///    @abstract
     ///        The engine's running state.
     pub fn is_running(&self) -> bool {
-        unsafe {
-            msg_send![self, isRunning]
-        }
+        unsafe { msg_send![self, isRunning] }
     }
 
     // /*! @property autoShutdownEnabled
@@ -548,9 +546,7 @@ impl AVAudioEngineRef {
     // */
     // open var isAutoShutdownEnabled: Bool
     pub fn is_auto_shutdown_enabled(&self) -> bool {
-        unsafe {
-            msg_send![self, isAutoShutdownEnabled]
-        }
+        unsafe { msg_send![self, isAutoShutdownEnabled] }
     }
 
     pub fn set_auto_shutdown_enabled(&self, value: bool) {
@@ -721,9 +717,7 @@ impl AVAudioEngineRef {
     // @available(OSX 10.13, *)
     // open var isInManualRenderingMode: Bool { get }
     pub fn is_in_manual_rendering_mode(&self) -> bool {
-        unsafe {
-            msg_send![self, isInManualRenderingMode]
-        }
+        unsafe { msg_send![self, isInManualRenderingMode] }
     }
 
     // @available(OSX 10.13, *)
@@ -736,9 +730,7 @@ impl AVAudioEngineRef {
     // 	i.e. when `isInManualRenderingMode` returns true.
     // */
     pub fn manual_rendering_mode(&self) -> bool {
-        unsafe {
-            msg_send![self, manualRenderingMode]
-        }
+        unsafe { msg_send![self, manualRenderingMode] }
     }
 
     // @available(OSX 10.13, *)
@@ -751,9 +743,7 @@ impl AVAudioEngineRef {
     // 	invalid format, with zero sample rate and channel count.
     // */
     pub fn manual_rendering_format(&self) -> bool {
-        unsafe {
-            msg_send![self, manualRenderingFormat]
-        }
+        unsafe { msg_send![self, manualRenderingFormat] }
     }
 
     // @available(OSX 10.13, *)

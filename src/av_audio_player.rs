@@ -53,18 +53,14 @@ impl AVAudioPlayerRef {
     // /* This method starts the audio hardware synchronously (if not already running), and triggers the sound playback which is streamed asynchronously. */
     // - (BOOL)play;
     pub fn play(&self) -> bool {
-        unsafe {
-            msg_send![self, play]
-        }
+        unsafe { msg_send![self, play] }
     }
     //
     // /* This method starts the audio hardware synchronously (if not already running), and triggers the sound playback which is streamed asynchronously at the specified time in the future.
     //  Time is an absolute time based on and greater than deviceCurrentTime. */
     // - (BOOL)playAtTime:(NSTimeInterval)time API_AVAILABLE(macos(10.7), ios(4.0), watchos(2.0), tvos(9.0));
     pub fn play_at_time(&self, time: NSTimeInterval) -> bool {
-        unsafe {
-            msg_send![self, playAtTime: time]
-        }
+        unsafe { msg_send![self, playAtTime: time] }
     }
     //
     // /* Pauses playback, but remains ready to play. */
@@ -123,9 +119,7 @@ impl AVAudioPlayerRef {
     //
     // @property BOOL enableRate API_AVAILABLE(macos(10.8), ios(5.0), watchos(2.0), tvos(9.0)); /* You must set enableRate to YES for the rate property to take effect. You must set this before calling prepareToPlay. */
     pub fn enable_rate(&self) -> bool {
-        unsafe {
-            msg_send![self, enableRate]
-        }
+        unsafe { msg_send![self, enableRate] }
     }
     // @property float rate API_AVAILABLE(macos(10.8), ios(5.0), watchos(2.0), tvos(9.0)); /* See enableRate. The playback rate for the sound. 1.0 is normal, 0.5 is half speed, 2.0 is double speed. */
     pub fn rate(&self) -> bool {

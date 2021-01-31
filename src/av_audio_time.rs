@@ -94,9 +94,7 @@ impl AVAudioTimeRef {
     // */
     // @property (nonatomic, readonly, getter=isHostTimeValid) BOOL hostTimeValid;
     pub fn is_host_time_valid(&self) -> bool {
-        unsafe {
-            msg_send![self, isHostTimeValid]
-        }
+        unsafe { msg_send![self, isHostTimeValid] }
     }
 
     // /*! @property hostTime
@@ -113,9 +111,7 @@ impl AVAudioTimeRef {
     // @property (nonatomic, readonly, getter=isSampleTimeValid) BOOL sampleTimeValid;
 
     pub fn is_sample_time_valid(&self) -> bool {
-        unsafe {
-            msg_send![self, isSampleTimeValid]
-        }
+        unsafe { msg_send![self, isSampleTimeValid] }
     }
 
     // /*!	@property sampleTime

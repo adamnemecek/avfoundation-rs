@@ -19,15 +19,11 @@ impl AVAudioRecorder {}
 
 impl AVAudioRecorderRef {
     pub fn prepare_to_record(&self) -> bool {
-        unsafe {
-            msg_send![self, prepareToRecord]
-        }
+        unsafe { msg_send![self, prepareToRecord] }
     }
 
     pub fn record(&self) -> bool {
-        unsafe {
-            msg_send![self, record]
-        }
+        unsafe { msg_send![self, record] }
     }
 
     // recordattime
@@ -43,15 +39,11 @@ impl AVAudioRecorderRef {
     }
 
     pub fn delete_recording(&self) -> bool {
-        unsafe {
-            msg_send![self, deleteRecording]
-        }
+        unsafe { msg_send![self, deleteRecording] }
     }
 
     pub fn is_recoring(&self) -> bool {
-        unsafe {
-            msg_send![self, isRecording]
-        }
+        unsafe { msg_send![self, isRecording] }
     }
 
     // url

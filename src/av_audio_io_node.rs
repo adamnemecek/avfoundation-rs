@@ -98,9 +98,7 @@ impl AVAudioInputNodeRef {
         format: &AVAudioFormatRef,
         input_block: AVAudioIONodeInputBlock,
     ) -> bool {
-        unsafe {
-            msg_send![self, setManualRenderingInputPCMFormat: format inputBlock: input_block]
-        }
+        unsafe { msg_send![self, setManualRenderingInputPCMFormat: format inputBlock: input_block] }
     }
 
     // /*! @property voiceProcessingBypassed
@@ -111,9 +109,7 @@ impl AVAudioInputNodeRef {
     //  */
     // @property (nonatomic, getter=isVoiceProcessingBypassed) BOOL voiceProcessingBypassed API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
     pub fn is_voice_processing_bypassed(&self) -> bool {
-        unsafe {
-            msg_send![self, isVoiceProcessingBypassed]
-        }
+        unsafe { msg_send![self, isVoiceProcessingBypassed] }
     }
 
     pub fn set_voice_processing_bypassed(&self, value: bool) {

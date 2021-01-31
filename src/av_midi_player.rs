@@ -151,9 +151,7 @@ impl AVMIDIPlayerRef {
     //  */
     // @property(nonatomic, readonly, getter=isPlaying) BOOL playing;
     pub fn is_playing(&self) -> bool {
-        unsafe {
-            msg_send![self, isPlaying]
-        }
+        unsafe { msg_send![self, isPlaying] }
     }
 
     // /*! @property rate

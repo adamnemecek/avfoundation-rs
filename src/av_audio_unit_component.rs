@@ -105,21 +105,15 @@ impl AVAudioUnitComponentRef {
     }
 
     pub fn has_midi_output(&self) -> bool {
-        unsafe {
-            msg_send![self, hasMIDIOutput]
-        }
+        unsafe { msg_send![self, hasMIDIOutput] }
     }
 
     pub fn has_midi_input(&self) -> bool {
-        unsafe {
-            msg_send![self, hasMIDIInput]
-        }
+        unsafe { msg_send![self, hasMIDIInput] }
     }
 
     pub fn has_custom_view(&self) -> bool {
-        unsafe {
-            msg_send![self, hasCustomView]
-        }
+        unsafe { msg_send![self, hasCustomView] }
     }
 }
 

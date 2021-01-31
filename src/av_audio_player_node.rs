@@ -336,8 +336,6 @@ impl AVAudioPlayerNodeRef {
     ///    @property playing
     ///    @abstract Indicates whether or not the player is playing.
     pub fn is_playing(&self) -> bool {
-        unsafe {
-            msg_send![self, isPlaying]
-        }
+        unsafe { msg_send![self, isPlaying] }
     }
 }

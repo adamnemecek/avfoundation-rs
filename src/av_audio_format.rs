@@ -121,9 +121,7 @@ impl AVAudioFormat {
 
 impl AVAudioFormatRef {
     pub fn is_standard(&self) -> bool {
-        unsafe {
-            msg_send![self, isStandard]
-        }
+        unsafe { msg_send![self, isStandard] }
     }
 
     pub fn common_format(&self) -> AudioCommonFormat {
@@ -139,9 +137,7 @@ impl AVAudioFormatRef {
     }
 
     pub fn is_interleaved(&self) -> bool {
-        unsafe {
-            msg_send![self, isInterleaved]
-        }
+        unsafe { msg_send![self, isInterleaved] }
     }
 
     // pub fn stream_description: UnsafePointer<AudioStreamBasicDescription> { get } {

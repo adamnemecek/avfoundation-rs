@@ -264,9 +264,7 @@ impl AVAudioSequencerRef {
     // @property(nonatomic, readonly, getter=isPlaying) BOOL playing;
 
     pub fn is_playing(&self) -> bool {
-        unsafe {
-            msg_send![self, isPlaying]
-        }
+        unsafe { msg_send![self, isPlaying] }
     }
 
     // /*! @property rate
@@ -291,7 +289,11 @@ impl AVAudioSequencerRef {
     // - (UInt64)hostTimeForBeats:(AVMusicTimeStamp)inBeats error:(NSError **)outError;
     #[must_use]
     pub fn host_time_for_beats(&self, beats: AVMusicTimeStamp) -> Result<u64, NSError> {
-        todo!()
+        unsafe {
+            try_objc! { err =>
+                msg_send![self, hostTimeForBeats: beats error: &mut err]
+            }
+        }
     }
 
     // /*!	@method beatsForHostTime:error:
@@ -305,7 +307,11 @@ impl AVAudioSequencerRef {
     // - (AVMusicTimeStamp)beatsForHostTime:(UInt64)inHostTime error:(NSError **)outError;
     #[must_use]
     pub fn beats_for_host_time(&self, host_time: u64) -> Result<AVMusicTimeStamp, NSError> {
-        todo!()
+        unsafe {
+            try_objc! { err =>
+                msg_send![self, beatsForHostTime: host_time error: &mut err]
+            }
+        }
     }
 
     // /*! @method prepareToPlay
@@ -465,9 +471,7 @@ impl AVMusicTrackRef {
     // */
     // @property (nonatomic,getter=isMuted) BOOL muted;
     pub fn is_muted(&self) -> bool {
-        unsafe {
-            msg_send![self, isMuted]
-        }
+        unsafe { msg_send![self, isMuted] }
     }
 
     pub fn set_is_muted(&self, v: bool) {
@@ -481,9 +485,7 @@ impl AVMusicTrackRef {
     // @property (nonatomic,getter=isSoloed) BOOL soloed;
 
     pub fn is_soloed(&self) -> bool {
-        unsafe {
-            msg_send![self, isSoloed]
-        }
+        unsafe { msg_send![self, isSoloed] }
     }
 
     pub fn set_soloed(&self, v: bool) {
