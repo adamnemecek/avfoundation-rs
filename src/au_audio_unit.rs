@@ -1265,10 +1265,7 @@ impl AUAudioUnitRef {
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL canProcessInPlace;
     pub fn can_process_in_place(&self) -> bool {
         unsafe {
-            match msg_send![self, canProcessInPlace] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, canProcessInPlace]
         }
     }
 
@@ -1531,10 +1528,7 @@ impl AUAudioUnitRef {
     // @property (nonatomic, readonly) BOOL canPerformOutput;
     pub fn can_perform_output(&self) -> bool {
         unsafe {
-            match msg_send![self, canPerformOutput] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, canPerformOutput]
         }
     }
 
@@ -1546,10 +1540,7 @@ impl AUAudioUnitRef {
     // @property (nonatomic, getter=isInputEnabled) BOOL inputEnabled;
     pub fn is_input_enabled(&self) -> bool {
         unsafe {
-            match msg_send![self, isInputEnabled] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isInputEnabled]
         }
     }
 
@@ -1565,10 +1556,7 @@ impl AUAudioUnitRef {
     // @property (nonatomic, getter=isOutputEnabled) BOOL outputEnabled;
     pub fn is_output_enabled(&self) -> bool {
         unsafe {
-            match msg_send![self, isOutputEnabled] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isOutputEnabled]
         }
     }
 
@@ -1636,6 +1624,7 @@ impl AUAudioUnitRef {
     // 	@brief		The audio device's running state.
     // */
     // @property (nonatomic, readonly, getter=isRunning) BOOL running API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+
 
     // /*!	@method		startHardwareAndReturnError:
     // 	@brief		Starts the audio hardware.

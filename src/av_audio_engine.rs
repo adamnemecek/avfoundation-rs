@@ -523,10 +523,7 @@ impl AVAudioEngineRef {
     ///        The engine's running state.
     pub fn is_running(&self) -> bool {
         unsafe {
-            match msg_send![self, isRunning] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isRunning]
         }
     }
 

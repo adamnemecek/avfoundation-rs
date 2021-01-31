@@ -159,6 +159,15 @@ macro_rules! try_objc {
     };
 }
 
+// macro_rules! get_bool {
+//     ($body: expr) => {
+//         match $body {
+//             cocoa_foundation::base::YES => true,
+//             cocoa_foundation::base::NO => false,
+//         }
+//     }
+// }
+
 // macro_rules! to_nil {
 //     { $ref: ident => $body:expr } => {
 //         use cocoa_foundation::base::nil;
