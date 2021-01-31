@@ -670,16 +670,22 @@ impl AVAudioEngineRef {
         buffer: &AVAudioPCMBufferRef,
     ) -> Result<AVAudioEngineManualRenderingStatus, NSError> {
         unsafe {
-            let mut err: *mut NSError = std::ptr::null_mut();
+            // let mut err: *mut NSError = std::ptr::null_mut();
 
-            let res: AVAudioEngineManualRenderingStatus =
-                msg_send![self, renderOffline: number_of_frames toBuffer: buffer error: &mut err];
-            if err.is_null() {
-                Ok(res)
-            } else {
-                let e = err.as_ref().unwrap();
-                Err(e.to_owned())
-            }
+            // let res: AVAudioEngineManualRenderingStatus =
+            //     msg_send![self, renderOffline: number_of_frames toBuffer: buffer error: &mut err];
+            // if err.is_null() {
+            //     Ok(res)
+            // } else {
+            //     let e = err.as_ref().unwrap();
+            //     Err(e.to_owned())
+            // }
+            todo!()
+            // try_objc! { err =>
+
+                
+                
+            // }
         }
     }
 
