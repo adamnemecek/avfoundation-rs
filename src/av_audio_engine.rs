@@ -549,10 +549,7 @@ impl AVAudioEngineRef {
     // open var isAutoShutdownEnabled: Bool
     pub fn is_auto_shutdown_enabled(&self) -> bool {
         unsafe {
-            match msg_send![self, isAutoShutdownEnabled] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isAutoShutdownEnabled]
         }
     }
 

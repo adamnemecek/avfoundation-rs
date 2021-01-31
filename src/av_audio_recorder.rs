@@ -44,10 +44,7 @@ impl AVAudioRecorderRef {
 
     pub fn delete_recording(&self) -> bool {
         unsafe {
-            match msg_send![self, deleteRecording] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, deleteRecording]
         }
     }
 

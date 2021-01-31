@@ -265,10 +265,7 @@ impl AVAudioSequencerRef {
 
     pub fn is_playing(&self) -> bool {
         unsafe {
-            match msg_send![self, isPlaying] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isPlaying]
         }
     }
 
@@ -469,10 +466,7 @@ impl AVMusicTrackRef {
     // @property (nonatomic,getter=isMuted) BOOL muted;
     pub fn is_muted(&self) -> bool {
         unsafe {
-            match msg_send![self, isMuted] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isMuted]
         }
     }
 
@@ -488,10 +482,7 @@ impl AVMusicTrackRef {
 
     pub fn is_soloed(&self) -> bool {
         unsafe {
-            match msg_send![self, isSoloed] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isSoloed]
         }
     }
 

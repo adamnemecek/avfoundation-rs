@@ -1268,10 +1268,7 @@ impl AUAudioUnitRef {
     // @property (NS_NONATOMIC_IOSONLY, getter=isRenderingOffline) BOOL renderingOffline;
     pub fn is_rendering_offline(&self) -> bool {
         unsafe {
-            match msg_send![self, isRenderingOffline] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isRenderingOffline]
         }
     }
 

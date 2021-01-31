@@ -124,10 +124,7 @@ impl AVAudioPlayerRef {
     // @property BOOL enableRate API_AVAILABLE(macos(10.8), ios(5.0), watchos(2.0), tvos(9.0)); /* You must set enableRate to YES for the rate property to take effect. You must set this before calling prepareToPlay. */
     pub fn enable_rate(&self) -> bool {
         unsafe {
-            match msg_send![self, enableRate] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, enableRate]
         }
     }
     // @property float rate API_AVAILABLE(macos(10.8), ios(5.0), watchos(2.0), tvos(9.0)); /* See enableRate. The playback rate for the sound. 1.0 is normal, 0.5 is half speed, 2.0 is double speed. */

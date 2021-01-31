@@ -337,10 +337,7 @@ impl AVAudioPlayerNodeRef {
     ///    @abstract Indicates whether or not the player is playing.
     pub fn is_playing(&self) -> bool {
         unsafe {
-            match msg_send![self, isPlaying] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isPlaying]
         }
     }
 }

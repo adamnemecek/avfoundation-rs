@@ -95,10 +95,7 @@ impl AVAudioTimeRef {
     // @property (nonatomic, readonly, getter=isHostTimeValid) BOOL hostTimeValid;
     pub fn is_host_time_valid(&self) -> bool {
         unsafe {
-            match msg_send![self, isHostTimeValid] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isHostTimeValid]
         }
     }
 
@@ -117,10 +114,7 @@ impl AVAudioTimeRef {
 
     pub fn is_sample_time_valid(&self) -> bool {
         unsafe {
-            match msg_send![self, isSampleTimeValid] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isSampleTimeValid]
         }
     }
 
