@@ -159,6 +159,18 @@ macro_rules! try_objc {
     };
 }
 
+// macro_rules! to_nil {
+//     { $ref: ident => $body:expr } => {
+//         use cocoa_foundation::base::nil;
+//         if $ref.is_none() {
+//             let $ref
+//         } else {
+
+//         }
+
+//     }
+// }
+
 // some functions have the following signature
 // -(bool)method:(Arg)arg error:(NSError**)error;
 macro_rules! try_bool_objc {

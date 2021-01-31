@@ -274,6 +274,11 @@ impl AVAudioEngineRef {
         unsafe {
             let _: () = msg_send![self, connect: node1 to: node2 format: nil];
         }
+        // unsafe {
+        //     to_nil! { format => {
+        //         msg_send![self, connect: node1 to: node2 format: nil]
+        //     }};
+        // }
     }
 
     ///    @method connect:toConnectionPoints:fromBus:format:
@@ -349,13 +354,15 @@ impl AVAudioEngineRef {
     }
 
     // throws
-    pub fn start_and_return_error(&self) -> bool {
-        use cocoa_foundation::base::nil;
+    pub fn start(&self) -> Result<(), NSError> {
         unsafe {
-            let mut error = nil;
-            match msg_send![self, startAndReturnError: &error] {
-                YES => true,
-                NO => false,
+            // let mut error = nil;
+            // match msg_send![self, startAndReturnError: &error] {
+            //     YES => true,
+            //     NO => false,
+            // }
+            try_bool_objc! { err => 
+                msg_send![self, startAndReturnError: &mut err]
             }
         }
     }
