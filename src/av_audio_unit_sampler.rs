@@ -77,26 +77,35 @@ impl AVAudioUnitSamplerRef {
         program: u8,
         bank_msb: u8,
         bank_lsb: u8,
-    ) -> Result<bool, NSError> {
+    ) -> Result<(), NSError> {
         let url = crate::path_to_url(bank_url);
 
         unsafe {
-            let mut err: *mut NSErrorRef = std::ptr::null_mut();
-            let res = match msg_send![self,
-               loadSoundBankInstrumentAtURL: url
-               program: program
-               bankMSB: bank_msb
-               bankLSB: bank_lsb
-               error: &mut err
-            ] {
-                YES => true,
-                NO => false,
-            };
-            if err.is_null() {
-                Ok(res)
-            } else {
-                let e = err.as_ref().unwrap();
-                Err(e.to_owned())
+            // let mut err: *mut NSErrorRef = std::ptr::null_mut();
+            // let res = match msg_send![self,
+            //    loadSoundBankInstrumentAtURL: url
+            //    program: program
+            //    bankMSB: bank_msb
+            //    bankLSB: bank_lsb
+            //    error: &mut err
+            // ] {
+            //     YES => true,
+            //     NO => false,
+            // };
+            // if err.is_null() {
+            //     Ok(()))
+            // } else {
+            //     let e = err.as_ref().unwrap();
+            //     Err(e.to_owned())
+            // }
+            try_bool_objc! { err =>
+                msg_send![self,
+                   loadSoundBankInstrumentAtURL: url
+                   program: program
+                   bankMSB: bank_msb
+                   bankLSB: bank_lsb
+                   error: &mut err
+                ]
             }
         }
     }
