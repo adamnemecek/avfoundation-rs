@@ -72,21 +72,24 @@ impl AVAudioSequencerRef {
         &self,
         url: std::path::PathBuf,
         options: AVMusicSequenceLoadOptions,
-    ) -> Result<bool, NSError> {
+    ) -> Result<(), NSError> {
         let url = crate::path_to_url(url);
         unsafe {
-            let mut err: *mut NSErrorRef = std::ptr::null_mut();
-            let res = match msg_send![self, loadFromURL: url options: options error: &mut err] {
-                YES => true,
-                NO => false,
-            };
-
-            if err.is_null() {
-                Ok(res)
-            } else {
-                let e = err.as_ref().unwrap();
-                Err(e.to_owned())
+            try_bool_objc! { err => 
+                msg_send![self, loadFromURL: url options: options error: &mut err]
             }
+            // let mut err: *mut NSErrorRef = std::ptr::null_mut();
+            // let res = match msg_send![self, loadFromURL: url options: options error: &mut err] {
+            //     YES => true,
+            //     NO => false,
+            // };
+
+            // if err.is_null() {
+            //     Ok(res)
+            // } else {
+            //     let e = err.as_ref().unwrap();
+            //     Err(e.to_owned())
+            // }
         }
     }
 
