@@ -680,12 +680,10 @@ impl AVAudioEngineRef {
             //     let e = err.as_ref().unwrap();
             //     Err(e.to_owned())
             // }
-            todo!()
-            // try_objc! { err =>
 
-                
-                
-            // }
+            try_objc! { err =>
+                msg_send![self, renderOffline: number_of_frames toBuffer: buffer error: &mut err]
+            }
         }
     }
 

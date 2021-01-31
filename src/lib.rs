@@ -140,19 +140,21 @@ macro_rules! foreign_obj_type {
 // }
 macro_rules! try_objc {
     {
-        $err_name: ident => $body:expr
+        $err: ident => $body:expr
     } => {
         {
-            let mut $err_name: *mut ::objc::runtime::Object = ::std::ptr::null_mut();
+            let mut $err: *mut NSError = ::std::ptr::null_mut();
             let value = $body;
-            if !$err_name.is_null() {
-                let desc: *mut Object = msg_send![$err_name, localizedDescription];
-                let compile_error: *const std::os::raw::c_char = msg_send![desc, UTF8String];
-                let message = CStr::from_ptr(compile_error).to_string_lossy().into_owned();
-                let () = msg_send![$err_name, release];
-                return Err(message);
+            if !$err.is_null() {
+                // let desc: *mut Object = msg_send![$err_name, localizedDescription];
+                // let compile_error: *const std::os::raw::c_char = msg_send![desc, UTF8String];
+                // let message = CStr::from_ptr(compile_error).to_string_lossy().into_owned();
+                // let () = msg_send![$err, release];
+                let e = $err.as_ref().unwrap();
+                return Err(e.to_owned());
+                // return Err($err.as_ref().unwrap());
             }
-            value
+            Ok(value)
         }
     };
 }
