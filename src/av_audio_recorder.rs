@@ -20,19 +20,13 @@ impl AVAudioRecorder {}
 impl AVAudioRecorderRef {
     pub fn prepare_to_record(&self) -> bool {
         unsafe {
-            match msg_send![self, prepareToRecord] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, prepareToRecord]
         }
     }
 
     pub fn record(&self) -> bool {
         unsafe {
-            match msg_send![self, record] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, record]
         }
     }
 
@@ -59,10 +53,7 @@ impl AVAudioRecorderRef {
 
     pub fn is_recoring(&self) -> bool {
         unsafe {
-            match msg_send![self, isRecording] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isRecording]
         }
     }
 

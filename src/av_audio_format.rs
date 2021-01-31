@@ -122,10 +122,7 @@ impl AVAudioFormat {
 impl AVAudioFormatRef {
     pub fn is_standard(&self) -> bool {
         unsafe {
-            match msg_send![self, isStandard] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isStandard]
         }
     }
 
@@ -143,10 +140,7 @@ impl AVAudioFormatRef {
 
     pub fn is_interleaved(&self) -> bool {
         unsafe {
-            match msg_send![self, isInterleaved] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isInterleaved]
         }
     }
 

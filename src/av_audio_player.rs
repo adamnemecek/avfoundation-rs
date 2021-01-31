@@ -54,10 +54,7 @@ impl AVAudioPlayerRef {
     // - (BOOL)play;
     pub fn play(&self) -> bool {
         unsafe {
-            match msg_send![self, play] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, play]
         }
     }
     //
@@ -66,10 +63,7 @@ impl AVAudioPlayerRef {
     // - (BOOL)playAtTime:(NSTimeInterval)time API_AVAILABLE(macos(10.7), ios(4.0), watchos(2.0), tvos(9.0));
     pub fn play_at_time(&self, time: NSTimeInterval) -> bool {
         unsafe {
-            match msg_send![self, playAtTime: time] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, playAtTime: time]
         }
     }
     //

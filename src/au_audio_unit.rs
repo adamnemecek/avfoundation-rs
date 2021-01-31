@@ -643,10 +643,7 @@ impl AUAudioUnitRef {
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL renderResourcesAllocated;
     pub fn render_resources_allocated(&self) -> bool {
         unsafe {
-            match msg_send![self, renderResourcesAllocated] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, renderResourcesAllocated]
         }
     }
 
@@ -897,10 +894,7 @@ impl AUAudioUnitRef {
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL providesUserInterface API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
     pub fn provides_user_interface(&self) -> bool {
         unsafe {
-            match msg_send![self, providesUserInterface] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, providesUserInterface]
         }
     }
 
@@ -1132,10 +1126,7 @@ impl AUAudioUnitRef {
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL supportsUserPresets API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
     pub fn supports_user_presets(&self) -> bool {
         unsafe {
-            match msg_send![self, supportsUserPresets] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, supportsUserPresets]
         }
     }
 
@@ -1158,10 +1149,7 @@ impl AUAudioUnitRef {
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL isLoadedInProcess API_AVAILABLE(macos(10.15)) API_UNAVAILABLE(ios, watchos, tvos);
     pub fn is_loaded_in_process(&self) -> bool {
         unsafe {
-            match msg_send![self, isLoadedInProcess] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isLoadedInProcess]
         }
     }
 
@@ -1236,10 +1224,7 @@ impl AUAudioUnitRef {
     // @property (NS_NONATOMIC_IOSONLY) BOOL shouldBypassEffect;
     pub fn should_bypass_effect(&self) -> bool {
         unsafe {
-            match msg_send![self, shouldBypassEffect] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, shouldBypassEffect]
         }
     }
 
@@ -1375,10 +1360,7 @@ impl AUAudioUnitRef {
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL supportsMPE API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
     pub fn supports_mpe(&self) -> bool {
         unsafe {
-            match msg_send![self, supportsMPE] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, supportsMPE]
         }
     }
 
@@ -1515,10 +1497,7 @@ impl AUAudioUnitRef {
     // @property (nonatomic, readonly) BOOL canPerformInput;
     pub fn can_perform_input(&self) -> bool {
         unsafe {
-            match msg_send![self, canPerformInput] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, canPerformInput]
         }
     }
 
@@ -1731,10 +1710,7 @@ impl AUAudioUnitBusArrayRef {
     // @property (NS_NONATOMIC_IOSONLY, readonly, getter=isCountChangeable) BOOL countChangeable;
     pub fn count_changeable(&self) -> bool {
         unsafe {
-            match msg_send![self, countChangeable] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, countChangeable]
         }
     }
 

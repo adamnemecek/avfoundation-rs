@@ -725,10 +725,7 @@ impl AVAudioEngineRef {
     // open var isInManualRenderingMode: Bool { get }
     pub fn is_in_manual_rendering_mode(&self) -> bool {
         unsafe {
-            match msg_send![self, isInManualRenderingMode] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isInManualRenderingMode]
         }
     }
 
@@ -743,10 +740,7 @@ impl AVAudioEngineRef {
     // */
     pub fn manual_rendering_mode(&self) -> bool {
         unsafe {
-            match msg_send![self, manualRenderingMode] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, manualRenderingMode]
         }
     }
 
@@ -761,10 +755,7 @@ impl AVAudioEngineRef {
     // */
     pub fn manual_rendering_format(&self) -> bool {
         unsafe {
-            match msg_send![self, manualRenderingFormat] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, manualRenderingFormat]
         }
     }
 
