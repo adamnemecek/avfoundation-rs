@@ -354,6 +354,7 @@ impl AVAudioEngineRef {
     }
 
     // throws
+    #[must_use]
     pub fn start(&self) -> Result<(), NSError> {
         unsafe {
             // let mut error = nil;
@@ -361,7 +362,7 @@ impl AVAudioEngineRef {
             //     YES => true,
             //     NO => false,
             // }
-            try_bool_objc! { err => 
+            try_bool_objc! { err =>
                 msg_send![self, startAndReturnError: &mut err]
             }
         }
@@ -671,6 +672,7 @@ impl AVAudioEngineRef {
     // 	(`manualRenderingBlock`) in that mode instead.
     // */
     // - (AVAudioEngineManualRenderingStatus)renderOffline:(AVAudioFrameCount)numberOfFrames toBuffer:(AVAudioPCMBuffer *)buffer error:(NSError **)outError API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0)) __attribute__((swift_error(nonnull_error)));
+    #[must_use]
     pub fn render_offline(
         &self,
         number_of_frames: AVAudioFrameCount,

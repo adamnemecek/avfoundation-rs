@@ -497,6 +497,10 @@ impl AUAudioUnit {
     // 		Returned in the event of failure.
     // */
     // - (nullable instancetype)initWithComponentDescription:(AudioComponentDescription)componentDescription options:(AudioComponentInstantiationOptions)options error:(NSError **)outError NS_DESIGNATED_INITIALIZER;
+    #[must_use]
+    pub fn new_with_component_description() -> Result<Self, NSError> {
+        todo!()
+    }
 
     // /*!	@method		initWithComponentDescription:error:
     // 	@brief		Convenience initializer (omits options).
@@ -1035,7 +1039,8 @@ impl AUAudioUnitRef {
     // 		outError.
     //  */
     // - (BOOL)saveUserPreset:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
-    pub fn save_user_preset(&self) -> ! {
+    #[must_use]
+    pub fn save_user_preset(&self) -> Result<(), NSError> {
         todo!()
     }
 
@@ -1829,7 +1834,8 @@ impl AUAudioUnitBusRef {
     // 		see AUAudioUnit.channelCapabilities.
     // */
     // - (BOOL)setFormat:(AVAudioFormat *)format error:(NSError **)outError;
-    pub fn set_format(&self, format: &AVAudioFormatRef) -> bool {
+    #[must_use]
+    pub fn set_format(&self, format: &AVAudioFormatRef) -> Result<(), NSError> {
         todo!()
     }
 

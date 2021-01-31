@@ -71,6 +71,7 @@ impl AVAudioUnitSamplerRef {
     //  		This method reads from file and allocates memory, so it should not be called on a real time thread.
     //  */
     // - (BOOL)loadSoundBankInstrumentAtURL:(NSURL *)bankURL program:(uint8_t)program bankMSB:(uint8_t)bankMSB bankLSB:(uint8_t)bankLSB error:(NSError **)outError;
+    #[must_use]
     pub fn load_bank_instrument_at_url(
         &self,
         bank_url: std::path::PathBuf,
@@ -127,6 +128,7 @@ impl AVAudioUnitSamplerRef {
     //
     //  */
     // - (BOOL)loadInstrumentAtURL:(NSURL *)instrumentURL error:(NSError **)outError;
+    #[must_use]
     pub fn load_instrument_at_url(
         &self,
         instrument_url: std::path::PathBuf,
@@ -171,7 +173,8 @@ impl AVAudioUnitSamplerRef {
     //  */
     // - (BOOL)loadAudioFilesAtURLs:(NSArray<NSURL *> *)audioFiles error:(NSError **)outError;
     //
-    pub fn load_audio_files_at_url(&self) -> bool {
+    #[must_use]
+    pub fn load_audio_files_at_url(&self) -> Result<(), NSError> {
         todo!()
     }
     // /*! @property stereoPan

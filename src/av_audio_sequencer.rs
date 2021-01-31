@@ -75,7 +75,7 @@ impl AVAudioSequencerRef {
     ) -> Result<(), NSError> {
         let url = crate::path_to_url(url);
         unsafe {
-            try_bool_objc! { err => 
+            try_bool_objc! { err =>
                 msg_send![self, loadFromURL: url options: options error: &mut err]
             }
             // let mut err: *mut NSErrorRef = std::ptr::null_mut();
@@ -103,7 +103,12 @@ impl AVAudioSequencerRef {
     //         on exit, if an error occurs, a description of the error
     // */
     // - (BOOL)loadFromData:(NSData *)data options:(AVMusicSequenceLoadOptions)options error:(NSError **)outError;
-    pub fn load_from_data(&self, data: &[u8], options: AVMusicSequenceLoadOptions) -> bool {
+    #[must_use]
+    pub fn load_from_data(
+        &self,
+        data: &[u8],
+        options: AVMusicSequenceLoadOptions,
+    ) -> Result<(), NSError> {
         todo!()
         // let url = crate::path_to_url(url);
         // unsafe {
@@ -282,6 +287,10 @@ impl AVAudioSequencerRef {
     // 		time from the starting time and beat of the player.
     // */
     // - (UInt64)hostTimeForBeats:(AVMusicTimeStamp)inBeats error:(NSError **)outError;
+    #[must_use]
+    pub fn host_time_for_beats(&self, beats: AVMusicTimeStamp) -> Result<u64, NSError> {
+        todo!()
+    }
 
     // /*!	@method beatsForHostTime:error:
     // 	@abstract Returns the beat that will be (or was) played at the specified host time.
@@ -292,6 +301,10 @@ impl AVAudioSequencerRef {
     // 		and specified host time.
     // */
     // - (AVMusicTimeStamp)beatsForHostTime:(UInt64)inHostTime error:(NSError **)outError;
+    #[must_use]
+    pub fn beats_for_host_time(&self, host_time: u64) -> Result<AVMusicTimeStamp, NSError> {
+        todo!()
+    }
 
     // /*! @method prepareToPlay
     // 	@abstract Get ready to play the sequence by prerolling all events
@@ -315,6 +328,10 @@ impl AVAudioSequencerRef {
     // 		play if the audio engine is running.
     // */
     // - (BOOL)startAndReturnError:(NSError **)outError;
+    #[must_use]
+    pub fn start(&self) -> Result<(), NSError> {
+        todo!()
+    }
 
     // /*!	@method	stop
     // 	@abstract	Stop the sequencer's player

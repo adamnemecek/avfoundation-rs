@@ -7,7 +7,10 @@ use objc::runtime::{
     YES,
 }; //, BOOL, NO, SEL, nil};
    // use cocoa_foundation::foundation::NSURL;
-use crate::NSTimeInterval;
+use crate::{
+    NSError,
+    NSTimeInterval,
+};
 
 pub(crate) fn path_to_url(path: std::path::PathBuf) -> id {
     use cocoa_foundation::foundation::{
@@ -38,6 +41,7 @@ impl AVMIDIPlayer {
     // */
     // - (nullable instancetype)initWithContentsOfURL:(NSURL *)inURL soundBankURL:(NSURL * __nullable)bankURL error:(NSError **)outError;
 
+    // todo: result<Self, NSError>
     pub fn with_url(path: std::path::PathBuf, bank: std::path::PathBuf) -> Self {
         use objc::runtime::Object;
 
@@ -74,7 +78,8 @@ impl AVMIDIPlayer {
     //  */
     // - (nullable instancetype)initWithData:(NSData *)data soundBankURL:(NSURL * __nullable)bankURL error:(NSError **)outError;
 
-    pub fn with_data(data: &[u8], bank: std::path::PathBuf) -> Self {
+    #[must_use]
+    pub fn with_data(data: &[u8], bank: std::path::PathBuf) -> Result<Self, NSError> {
         // use cocoa_foundation::
         // core_foundation::URL::new();
         todo!();

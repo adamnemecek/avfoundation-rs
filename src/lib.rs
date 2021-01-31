@@ -129,7 +129,7 @@ macro_rules! foreign_obj_type {
     };
 }
 
-/// from metal rs
+/// from metal-rs
 // pub fn start_capture(&self, descriptor: &CaptureDescriptorRef) -> Result<(), String> {
 //     unsafe {
 //         try_objc! { err =>
@@ -171,8 +171,9 @@ macro_rules! try_objc {
 //     }
 // }
 
-// some functions have the following signature
-// -(bool)method:(Arg)arg error:(NSError**)error;
+/// some functions have the following signature
+/// -(bool)method:(Arg)arg error:(NSError**)error;
+/// this is a wrapper for those functions
 macro_rules! try_bool_objc {
     {
         $err: ident => $body:expr

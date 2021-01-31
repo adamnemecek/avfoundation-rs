@@ -74,6 +74,10 @@ impl AVAudioUnitRef {
     //         If the .aupreset file cannot be successfully loaded, an error is returned.
     // */
     // - (BOOL)loadAudioUnitPresetAtURL:(NSURL *)url error:(NSError **)outError;
+    #[must_use]
+    pub fn load_audio_preset_at(&self, url: std::path::PathBuf) -> Result<(), NSError> {
+        todo!()
+    }
 
     // /*! @property audioComponentDescription
     //     @abstract AudioComponentDescription of the underlying audio unit.
