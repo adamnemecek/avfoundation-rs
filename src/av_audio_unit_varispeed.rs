@@ -48,9 +48,7 @@ impl AVAudioUnitVarispeedRef {
     //  */
     //  @property (nonatomic) float rate;
     pub fn rate(&self) -> f32 {
-        unsafe {
-            msg_send![self, rate]
-        }
+        unsafe { msg_send![self, rate] }
     }
 
     pub fn set_rate(&self, v: f32) {
