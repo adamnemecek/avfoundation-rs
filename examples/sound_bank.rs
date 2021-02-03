@@ -18,7 +18,7 @@ impl Instrument {
         engine.attach_node(&sampler);
         let output = engine.output_node();
         engine.connect_nodes(&sampler, output, None);
-        engine.start_and_return_error();
+        let _ = engine.start().unwrap();
         let bank = 121;
         let url = std::path::Path::new("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
 

@@ -338,7 +338,11 @@ impl AVAudioSequencerRef {
     // - (BOOL)startAndReturnError:(NSError **)outError;
     #[must_use]
     pub fn start(&self) -> Result<(), NSError> {
-        todo!()
+        unsafe {
+            try_objc! { err =>
+                msg_send![self, startAndReturnError: &mut err]
+            }
+        }
     }
 
     // /*!	@method	stop
