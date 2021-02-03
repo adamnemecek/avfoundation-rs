@@ -376,11 +376,11 @@ impl AVMusicTrackRef {
     // 		destination AU cannot be changed while the track's sequence is playing.
     // */
     // @property (nonatomic, retain, nullable) AVAudioUnit *destinationAudioUnit;
-    pub fn destination_audio_unit(&self) -> &AVAudioUnitRef {
+    pub fn destination_audio_unit(&self) -> Option<&AVAudioUnitRef> {
         unsafe { msg_send![self, destinationAudioUnit] }
     }
 
-    pub fn set_destination_audio_unit(&self, audio_unit: &AVAudioUnitRef) {
+    pub fn set_destination_audio_unit(&self, audio_unit: Option<&AVAudioUnitRef>) {
         unsafe { msg_send![self, setDestinationAudioUnit: audio_unit] }
     }
     //

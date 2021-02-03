@@ -45,11 +45,6 @@ foreign_obj_type! {
 //  - (instancetype)initWithAudioComponentDescription:(AudioComponentDescription)audioComponentDescription;
 //  #endif
 
-//  /*! @property bypass
-//      @abstract bypass state of the audio unit
-//  */
-//  @property (nonatomic) BOOL bypass;
-
 //  @end
 
 //  NS_ASSUME_NONNULL_END
@@ -61,6 +56,11 @@ impl AVAudioUnitTimeEffect {
 }
 
 impl AVAudioUnitTimeEffectRef {
+    //  /*! @property bypass
+    //      @abstract bypass state of the audio unit
+    //  */
+    //  @property (nonatomic) BOOL bypass;
+
     pub fn bypass(&self) -> bool {
         unsafe { msg_send![self, bypass] }
     }
