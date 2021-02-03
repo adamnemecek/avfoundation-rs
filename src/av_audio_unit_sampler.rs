@@ -174,7 +174,7 @@ impl AVAudioUnitSamplerRef {
     // - (BOOL)loadAudioFilesAtURLs:(NSArray<NSURL *> *)audioFiles error:(NSError **)outError;
     //
     #[must_use]
-    pub fn load_audio_files_at_url(&self) -> Result<(), NSError> {
+    pub fn load_audio_files_at_url(&self, paths: &[std::path::PathBuf]) -> Result<(), NSError> {
         todo!()
     }
     // /*! @property stereoPan

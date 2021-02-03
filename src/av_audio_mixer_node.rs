@@ -32,6 +32,10 @@ impl AVAudioMixerNodeRef {
         unsafe { msg_send![self, outputVolume] }
     }
 
+    pub fn set_output_volume(&self, v: f32) {
+        unsafe { msg_send![self, setOutputVolume: v] }
+    }
+
     // /*! @property nextAvailableInputBus
     //     @abstract Find an unused input bus.
     //     @discussion

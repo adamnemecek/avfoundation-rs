@@ -8,6 +8,7 @@ use objc::runtime::{
 };
 
 use crate::{
+    AVAudioFrameCount,
     AVAudioNodeCompletionHandler,
     AVAudioNodeRef,
     AVAudioPCMBufferRef,
@@ -249,6 +250,9 @@ impl AVAudioPlayerNodeRef {
     ///        The number of sample frames of data to be prepared before returning.
     ///
     // - (void)prepareWithFrameCount:(AVAudioFrameCount)frameCount;
+    pub fn prepare_with_frame_count(&self, frame_count: AVAudioFrameCount) {
+        unsafe { msg_send![self, prepareWithFrameCount: frame_count] }
+    }
 
     ///    @method play
     ///    @abstract Start or resume playback immediately.
@@ -317,6 +321,15 @@ impl AVAudioPlayerNodeRef {
     ///        If the player is not playing when this method is called, nil is returned.
     ///
     // - (AVAudioTime * __nullable)nodeTimeForPlayerTime:(AVAudioTime *)playerTime;
+    pub fn node_time_for_player_time(
+        &self,
+        player_time: &AVAudioTimeRef,
+    ) -> Option<&AVAudioTimeRef> {
+        unsafe {
+            let res: *mut AVAudioTimeRef = msg_send![self, nodeTimeForPlayerTime: player_time];
+            res.as_ref()
+        }
+    }
 
     ///    @method playerTimeForNodeTime:
     ///    @abstract
