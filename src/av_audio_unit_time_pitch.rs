@@ -24,6 +24,7 @@ foreign_obj_type! {
     type CType = AVAudioUnitTimePitchFFI;
     pub struct AVAudioUnitTimePitch;
     pub struct AVAudioUnitTimePitchRef;
+    type ParentType = AVAudioUnitTimeEffectRef;
 }
 
 impl AVAudioUnitTimePitchRef {

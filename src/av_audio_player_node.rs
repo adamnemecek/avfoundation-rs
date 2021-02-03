@@ -129,6 +129,9 @@ impl AVAudioPlayerNodeRef {
     ///        Schedules the buffer to be played following any previously scheduled commands.
     ///
     // - (void)scheduleBuffer:(AVAudioPCMBuffer *)buffer completionCallbackType:(AVAudioPlayerNodeCompletionCallbackType)callbackType completionHandler:(AVAudioPlayerNodeCompletionHandler __nullable)completionHandler API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    // pub fn schedule_buffer(&self, buffer: AVAudioPCMBufferRef) {
+
+    // }
 
     /// @method scheduleBuffer:atTime:options:completionHandler:
     ///    @abstract Schedule playing samples from an AVAudioBuffer.
