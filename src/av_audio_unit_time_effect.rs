@@ -16,6 +16,17 @@
 //      unit is an example of a time effect unit.
 
 //  */
+use crate::{AudioComponentDescription, prelude::*};
+
+pub enum AVAudioUnitTimeEffectFFI {}
+
+foreign_obj_type! {
+    type CType = AVAudioUnitTimeEffectFFI;
+    pub struct AVAudioUnitTimeEffect;
+    pub struct AVAudioUnitTimeEffectRef;
+    type ParentType = AVAudioUnitRef;
+
+}
 //  API_AVAILABLE(macos(10.10), ios(8.0), tvos(9.0)) API_UNAVAILABLE(watchos)
 //  @interface AVAudioUnitTimeEffect : AVAudioUnit
 
@@ -39,3 +50,21 @@
 //  @end
 
 //  NS_ASSUME_NONNULL_END
+
+impl AVAudioUnitTimeEffect {
+    pub fn new_with_component_description(desc: AudioComponentDescription) -> Self {
+        todo!()
+    }
+}
+
+impl AVAudioUnitTimeEffectRef {
+    pub fn bypass(&self) -> bool {
+        unsafe { msg_send![self, bypass] }
+    }
+
+    pub fn set_bypass(&self, v: bool) {
+        unsafe {
+            let _: () = msg_send![self, setBypass: v];
+        }
+    }
+}
