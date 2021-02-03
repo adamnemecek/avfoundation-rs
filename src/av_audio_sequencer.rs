@@ -423,10 +423,7 @@ impl AVMusicTrackRef {
     // @property (nonatomic,getter=isLoopingEnabled) BOOL loopingEnabled;
     pub fn is_looping_enabled(&self) -> bool {
         unsafe {
-            match msg_send![self, isLoopingEnabled] {
-                YES => true,
-                NO => false,
-            }
+            msg_send![self, isLoopingEnabled]
         }
     }
 
