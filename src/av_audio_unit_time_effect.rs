@@ -16,7 +16,10 @@
 //      unit is an example of a time effect unit.
 
 //  */
-use crate::{AudioComponentDescription, prelude::*};
+use crate::{
+    prelude::*,
+    AudioComponentDescription,
+};
 
 pub enum AVAudioUnitTimeEffectFFI {}
 
