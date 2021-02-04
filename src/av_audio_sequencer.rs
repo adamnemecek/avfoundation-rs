@@ -78,13 +78,6 @@ impl AVAudioSequencerRef {
             try_bool_objc! { err =>
                 msg_send![self, loadFromURL: url options: options error: &mut err]
             }
-
-            // if err.is_null() {
-            //     Ok(res)
-            // } else {
-            //     let e = err.as_ref().unwrap();
-            //     Err(e.to_owned())
-            // }
         }
     }
 
