@@ -78,11 +78,6 @@ impl AVAudioSequencerRef {
             try_bool_objc! { err =>
                 msg_send![self, loadFromURL: url options: options error: &mut err]
             }
-            // let mut err: *mut NSErrorRef = std::ptr::null_mut();
-            // let res = match msg_send![self, loadFromURL: url options: options error: &mut err] {
-            //     YES => true,
-            //     NO => false,
-            // };
 
             // if err.is_null() {
             //     Ok(res)
@@ -422,9 +417,7 @@ impl AVMusicTrackRef {
     // */
     // @property (nonatomic,getter=isLoopingEnabled) BOOL loopingEnabled;
     pub fn is_looping_enabled(&self) -> bool {
-        unsafe {
-            msg_send![self, isLoopingEnabled]
-        }
+        unsafe { msg_send![self, isLoopingEnabled] }
     }
 
     pub fn set_looping_enabled(&self, v: bool) {
