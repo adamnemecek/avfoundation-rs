@@ -104,15 +104,15 @@ impl AVAudioSequencerRef {
         data: &[u8],
         options: AVMusicSequenceLoadOptions,
     ) -> Result<(), NSError> {
-        todo!()
-        // let url = crate::path_to_url(url);
-        // unsafe {
-        //     match msg_send![self, loadFromURL: url options: options error: nil] {
-        //         YES => true,
-        //         NO => false,
-        //         _ => unreachable!(),
-        //     }
-        // }
+        // todo!()
+        let nsdata = crate::slice_to_nsdata(data);
+        unsafe {
+            try_bool_objc! { err =>
+                msg_send![self, loadFromData: nsdata
+                                     options: options
+                                       error: &mut err]
+            }
+        }
     }
 
     // /*! @method writeToURL:SMPTEResolution:replaceExisting:error:
@@ -138,17 +138,19 @@ impl AVAudioSequencerRef {
     pub fn write_to_url(
         &self,
         url: std::path::PathBuf,
-        options: AVMusicSequenceLoadOptions,
+        resolution: NSInteger,
+        replace_existing: bool,
     ) -> Result<(), NSError> {
-        todo!()
-        // let url = crate::path_to_url(url);
-        // unsafe {
-        //     match msg_send![self, loadFromURL: url options: options error: nil] {
-        //         YES => true,
-        //         NO => false,
-        //         _ => unreachable!(),
-        //     }
-        // }
+
+        let url = crate::path_to_url(url);
+        unsafe {
+            try_bool_objc!{ err =>
+                msg_send![self, writeToURL: url
+                           SMPTEResolution: resolution
+                           replaceExisting: replace_existing
+                                     error: &mut err]
+            }
+        }
     }
 
     // /*!    @method dataWithSMPTEResolution:error:

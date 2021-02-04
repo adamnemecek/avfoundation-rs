@@ -23,6 +23,17 @@ pub(crate) fn path_to_url(path: std::path::PathBuf) -> id {
     }
 }
 
+pub(crate) fn slice_to_nsdata(data: &[u8]) -> id {
+    use cocoa_foundation::foundation::NSData;
+    unsafe {
+        NSData::dataWithBytesNoCopy_length_(
+            nil,
+            data.as_ptr() as *const std::ffi::c_void,
+            data.len() as _,
+        )
+    }
+}
+
 pub enum AVMIDIPlayerFFI {}
 
 foreign_obj_type! {
