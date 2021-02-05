@@ -177,8 +177,33 @@ use cocoa_foundation::foundation::{
 };
 pub struct AudioTimeStamp {}
 
-pub struct AudioUnitRenderActionFlags {
+// pub struct AudioUnitRenderActionFlags {
 
+// }
+
+bitflags! {
+
+    // typedef CF_OPTIONS(UInt32, AudioUnitRenderActionFlags)
+    // {
+    // 	kAudioUnitRenderAction_PreRender			= (1UL << 2),
+    // 	kAudioUnitRenderAction_PostRender			= (1UL << 3),
+    // 	kAudioUnitRenderAction_OutputIsSilence		= (1UL << 4),
+    // 	kAudioOfflineUnitRenderAction_Preflight		= (1UL << 5),
+    // 	kAudioOfflineUnitRenderAction_Render		= (1UL << 6),
+    // 	kAudioOfflineUnitRenderAction_Complete		= (1UL << 7),
+    // 	kAudioUnitRenderAction_PostRenderError		= (1UL << 8),
+    // 	kAudioUnitRenderAction_DoNotCheckRenderArgs	= (1UL << 9)
+    // };
+    pub struct AudioUnitRenderActionFlags: u32 {
+        const PreRender			= (1 << 2);
+        const PostRender			= (1 << 3);
+        const OutputIsSilence		= (1 << 4);
+        const OfflineActionPreflight		= (1 << 5);
+        const OfflineUnitRenderActionRender		= (1 << 6);
+        const OfflineUnitRenderActionComplete		= (1 << 7);
+        const PostRenderError		= (1 << 8);
+        const DoNotCheckRenderArgs	= (1 << 9);
+    }
 }
 pub type AURenderPullInputBlock = block::RcBlock<
     (
@@ -230,7 +255,7 @@ pub type AURenderBlock = block::RcBlock<
         AUAudioFrameCount,
         NSInteger,
         *const AudioBufferList,
-        AURenderPullInputBlock, /* nullable*/
+        Option<AURenderPullInputBlock>, /* nullable*/
     ),
     AUAudioUnitStatus,
 >;
@@ -476,6 +501,7 @@ pub type AUHostTransportStateBlock = block::RcBlock<
 // */
 // API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
 
+pub type AUAudioUnitCompletionHandler = block::RcBlock<(), ()>;
 pub enum AUAudioUnitFFI {}
 
 foreign_obj_type! {
@@ -684,7 +710,7 @@ impl AUAudioUnitRef {
     // 		object every time it is asked for it, since clients can install KVO observers on it.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusArray *inputBusses;
-    pub fn input_busses(&self) -> &AUAudioUnitBusArray {
+    pub fn input_busses(&self) -> &AUAudioUnitBusArrayRef {
         unsafe { msg_send![self, inputBusses] }
     }
 
@@ -753,9 +779,7 @@ impl AUAudioUnitRef {
     // */
     // - (NSInteger)tokenByAddingRenderObserver:(AURenderObserver)observer;
     pub fn token_by_adding_render_observer(&self, observer: AURenderObserver) -> NSInteger {
-        unsafe {
-            msg_send![self, tokenByAddingRenderObserver: observer]
-        }
+        unsafe { msg_send![self, tokenByAddingRenderObserver: observer] }
     }
 
     // /*!	@method		removeRenderObserver:
@@ -768,7 +792,7 @@ impl AUAudioUnitRef {
     // - (void)removeRenderObserver:(NSInteger)token;
     pub fn remove_render_observer(&self, token: NSInteger) {
         unsafe {
-            let _:() = msg_send![self, removeRenderObserver: token];
+            let _: () = msg_send![self, removeRenderObserver: token];
         }
     }
 
