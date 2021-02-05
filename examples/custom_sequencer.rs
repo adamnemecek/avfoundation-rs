@@ -15,6 +15,39 @@ fn run_main_loop() {
     };
 }
 
+pub struct MIDIInstrument {
+    pub inner: AVAudioUnitMIDIInstrument,
+    block: AUScheduleMIDIEventBlock,
+}
+
+impl MIDIInstrument {
+    pub fn new(component: &AVAudioUnitComponentRef) -> Self {
+        let instrument = AVAudioUnitMIDIInstrument::new_with_audio_component_description(
+            component.audio_component_description(),
+        );
+        let block = instrument
+            .au_audio_unit()
+            .schedule_midi_event_block()
+            .unwrap()
+            .clone();
+        Self {
+            inner: instrument,
+            block,
+        }
+    }
+
+    pub fn midi_msg(&self, msg: &[u8]) {
+        unsafe {
+            self.block.call((
+                AUEventSampleTime::immediate(),
+                0,
+                msg.len() as _,
+                msg.as_ptr(),
+            ));
+        }
+    }
+}
+
 fn main() {
     // you need to get the
     let manager = AVAudioUnitComponentManager::shared();
@@ -29,18 +62,35 @@ fn main() {
     // let engine = AVAudioEngine::new();
     println!("components {:?}", components);
 
-    let instrument = AVAudioUnitMIDIInstrument::new_with_audio_component_description(
-        component.audio_component_description(),
-    );
+    // let instrument = AVAudioUnitMIDIInstrument::new_with_audio_component_description(
+    //     component.audio_component_description(),
+    // );
+
+    let instrument = MIDIInstrument::new(component);
 
     let engine = AVAudioEngine::new();
 
-    let midi_block = instrument.au_audio_unit().schedule_midi_event_block();
-    engine.attach_node(&instrument);
+    engine.attach_node(&instrument.inner);
 
     let output = engine.output_node();
-    engine.connect_nodes(&instrument, output, None);
+    engine.connect_nodes(&instrument.inner, output, None);
     let _ = engine.start().unwrap();
 
-    run_main_loop();
+    // instrument.au_audio_unit().token_by_adding_render_observer(observer)
+    // midi_block.call(args)
+        println!("here");
+    // cbytes[0] = 0xB0 // status
+    // cbytes[1] = 60 // note
+    // cbytes[2] = 0 // velocity
+    let msg: [u8; 3] = [0x90, 60, 100];
+    // unsafe {
+    //     midi_block.call((AUEventSampleTime::immediate(), 0, 3, msg.as_ptr()));
+    // }
+    // instrument.midi_msg(msg)
+
+    instrument.midi_msg(&msg);
+
+    std::thread::sleep(std::time::Duration::from_micros(10));
+
+    // run_main_loop();
 }
