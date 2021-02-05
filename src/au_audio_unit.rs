@@ -194,17 +194,19 @@ bitflags! {
     // 	kAudioUnitRenderAction_PostRenderError		= (1UL << 8),
     // 	kAudioUnitRenderAction_DoNotCheckRenderArgs	= (1UL << 9)
     // };
+
     pub struct AudioUnitRenderActionFlags: u32 {
-        const PreRender			= (1 << 2);
-        const PostRender			= (1 << 3);
-        const OutputIsSilence		= (1 << 4);
-        const OfflineActionPreflight		= (1 << 5);
+        const PreRender			                = (1 << 2);
+        const PostRender			            = (1 << 3);
+        const OutputIsSilence		            = (1 << 4);
+        const OfflineActionPreflight		    = (1 << 5);
         const OfflineUnitRenderActionRender		= (1 << 6);
-        const OfflineUnitRenderActionComplete		= (1 << 7);
-        const PostRenderError		= (1 << 8);
-        const DoNotCheckRenderArgs	= (1 << 9);
+        const OfflineUnitRenderActionComplete	= (1 << 7);
+        const PostRenderError		            = (1 << 8);
+        const DoNotCheckRenderArgs	            = (1 << 9);
     }
 }
+
 pub type AURenderPullInputBlock = block::RcBlock<
     (
         AudioUnitRenderActionFlags,
@@ -659,6 +661,7 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitInitialize().
     // */
     // - (BOOL)allocateRenderResourcesAndReturnError:(NSError **)outError;
+    #[must_use]
     pub fn allocate_render_resources(&self) -> Result<(), NSError> {
         unsafe {
             try_bool_objc! { err =>
