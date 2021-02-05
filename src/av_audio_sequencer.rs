@@ -76,7 +76,9 @@ impl AVAudioSequencerRef {
         let url = crate::path_to_url(url);
         unsafe {
             try_bool_objc! { err =>
-                msg_send![self, loadFromURL: url options: options error: &mut err]
+                msg_send![self, loadFromURL: url
+                                    options: options
+                                      error: &mut err]
             }
         }
     }
@@ -134,10 +136,9 @@ impl AVAudioSequencerRef {
         resolution: NSInteger,
         replace_existing: bool,
     ) -> Result<(), NSError> {
-
         let url = crate::path_to_url(url);
         unsafe {
-            try_bool_objc!{ err =>
+            try_bool_objc! { err =>
                 msg_send![self, writeToURL: url
                            SMPTEResolution: resolution
                            replaceExisting: replace_existing

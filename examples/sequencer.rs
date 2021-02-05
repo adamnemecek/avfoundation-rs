@@ -1,4 +1,4 @@
-// #![deny(unused_must_use)]
+#![deny(unused_must_use)]
 
 use avfoundation::{
     AVAudioEngine,

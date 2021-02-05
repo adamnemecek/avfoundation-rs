@@ -177,7 +177,9 @@ use cocoa_foundation::foundation::{
 };
 pub struct AudioTimeStamp {}
 
-pub struct AudioUnitRenderActionFlags {}
+pub struct AudioUnitRenderActionFlags {
+
+}
 pub type AURenderPullInputBlock = block::RcBlock<
     (
         AudioUnitRenderActionFlags,
@@ -500,6 +502,11 @@ impl AUAudioUnit {
     #[must_use]
     pub fn new_with_component_description() -> Result<Self, NSError> {
         todo!()
+        // unsafe {
+        //     // try_objc!{ err =>
+        //         // msg_send![self, ]
+        //     // }
+        // }
     }
 
     // /*!	@method		initWithComponentDescription:error:
@@ -547,6 +554,9 @@ impl AUAudioUnitRef {
 
     pub fn component(&self) -> ! {
         todo!()
+        // unsafe {
+        //     msg_send![self, component]
+        // }
     }
 
     // /*!	@property	componentName
@@ -623,6 +633,13 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitInitialize().
     // */
     // - (BOOL)allocateRenderResourcesAndReturnError:(NSError **)outError;
+    pub fn allocate_render_resources(&self) -> Result<(), NSError> {
+        unsafe {
+            try_bool_objc! { err =>
+                msg_send![self, allocateRenderResourcesAndReturnError: &mut err]
+            }
+        }
+    }
 
     // /*!	@method		deallocateRenderResources
     // 	@brief		Deallocate resources allocated by allocateRenderResourcesAndReturnError:
@@ -735,8 +752,10 @@ impl AUAudioUnitRef {
     // 		A token to be used when removing the observer.
     // */
     // - (NSInteger)tokenByAddingRenderObserver:(AURenderObserver)observer;
-    pub fn token_by_adding_render_observer(&self) -> ! {
-        todo!()
+    pub fn token_by_adding_render_observer(&self, observer: AURenderObserver) -> NSInteger {
+        unsafe {
+            msg_send![self, tokenByAddingRenderObserver: observer]
+        }
     }
 
     // /*!	@method		removeRenderObserver:
@@ -748,7 +767,9 @@ impl AUAudioUnitRef {
     // */
     // - (void)removeRenderObserver:(NSInteger)token;
     pub fn remove_render_observer(&self, token: NSInteger) {
-        todo!()
+        unsafe {
+            let _:() = msg_send![self, removeRenderObserver: token];
+        }
     }
 
     // /*!	@property	maximumFramesToRender
@@ -821,8 +842,8 @@ impl AUAudioUnitRef {
     }
 
     // @property (NS_NONATOMIC_IOSONLY, readonly) BOOL allParameterValues;	/// special pseudo-property for KVO
-    pub fn all_parameter_values(&self) -> ! {
-        todo!()
+    pub fn all_parameter_values(&self) -> bool {
+        unsafe { msg_send![self, allParameterValues] }
     }
 
     // /*!	@property	musicDeviceOrEffect
