@@ -197,10 +197,10 @@ impl AVAudioSequencerRef {
     //          are ignored.
     // */
     // @property (nonatomic, readonly) AVMusicTrack *tempoTrack;
-    pub fn tempo_track(&self) -> Option<&AVMusicTrackRef> {
+    pub fn tempo_track(&self) -> &AVMusicTrackRef {
         unsafe {
-            let ret: *const AVMusicTrackRef = msg_send![self, tempoTrack];
-            ret.as_ref()
+            msg_send![self, tempoTrack]
+            // ret.as_ref()
         }
     }
 

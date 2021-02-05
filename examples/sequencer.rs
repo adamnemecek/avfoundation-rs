@@ -19,8 +19,8 @@ fn main() {
         }
         Err(e) => println!("err {:?}", e.domain()),
     };
-    let tempo = sequencer.tempo_track().unwrap();
-    println!("tempo {:?}", tempo.is_soloed());
+    // let tempo = sequencer.tempo_track().unwrap();
+    // println!("tempo {:?}", tempo.is_soloed());
 
     let tracks = sequencer.tracks();
     for t in tracks {
@@ -30,6 +30,9 @@ fn main() {
         "current_position_in_seconds {:?}",
         sequencer.current_position_in_seconds()
     );
+
+    let resolution = sequencer.tempo_track().time_resolution();
+    println!("time resolution {:?}", resolution);
 
     // println!("player {:?}", player.duration());
     // player.set_rate(1.5);
