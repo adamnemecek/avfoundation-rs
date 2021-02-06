@@ -23,7 +23,7 @@ impl Instrument {
         let url = std::path::Path::new("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
 
         // println!("before load");
-        sampler.load_bank_instrument_at_url(url.to_path_buf(), 100, bank, 0);
+        sampler.load_bank_instrument_at_url(url.to_path_buf(), 100, bank, 0).unwrap();
         println!("after load");
         Self { engine, sampler }
     }
@@ -49,7 +49,7 @@ pub fn sleep(s: u64) {
 
 fn main() {
     use rand::Rng;
-    println!("{:?}", avfoundation::AUEventSampleTimeImmediate);
+    // println!("{:?}", avfoundation::AUEventSampleTimeImmediate);
     let instrument = Instrument::new();
     let mut rng = rand::thread_rng();
 
@@ -67,17 +67,19 @@ fn main() {
     let audiounit = instrument.sampler.au_audio_unit();
 
     // println!("{:?}", audiounit.device_input_latency());
-    let block = audiounit.schedule_midi_event_block();
-
+    println!("here");
+    let block = audiounit.schedule_midi_event_block();//.unwrap();
+    
     // elf.noteBlock(AUEventSampleTimeImmediate, 0, 3, cbytes)
     // cbytes[0] = 0xB0
     //         cbytes[1] = 123
     //         cbytes[2] = 0
     let bytes: [u8; 3] = [0x90, 123, 50];
+    println!("here1");
     unsafe {
         block.call((AUEventSampleTimeImmediate, 0, 3, bytes.as_ptr()));
     }
-
+    println!("here2");
     sleep(1);
     // println!("{:?}", instrument.sampler.au_audio_unit().latency());
 

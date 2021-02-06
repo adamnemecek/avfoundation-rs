@@ -910,7 +910,7 @@ impl AUAudioUnitRef {
     // 		This bridged to the v2 API MusicDeviceMIDIEvent.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, nullable) AUScheduleMIDIEventBlock scheduleMIDIEventBlock;
-    pub fn schedule_midi_event_block(&self) -> Option<&AUScheduleMIDIEventBlock> {
+    pub fn schedule_midi_event_block(&self) -> &AUScheduleMIDIEventBlock {
         unsafe { msg_send![self, scheduleMIDIEventBlock] }
     }
 

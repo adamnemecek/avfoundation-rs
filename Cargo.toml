@@ -19,7 +19,7 @@ log = "0.4"
 block = "0.1.5"
 foreign-types = "0.3"
 rand = "0.8.2"
-#chromagear = { path = "../chromagear"}
+chromagear = { path = "../chromagear"}
 
 [dependencies.objc]
 version = "0.2.4"
