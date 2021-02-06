@@ -17,7 +17,7 @@ fn run_main_loop() {
 
 pub struct MIDIInstrument {
     pub inner: AVAudioUnitMIDIInstrument,
-    block: AUScheduleMIDIEventBlock,
+    // block: AUScheduleMIDIEventBlock,
 }
 
 impl MIDIInstrument {
@@ -32,19 +32,19 @@ impl MIDIInstrument {
             .clone();
         Self {
             inner: instrument,
-            block,
+            // block,
         }
     }
 
     pub fn midi_msg(&self, msg: &[u8]) {
-        unsafe {
-            self.block.call((
-                AUEventSampleTime::immediate(),
-                0,
-                msg.len() as _,
-                msg.as_ptr(),
-            ));
-        }
+        // unsafe {
+        //     self.block.call((
+        //         AUEventSampleTime::immediate(),
+        //         0,
+        //         msg.len() as _,
+        //         msg.as_ptr(),
+        //     ));
+        // }
     }
 }
 
@@ -52,7 +52,7 @@ fn main() {
     // you need to get the
     let manager = AVAudioUnitComponentManager::shared();
     let components = manager.components_passing_test(|unit| {
-        if unit.name().contains("Primer") {
+        if unit.name().contains("DLS") {
             (true, ShouldStop::Stop)
         } else {
             (false, ShouldStop::Continue)
@@ -65,20 +65,23 @@ fn main() {
     // let instrument = AVAudioUnitMIDIInstrument::new_with_audio_component_description(
     //     component.audio_component_description(),
     // );
-
+    println!("here11");
     let instrument = MIDIInstrument::new(component);
-
+    println!("here10");
     let engine = AVAudioEngine::new();
-
+    println!("here0");
     engine.attach_node(&instrument.inner);
-
+    println!("here1");
     let output = engine.output_node();
+    println!("here2");
     engine.connect_nodes(&instrument.inner, output, None);
+    println!("here3");
     let _ = engine.start().unwrap();
+    println!("here4");
 
     // instrument.au_audio_unit().token_by_adding_render_observer(observer)
     // midi_block.call(args)
-        println!("here");
+
     // cbytes[0] = 0xB0 // status
     // cbytes[1] = 60 // note
     // cbytes[2] = 0 // velocity
