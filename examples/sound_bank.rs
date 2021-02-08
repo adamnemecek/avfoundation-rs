@@ -23,7 +23,9 @@ impl Instrument {
         let url = std::path::Path::new("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
 
         // println!("before load");
-        sampler.load_bank_instrument_at_url(url.to_path_buf(), 100, bank, 0).unwrap();
+        sampler
+            .load_bank_instrument_at_url(url.to_path_buf(), 100, bank, 0)
+            .unwrap();
         println!("after load");
         Self { engine, sampler }
     }
@@ -68,8 +70,8 @@ fn main() {
 
     // println!("{:?}", audiounit.device_input_latency());
     println!("here");
-    let block = audiounit.schedule_midi_event_block();//.unwrap();
-    
+    let block = audiounit.schedule_midi_event_block(); //.unwrap();
+
     // elf.noteBlock(AUEventSampleTimeImmediate, 0, 3, cbytes)
     // cbytes[0] = 0xB0
     //         cbytes[1] = 123

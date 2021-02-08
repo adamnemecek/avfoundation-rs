@@ -208,6 +208,9 @@ macro_rules! try_bool_objc {
 
 pub mod prelude;
 
+mod aux;
+pub use aux::*;
+
 mod au_component;
 pub use au_component::*;
 

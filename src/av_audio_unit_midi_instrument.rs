@@ -65,6 +65,14 @@ impl PartialEq for AVAudioUnitMIDIInstrumentRef {
 // - (instancetype)initWithAudioComponentDescription:(AudioComponentDescription)description;
 // #endif
 
+// macro_rules! new {
+//     ($cls: ident) => {
+//         let class = class!($cls);
+//         let alloc = msg_send![class, alloc];
+
+//     }
+// }
+
 impl AVAudioUnitMIDIInstrument {
     pub fn new_with_audio_component_description(description: AudioComponentDescription) -> Self {
         unsafe {

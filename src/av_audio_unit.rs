@@ -49,7 +49,7 @@ impl AVAudioUnit {
     // 		according to the component's type.
     // */
     // + (void)instantiateWithComponentDescription:(AudioComponentDescription)audioComponentDescription options:(AudioComponentInstantiationOptions)options completionHandler:(void (^)(__kindof AVAudioUnit * __nullable audioUnit, NSError * __nullable error))completionHandler API_AVAILABLE(macos(10.11), ios(9.0), tvos(9.0));
-    pub fn with_component_description(
+    pub fn new_with_component_description(
         desc: AudioComponentDescription,
         options: AudioComponentInstantiationOptions,
         completion_handler: AVAudioUnitInitCompletionHandler,
