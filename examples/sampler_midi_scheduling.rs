@@ -21,11 +21,11 @@
 // }
 use avfoundation::{
     run_main_loop,
+    AUAudioFrameCount,
+    // AudioTimeStamp,
     AVAudioEngine,
     AVAudioUnitSampler,
     AudioUnitRenderActionFlags,
-    AUAudioFrameCount,
-    // AudioTimeStamp,
 };
 
 use avfoundation::prelude::AudioTimeStamp;
@@ -46,10 +46,17 @@ fn main() {
         .unwrap();
 
     let s2 = sampler.clone();
-    let block = block::ConcreteBlock::new(move |flags: AudioUnitRenderActionFlags, stamp: *const AudioTimeStamp, frame_count: AUAudioFrameCount, bus: u64| {
-        s2.start_note(100, 100, 0);
-    });
-    // sampler.au_audio_unit.token_by_adding_render_observer()
+    let block = block::ConcreteBlock::new(
+        move |flags: AudioUnitRenderActionFlags,
+              stamp: *const AudioTimeStamp,
+              frame_count: AUAudioFrameCount,
+              bus: i64| {
+            s2.start_note(100, 100, 0);
+        },
+    ).copy();
+    sampler
+        .au_audio_unit()
+        .token_by_adding_render_observer(block);
 
     run_main_loop();
 }

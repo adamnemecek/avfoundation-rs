@@ -22,7 +22,7 @@ fn main1() {
     // let au = player.au_audio_unit();
     let sequencer = AVAudioSequencer::with_engine(&engine);
     // println!("{:?}", sequencer.is_playing());
-    let tracks = sequencer.tracks();
+    let tracksqb = sequencer.tracks();
 
     let point = AVAudioConnectionPoint::with_node(&node, 1.into());
     println!("point {:?}", point.bus());
