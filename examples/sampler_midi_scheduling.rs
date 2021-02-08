@@ -19,5 +19,25 @@
 //     RunLoop.main.run()
 
 // }
+use avfoundation::{
+    AVAudioEngine,
+    AVAudioUnitSampler,
+    run_main_loop,
+};
 
-fn main() {}
+fn main() {
+    let engine = AVAudioEngine::new();
+    let sampler = AVAudioUnitSampler::new();
+
+    engine.attach_node(&sampler);
+    let output = engine.output_node();
+    engine.connect_nodes(&sampler, &output, None);
+    let _ = engine.start().unwrap();
+    let url = std::path::PathBuf::from("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
+    let bank = 121;
+    sampler
+    .load_bank_instrument_at_url(url.to_path_buf(), 100, bank, 0)
+    .unwrap();
+
+    run_main_loop();
+}
