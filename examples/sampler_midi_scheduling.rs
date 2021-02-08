@@ -20,10 +20,16 @@
 
 // }
 use avfoundation::{
+    run_main_loop,
     AVAudioEngine,
     AVAudioUnitSampler,
-    run_main_loop,
+    AudioUnitRenderActionFlags,
+    AUAudioFrameCount,
+    // AudioTimeStamp,
 };
+
+use avfoundation::prelude::AudioTimeStamp;
+// use block::
 
 fn main() {
     let engine = AVAudioEngine::new();
@@ -36,8 +42,14 @@ fn main() {
     let url = std::path::PathBuf::from("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
     let bank = 121;
     sampler
-    .load_bank_instrument_at_url(url.to_path_buf(), 100, bank, 0)
-    .unwrap();
+        .load_bank_instrument_at_url(url.to_path_buf(), 100, bank, 0)
+        .unwrap();
+
+    let s2 = sampler.clone();
+    let block = block::ConcreteBlock::new(move |flags: AudioUnitRenderActionFlags, stamp: *const AudioTimeStamp, frame_count: AUAudioFrameCount, bus: u64| {
+        s2.start_note(100, 100, 0);
+    });
+    // sampler.au_audio_unit.token_by_adding_render_observer()
 
     run_main_loop();
 }

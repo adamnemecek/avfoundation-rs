@@ -3,9 +3,11 @@ use objc::runtime::{
     YES,
 };
 
+use core_audio_types::AudioTimeStamp;
+
 use crate::{
     AVAudioFramePosition,
-    AudioTimeStamp,
+    // AudioTimeStamp,
 };
 
 pub enum AVAudioTimeFFI {}

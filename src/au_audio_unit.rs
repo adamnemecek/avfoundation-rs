@@ -14,6 +14,8 @@ use crate::{
     OSStatus,
 };
 
+use core_audio_types::AudioTimeStamp;
+
 use cocoa_foundation::{
     base::{
         nil,
@@ -175,7 +177,6 @@ use cocoa_foundation::foundation::{
     NSInteger,
     NSIntegerMax,
 };
-pub struct AudioTimeStamp {}
 
 // pub struct AudioUnitRenderActionFlags {
 

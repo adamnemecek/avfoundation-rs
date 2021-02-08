@@ -1,4 +1,4 @@
-use crate::AudioTimeStamp;
+use core_audio_types::AudioTimeStamp;
 
 pub struct OSStatus {}
 pub struct AudioBufferList {}

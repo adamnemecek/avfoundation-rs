@@ -20,6 +20,7 @@ block = "0.1.5"
 foreign-types = "0.3"
 rand = "0.8.2"
 chromagear = { path = "../chromagear"}
+core_audio_types = { path = "../core_audio_types" }
 
 [dependencies.objc]
 version = "0.2.4"

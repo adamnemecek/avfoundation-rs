@@ -1,3 +1,7 @@
+pub use core_audio_types::{
+    AudioTimeStamp
+};
+
 pub use crate::{
     AUAudioUnit,
     AUAudioUnitBus,
