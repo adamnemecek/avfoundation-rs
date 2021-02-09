@@ -78,7 +78,6 @@ impl AVAudioUnit {
                     } else {
                         Err(error.as_ref().unwrap().to_owned())
                     };
-
                     completion_handler(res);
                 },
             )

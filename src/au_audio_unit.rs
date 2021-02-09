@@ -933,17 +933,24 @@ impl AUAudioUnitRef {
     // 		This bridged to the v2 API MusicDeviceMIDIEvent.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, nullable) AUScheduleMIDIEventBlock scheduleMIDIEventBlock;
-    pub fn schedule_midi_event_block(&self) -> &AUScheduleMIDIEventBlock {
+    // todo: should this be adding a reference?
+    pub fn schedule_midi_event_block(&self) -> Option<AUScheduleMIDIEventBlock> {
         unsafe { msg_send![self, scheduleMIDIEventBlock] }
     }
 
     // block::RcBlock<(AUEventSampleTime, u8, NSInteger, *const u8), ()>;
     #[inline]
-    pub fn schedule_midi_fn(&self) -> impl Fn(AUEventSampleTime, u8, &[u8]) -> () {
-        let block = self.schedule_midi_event_block().clone();
-        move |timestamp, cable, slice| unsafe {
-            block.call((timestamp, cable, slice.len() as _, slice.as_ptr()))
-        }
+    pub fn schedule_midi_fn(&self) -> Option<impl Fn(AUEventSampleTime, u8, &[u8]) -> ()> {
+        // let block = self.schedule_midi_event_block().unwrap().to_owned();
+        // move |timestamp, cable, slice| unsafe {
+        //     block.call((timestamp, cable, slice.len() as _, slice.as_ptr()))
+        // }
+        self.schedule_midi_event_block().map(|block| {
+            let b = block.to_owned();
+            move |timestamp, cable, slice: &[u8]| unsafe {
+                block.call((timestamp, cable, slice.len() as _, slice.as_ptr()))
+            }
+        })
     }
 
     // /*!	@property	MIDIOutputNames
