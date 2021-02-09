@@ -786,6 +786,28 @@ impl AUAudioUnitRef {
         unsafe { msg_send![self, tokenByAddingRenderObserver: observer] }
     }
 
+    pub fn token_by_adding_render_observer_2<F>(&self, f: F) -> NSInteger
+    where
+        F: 'static + Fn(AudioUnitRenderActionFlags, &AudioTimeStamp, AUAudioFrameCount, i64) -> (),
+    {
+        let block = block::ConcreteBlock::new(
+            move |flags: AudioUnitRenderActionFlags,
+                  timestamp: *const AudioTimeStamp,
+                  frame_count: AUAudioFrameCount,
+                  bus: i64| {
+                f(
+                    flags,
+                    unsafe { timestamp.as_ref().unwrap() },
+                    frame_count,
+                    bus,
+                );
+            },
+        )
+        .copy();
+
+        unsafe { msg_send![self, tokenByAddingRenderObserver: block] }
+    }
+
     // /*!	@method		removeRenderObserver:
     // 	@brief		Remove an observer block added via tokenByAddingRenderObserver:
     // 	@param token
