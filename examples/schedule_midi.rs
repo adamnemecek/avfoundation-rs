@@ -1,7 +1,4 @@
-use avfoundation::{
-    prelude::*,
-    AudioUnitRenderActionFlags,
-};
+use avfoundation::prelude::*;
 // public func midi_scheduler_main() {
 
 //     let engine = AVAudioEngine()
@@ -66,5 +63,5 @@ fn main() {
         }
     }
 
-    // println!("component {:?}",);
+    run_main_loop();
 }

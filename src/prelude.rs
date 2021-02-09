@@ -1,5 +1,7 @@
 pub use core_audio_types::AudioTimeStamp;
 
+pub use crate::run_main_loop;
+
 pub use crate::{
     AUAudioUnit,
     AUAudioUnitBus,
@@ -101,6 +103,7 @@ pub use crate::{
     AudioBufferList,
     AudioBufferListRef,
     AudioUnitParameterID,
+    AudioUnitRenderActionFlags,
     NSError,
     NSErrorRef,
     NSViewController,

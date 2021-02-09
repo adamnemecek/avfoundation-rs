@@ -70,8 +70,8 @@ impl AVAudioUnit {
         F: 'static + Fn(Result<AVAudioUnit, NSError>) -> (),
     {
         unsafe {
-            let block =
-                block::ConcreteBlock::new(move |unit: *mut AVAudioUnitRef, error: *mut NSErrorRef| {
+            let block = block::ConcreteBlock::new(
+                move |unit: *mut AVAudioUnitRef, error: *mut NSErrorRef| {
                     let res = if error.is_null() {
                         let a = unit.as_ref().unwrap().to_owned();
                         Ok(a)
@@ -80,8 +80,9 @@ impl AVAudioUnit {
                     };
 
                     completion_handler(res);
-                })
-                .copy();
+                },
+            )
+            .copy();
             let self_: Self = msg_send![class!(AVAudioUnit), instantiateWithComponentDescription: desc
                                                                                          options: options
                                                                                completionHandler: block];
