@@ -938,15 +938,9 @@ impl AUAudioUnitRef {
         unsafe { msg_send![self, scheduleMIDIEventBlock] }
     }
 
-    // block::RcBlock<(AUEventSampleTime, u8, NSInteger, *const u8), ()>;
     #[inline]
     pub fn schedule_midi_fn(&self) -> Option<impl Fn(AUEventSampleTime, u8, &[u8]) -> ()> {
-        // let block = self.schedule_midi_event_block().unwrap().to_owned();
-        // move |timestamp, cable, slice| unsafe {
-        //     block.call((timestamp, cable, slice.len() as _, slice.as_ptr()))
-        // }
         self.schedule_midi_event_block().map(|block| {
-            let b = block.to_owned();
             move |timestamp, cable, slice: &[u8]| unsafe {
                 block.call((timestamp, cable, slice.len() as _, slice.as_ptr()))
             }
