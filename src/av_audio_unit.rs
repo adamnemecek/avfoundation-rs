@@ -73,9 +73,9 @@ impl AVAudioUnit {
             let block =
                 block::ConcreteBlock::new(move |unit: *mut AVAudioUnit, error: *mut NSError| {
                     let res = if error.is_null() {
-                        Err(error.as_ref().unwrap().clone())
-                    } else {
                         Ok(unit.as_ref().unwrap().clone())
+                    } else {
+                        Err(error.as_ref().unwrap().clone())
                     };
                     completion_handler(res);
                 })

@@ -1,4 +1,7 @@
-use avfoundation::prelude::*;
+use avfoundation::{
+    prelude::*,
+    AudioUnitRenderActionFlags,
+};
 // public func midi_scheduler_main() {
 
 //     let engine = AVAudioEngine()
@@ -49,6 +52,14 @@ fn main() {
             engine.connect_nodes(&unit, engine.output_node(), None);
             let z = engine.start().unwrap();
             let midi_fn = unit.au_audio_unit().schedule_midi_fn();
+            unit.au_audio_unit().token_by_adding_render_observer_2(
+                move |flags, ts, frame_count, bus| {
+                    if flags.contains(AudioUnitRenderActionFlags::PreRender) {
+                        let bytes = [0x90, 100, 100];
+                        midi_fn(AUEventSampleTime::immediate(), 0, &bytes);
+                    }
+                },
+            );
         }
         Err(err) => {
             panic!("{:?}", err)
