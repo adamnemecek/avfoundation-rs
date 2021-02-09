@@ -786,7 +786,7 @@ impl AUAudioUnitRef {
         unsafe { msg_send![self, tokenByAddingRenderObserver: observer] }
     }
 
-    pub fn token_by_adding_render_observer_2<F>(&self, f: F) -> NSInteger
+    pub fn token_by_adding_render_observer_fn<F>(&self, f: F) -> NSInteger
     where
         F: 'static + Fn(AudioUnitRenderActionFlags, &AudioTimeStamp, AUAudioFrameCount, i64) -> (),
     {
@@ -805,7 +805,7 @@ impl AUAudioUnitRef {
         )
         .copy();
 
-        unsafe { msg_send![self, tokenByAddingRenderObserver: block] }
+        self.token_by_adding_render_observer(block)
     }
 
     // /*!	@method		removeRenderObserver:
