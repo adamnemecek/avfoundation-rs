@@ -31,6 +31,8 @@ use avfoundation::{
 use avfoundation::prelude::AudioTimeStamp;
 // use block::
 
+// use rand::
+
 fn main() {
     let engine = AVAudioEngine::new();
     let sampler = AVAudioUnitSampler::new();
@@ -46,17 +48,28 @@ fn main() {
         .unwrap();
 
     let s2 = sampler.clone();
+
+    struct Event {
+        timestamp: AudioTimeStamp,
+    }
+
+    let (tx, rx) = std::sync::mpsc::channel();
+
     let block = block::ConcreteBlock::new(
         move |flags: AudioUnitRenderActionFlags,
-              stamp: *const AudioTimeStamp,
+              timestamp: *const AudioTimeStamp,
               frame_count: AUAudioFrameCount,
               bus: i64| {
+            let ts = unsafe { *timestamp };
+            let _ = tx.send(Event { timestamp: ts });
             s2.start_note(100, 100, 0);
         },
-    ).copy();
+    )
+    .copy();
     sampler
         .au_audio_unit()
         .token_by_adding_render_observer(block);
 
-    run_main_loop();
+    // let previous =
+    for e in rx.recv() {}
 }

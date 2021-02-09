@@ -1,3 +1,5 @@
+use block::ConcreteBlock;
+
 use crate::{
     AUAudioUnitRef,
     AVAudioNodeRef,
@@ -21,13 +23,22 @@ foreign_obj_type! {
     type ParentType = AVAudioNodeRef;
 }
 
-#[repr(C)]
-#[derive(Clone, Copy, Default)]
-pub struct AudioComponentInstantiationOptions {
-    inner: u32,
+// #[repr(C)]
+// #[derive(Clone, Copy, Default)]
+// pub struct AudioComponentInstantiationOptions {
+//     inner: u32,
+// }
+
+bitflags::bitflags! {
+   #[allow(non_upper_case_globals)]
+   #[repr(C)]
+    pub struct AudioComponentInstantiationOptions: u32 {
+        const LOAD_OUT_OF_PROCESS = 1 << 0;
+        const LOAD_IN_PROCESS = 1 << 1;
+    }
 }
 
-pub type AVAudioUnitInitCompletionHandler<'a> = block::RcBlock<(&'a AVAudioUnitRef, NSError), ()>;
+// pub type AVAudioUnitInitCompletionHandler<'a> = block::RcBlock<(&'a AVAudioUnitRef, NSError), ()>;
 
 impl AVAudioUnit {
     // /*!	@method	instantiateWithComponentDescription:options:completionHandler:
@@ -49,15 +60,28 @@ impl AVAudioUnit {
     // 		according to the component's type.
     // */
     // + (void)instantiateWithComponentDescription:(AudioComponentDescription)audioComponentDescription options:(AudioComponentInstantiationOptions)options completionHandler:(void (^)(__kindof AVAudioUnit * __nullable audioUnit, NSError * __nullable error))completionHandler API_AVAILABLE(macos(10.11), ios(9.0), tvos(9.0));
-    pub fn new_with_component_description(
+    pub fn new_with_component_description<F>(
         desc: AudioComponentDescription,
         options: AudioComponentInstantiationOptions,
-        completion_handler: AVAudioUnitInitCompletionHandler,
-    ) -> Self {
+        completion_handler: F,
+    ) -> Self
+    where
+        F: 'static + Fn(Result<AVAudioUnit, NSError>) -> (),
+    {
         unsafe {
+            let block =
+                block::ConcreteBlock::new(move |unit: *mut AVAudioUnit, error: *mut NSError| {
+                    let res = if error.is_null() {
+                        Err(error.as_ref().unwrap().clone())
+                    } else {
+                        Ok(unit.as_ref().unwrap().clone())
+                    };
+                    completion_handler(res);
+                })
+                .copy();
             let self_: Self = msg_send![class!(AVAudioUnit), instantiateWithComponentDescription: desc
                                                                                          options: options
-                                                                               completionHandler: completion_handler];
+                                                                               completionHandler: block];
             self_
         }
     }
