@@ -71,12 +71,14 @@ impl AVAudioUnit {
     {
         unsafe {
             let block =
-                block::ConcreteBlock::new(move |unit: *mut AVAudioUnit, error: *mut NSError| {
+                block::ConcreteBlock::new(move |unit: *mut AVAudioUnitRef, error: *mut NSErrorRef| {
                     let res = if error.is_null() {
-                        Ok(unit.as_ref().unwrap().clone())
+                        let a = unit.as_ref().unwrap().to_owned();
+                        Ok(a)
                     } else {
-                        Err(error.as_ref().unwrap().clone())
+                        Err(error.as_ref().unwrap().to_owned())
                     };
+
                     completion_handler(res);
                 })
                 .copy();
