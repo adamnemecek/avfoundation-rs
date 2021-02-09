@@ -32,6 +32,7 @@ foreign_obj_type! {
 bitflags::bitflags! {
    #[allow(non_upper_case_globals)]
    #[repr(C)]
+   #[derive(Default)]
     pub struct AudioComponentInstantiationOptions: u32 {
         const LOAD_OUT_OF_PROCESS = 1 << 0;
         const LOAD_IN_PROCESS = 1 << 1;

@@ -37,7 +37,23 @@ fn main() {
         }
     });
     let desc = component.first().unwrap().audio_component_description();
-    AVAudioUnit::new_with_component_description(desc, options, completion_handler);
+    let (tx, rx) = std::sync::mpsc::channel();
+    AVAudioUnit::new_with_component_description(desc, Default::default(), move |result| {
+        let _ = tx.send(result);
+    });
 
-    println!("component {:?}",);
+    let res = rx.recv().unwrap();
+    match res {
+        Ok(unit) => {
+            engine.attach_node(&unit);
+            engine.connect_nodes(&unit, engine.output_node(), None);
+            let z = engine.start().unwrap();
+            let midi_fn = unit.au_audio_unit().schedule_midi_fn();
+        }
+        Err(err) => {
+            panic!("{:?}", err)
+        }
+    }
+
+    // println!("component {:?}",);
 }

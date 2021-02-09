@@ -937,6 +937,15 @@ impl AUAudioUnitRef {
         unsafe { msg_send![self, scheduleMIDIEventBlock] }
     }
 
+    // block::RcBlock<(AUEventSampleTime, u8, NSInteger, *const u8), ()>;
+    #[inline]
+    pub fn schedule_midi_fn(&self) -> impl Fn(AUEventSampleTime, u8, &[u8]) -> () {
+        let block = self.schedule_midi_event_block().clone();
+        move |timestamp, cable, slice| unsafe {
+            block.call((timestamp, cable, slice.len() as _, slice.as_ptr()))
+        }
+    }
+
     // /*!	@property	MIDIOutputNames
     // 	@brief		Count, and names of, a plug-in's MIDI outputs.
     // 	@discussion
