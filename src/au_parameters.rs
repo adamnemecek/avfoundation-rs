@@ -217,7 +217,10 @@ impl AUParameterNodeRef {
     // - (AUParameterObserverToken)tokenByAddingParameterRecordingObserver:(AUParameterRecordingObserver)observer;
     #[must_use]
     #[inline]
-    pub fn token_by_adding_parameter_recording_observer<F>(&self, observer: F)
+    pub fn token_by_adding_parameter_recording_observer<F>(
+        &self,
+        observer: F,
+    ) -> AUParameterObserverToken
     where
         F: Fn(&[AURecordedParameterEvent]) -> () + 'static,
     {
@@ -260,8 +263,27 @@ impl AUParameterNodeRef {
         &self,
         observer: AUParameterAutomationObserver,
     ) -> AUParameterObserverToken {
-        unsafe { msg_send![self, tokenByAddingParameterAutomationObserver: observer] }
+        // unsafe { msg_send![self, tokenByAddingParameterAutomationObserver: observer] }
+        // let block = block::ConcreteBlock::new(move |count, events| {
+        //         let slice = unsafe { std::slice::from_raw_parts(events, count as _) };
+        //         observer(slice);
+        //     }).copy();
+        //     self.token_by_adding_parameter_automation_observer(block)
+        todo!()
     }
+
+    // #[must_use]
+    // #[inline]
+    // pub fn token_by_adding_parameter_automation_observer_fn(
+    //     &self,
+    //     observer: impl Fn(&[AUParameterAutomationEvent]) -> () + 'static,
+    // ) -> AUParameterObserverToken {
+    //     let block = block::ConcreteBlock::new(move |count, events| {
+    //         let slice = unsafe { std::slice::from_raw_parts(events, count as _) };
+    //         observer(slice);
+    //     }).copy();
+    //     self.token_by_adding_parameter_automation_observer(block)
+    // }
 
     ///    @method removeParameterObserver:
     ///    @brief    Remove an observer created with tokenByAddingParameterObserver,
