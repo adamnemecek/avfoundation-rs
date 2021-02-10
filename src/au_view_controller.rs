@@ -122,6 +122,14 @@ impl AUAudioUnitRef {
         unsafe { msg_send![self, requestViewControllerWithCompletionHandler: block] }
     }
 
+    pub fn request_view_controller_fn(&self, f: impl Fn(NSViewController) + 'static) {
+        let block = block::ConcreteBlock::new(move |controller: &NSViewControllerRef| {
+            f(controller.to_owned())
+        })
+        .copy();
+        self.request_view_controller(block);
+    }
+
     // /*!	@method		supportedViewConfigurations
     // 	@param		availableViewConfigurations
     // 		The list of all available view configurations supported by the host.
