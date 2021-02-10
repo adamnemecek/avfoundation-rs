@@ -1417,10 +1417,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_ContextName.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *contextName;
-    pub fn context_name(&self) -> &str {
+    pub fn context_name(&self) -> Option<&str> {
         unsafe {
-            let s = msg_send![self, contextName];
-            crate::nsstring_as_str(s)
+            crate::opt_nsstring_as_str![msg_send![self, contextName]]
         }
     }
 
@@ -1917,8 +1916,10 @@ impl AUAudioUnitBusRef {
     // 	@brief		A name for the bus. Can be set by host.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *name;
-    pub fn name(&self) -> &str {
-        todo!()
+    pub fn name(&self) -> Option<&str> {
+        unsafe {
+            crate::opt_nsstring_as_str![msg_send![self, name]]
+        }
     }
 
     // /*! @property   index
@@ -1926,7 +1927,9 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSUInteger index;
     pub fn index(&self) -> NSUInteger {
-        todo!()
+        unsafe {
+            msg_send![self, index]
+        }
     }
 
     // /*! @property   busType
@@ -1934,7 +1937,9 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusType busType;
     pub fn bus_type(&self) -> AUAudioUnitBusType {
-        todo!()
+        unsafe {
+            msg_send![self, busType]
+        }
     }
 
     // /*! @property   ownerAudioUnit
@@ -1942,7 +1947,9 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, assign) AUAudioUnit *ownerAudioUnit;
     pub fn owner_audio_unit(&self) -> &AUAudioUnitRef {
-        todo!()
+        unsafe {
+            msg_send![self, ownerAudioUnit]
+        }
     }
 
     // /*!	@property	supportedChannelLayoutTags
@@ -1994,7 +2001,9 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY) NSTimeInterval contextPresentationLatency;
     pub fn context_presentation_latency(&self) -> NSTimeInterval {
-        todo!()
+        unsafe {
+            msg_send![self, contextPresentationLatency]
+        }
     }
 
     // @end

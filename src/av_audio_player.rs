@@ -95,6 +95,11 @@ impl AVAudioPlayerRef {
     //
     // /* the UID of the current audio device (as a string) */
     // @property(copy, nullable) NSString *currentDevice API_AVAILABLE(macos(10.13)) API_UNAVAILABLE(ios, watchos, tvos);
+    pub fn current_device(&self) -> Option<&str> {
+        unsafe {
+            msg_send![self, currentDevice]
+        }
+    }
     //
     // /* the delegate will be sent messages from the AVAudioPlayerDelegate protocol */
     // @property(weak, nullable) id<AVAudioPlayerDelegate> delegate;
