@@ -1418,9 +1418,7 @@ impl AUAudioUnitRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *contextName;
     pub fn context_name(&self) -> Option<&str> {
-        unsafe {
-            crate::opt_nsstring_as_str![msg_send![self, contextName]]
-        }
+        unsafe { crate::opt_nsstring_as_str![msg_send![self, contextName]] }
     }
 
     // /*!	@property	supportsMPE
@@ -1917,9 +1915,7 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *name;
     pub fn name(&self) -> Option<&str> {
-        unsafe {
-            crate::opt_nsstring_as_str![msg_send![self, name]]
-        }
+        unsafe { crate::opt_nsstring_as_str![msg_send![self, name]] }
     }
 
     // /*! @property   index
@@ -1927,9 +1923,7 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSUInteger index;
     pub fn index(&self) -> NSUInteger {
-        unsafe {
-            msg_send![self, index]
-        }
+        unsafe { msg_send![self, index] }
     }
 
     // /*! @property   busType
@@ -1937,9 +1931,7 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusType busType;
     pub fn bus_type(&self) -> AUAudioUnitBusType {
-        unsafe {
-            msg_send![self, busType]
-        }
+        unsafe { msg_send![self, busType] }
     }
 
     // /*! @property   ownerAudioUnit
@@ -1947,9 +1939,7 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, assign) AUAudioUnit *ownerAudioUnit;
     pub fn owner_audio_unit(&self) -> &AUAudioUnitRef {
-        unsafe {
-            msg_send![self, ownerAudioUnit]
-        }
+        unsafe { msg_send![self, ownerAudioUnit] }
     }
 
     // /*!	@property	supportedChannelLayoutTags
@@ -2001,9 +1991,7 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY) NSTimeInterval contextPresentationLatency;
     pub fn context_presentation_latency(&self) -> NSTimeInterval {
-        unsafe {
-            msg_send![self, contextPresentationLatency]
-        }
+        unsafe { msg_send![self, contextPresentationLatency] }
     }
 
     // @end

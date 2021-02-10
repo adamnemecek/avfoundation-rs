@@ -113,6 +113,7 @@ pub type AUParameterAutomationObserver =
 ///                or AUParameterAutomationObserver.
 
 // typedef void *AUParameterObserverToken;
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub struct AUParameterObserverToken(*const std::ffi::c_void);
 
 ///    @class        AUParameterNode
@@ -192,6 +193,7 @@ impl AUParameterNodeRef {
     ///        A token which can be passed to removeParameterObserver: or to -[AUParameter setValue:originator:]
     /// - (AUParameterObserverToken)tokenByAddingParameterObserver:(AUParameterObserver)observer;
     #[must_use]
+    #[inline]
     pub fn token_by_adding_parameter_observer<F>(&self, observer: F) -> AUParameterObserverToken
     where
         F: Fn(AUParameterAddress, AUValue) -> () + 'static,
@@ -214,6 +216,7 @@ impl AUParameterNodeRef {
 
     // - (AUParameterObserverToken)tokenByAddingParameterRecordingObserver:(AUParameterRecordingObserver)observer;
     #[must_use]
+    #[inline]
     pub fn token_by_adding_parameter_recording_observer<F>(&self, observer: F)
     where
         F: Fn(&[AURecordedParameterEvent]) -> () + 'static,
@@ -252,6 +255,7 @@ impl AUParameterNodeRef {
 
     // - (AUParameterObserverToken)tokenByAddingParameterAutomationObserver:(AUParameterAutomationObserver)observer API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0));
     #[must_use]
+    #[inline]
     pub fn token_by_adding_parameter_automation_observer(
         &self,
         observer: AUParameterAutomationObserver,

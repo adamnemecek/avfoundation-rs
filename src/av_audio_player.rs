@@ -96,9 +96,7 @@ impl AVAudioPlayerRef {
     // /* the UID of the current audio device (as a string) */
     // @property(copy, nullable) NSString *currentDevice API_AVAILABLE(macos(10.13)) API_UNAVAILABLE(ios, watchos, tvos);
     pub fn current_device(&self) -> Option<&str> {
-        unsafe {
-            msg_send![self, currentDevice]
-        }
+        unsafe { msg_send![self, currentDevice] }
     }
     //
     // /* the delegate will be sent messages from the AVAudioPlayerDelegate protocol */
@@ -168,6 +166,15 @@ impl AVAudioPlayerRef {
     //
     // @property(getter=isMeteringEnabled) BOOL meteringEnabled; /* turns level metering on or off. default is off. */
     //
+
+    pub fn is_metering_enabled(&self) -> bool {
+        unsafe { msg_send![self, isMeteringEnabled] }
+    }
+
+    pub fn set_metering_enabled(&self, v: bool) {
+        unsafe { msg_send![self, setMeteringEnabled: v] }
+    }
+
     // - (void)updateMeters; /* call to refresh meter values */
     pub fn update_meters(&self) {
         unsafe { msg_send![self, updateMeters] }
