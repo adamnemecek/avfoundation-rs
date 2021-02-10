@@ -513,6 +513,17 @@ foreign_obj_type! {
     pub struct AUAudioUnitRef;
 }
 
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+pub struct RenderObserverToken {
+    inner: NSInteger,
+}
+
+impl From<NSInteger> for RenderObserverToken {
+    fn from(inner: NSInteger) -> Self {
+        Self { inner }
+    }
+}
+
 impl AUAudioUnit {
     // - (instancetype)init NS_UNAVAILABLE;
 
@@ -596,33 +607,24 @@ impl AUAudioUnitRef {
     // 		from the component name.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *componentName;
-    pub fn component_name(&self) -> &str {
-        unsafe {
-            let s = msg_send![self, componentName];
-            crate::nsstring_as_str(s)
-        }
+    pub fn component_name(&self) -> Option<&str> {
+        unsafe { crate::opt_nsstring_as_str![msg_send![self, componentName]] }
     }
 
     // /*!	@property	audioUnitName
     // 	@brief		The audio unit's name.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitName;
-    pub fn audio_unit_name(&self) -> &str {
-        unsafe {
-            let s = msg_send![self, audioUnitName];
-            crate::nsstring_as_str(s)
-        }
+    pub fn audio_unit_name(&self) -> Option<&str> {
+        unsafe { crate::opt_nsstring_as_str![msg_send![self, audioUnitName]] }
     }
 
     // /*!	@property	manufacturerName
     // 	@brief		The manufacturer's name.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *manufacturerName;
-    pub fn manufacturer_name(&self) -> &str {
-        unsafe {
-            let s = msg_send![self, manufacturerName];
-            crate::nsstring_as_str(s)
-        }
+    pub fn manufacturer_name(&self) -> Option<&str> {
+        unsafe { crate::opt_nsstring_as_str![msg_send![self, manufacturerName]] }
     }
 
     // /*!	@property	audioUnitShortName
@@ -634,15 +636,7 @@ impl AUAudioUnitRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *audioUnitShortName API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
     pub fn audio_unit_short_name(&self) -> Option<&str> {
-        unsafe {
-            let mut s: *mut Object = std::ptr::null_mut();
-            s = msg_send![self, audioUnitShortName];
-            if s.is_null() {
-                None
-            } else {
-                Some(nsstring_as_str(s.as_ref().unwrap()))
-            }
-        }
+        unsafe { crate::opt_nsstring_as_str![msg_send![self, audioUnitShortName]] }
     }
 
     // /*!	@property	componentVersion
@@ -798,12 +792,16 @@ impl AUAudioUnitRef {
     // */
     // - (NSInteger)tokenByAddingRenderObserver:(AURenderObserver)observer;
     #[must_use]
-    pub fn token_by_adding_render_observer(&self, observer: AURenderObserver) -> NSInteger {
-        unsafe { msg_send![self, tokenByAddingRenderObserver: observer] }
+    pub fn token_by_adding_render_observer(
+        &self,
+        observer: AURenderObserver,
+    ) -> RenderObserverToken {
+        let token: NSInteger = unsafe { msg_send![self, tokenByAddingRenderObserver: observer] };
+        token.into()
     }
 
     #[must_use]
-    pub fn token_by_adding_render_observer_fn<F>(&self, f: F) -> NSInteger
+    pub fn token_by_adding_render_observer_fn<F>(&self, f: F) -> RenderObserverToken
     where
         F: 'static + Fn(AudioUnitRenderActionFlags, &AudioTimeStamp, AUAudioFrameCount, i64) -> (),
     {

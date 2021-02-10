@@ -109,6 +109,7 @@ pub use crate::{
     NSViewController,
     NSViewControllerRef,
     OSStatus,
+    RenderObserverToken,
     RequestAUAudioUnitViewController,
     ShouldStop,
 };

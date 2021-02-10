@@ -33,6 +33,20 @@ pub fn nsstring_as_str(nsstr: &objc::runtime::Object) -> &str {
     }
 }
 
+#[macro_export]
+macro_rules! opt_nsstring_as_str {
+    ($expr: expr) => {{
+        #[allow(unused_assignments)]
+        let mut s: *mut Object = std::ptr::null_mut();
+        s = $expr;
+        if s.is_null() {
+            None
+        } else {
+            Some(nsstring_as_str(s.as_ref().unwrap()))
+        }
+    }};
+}
+
 fn nsstring_from_str(string: &str) -> *mut objc::runtime::Object {
     const UTF8_ENCODING: usize = 4;
 
