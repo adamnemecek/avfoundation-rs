@@ -797,10 +797,12 @@ impl AUAudioUnitRef {
     // 		A token to be used when removing the observer.
     // */
     // - (NSInteger)tokenByAddingRenderObserver:(AURenderObserver)observer;
+    #[must_use]
     pub fn token_by_adding_render_observer(&self, observer: AURenderObserver) -> NSInteger {
         unsafe { msg_send![self, tokenByAddingRenderObserver: observer] }
     }
 
+    #[must_use]
     pub fn token_by_adding_render_observer_fn<F>(&self, f: F) -> NSInteger
     where
         F: 'static + Fn(AudioUnitRenderActionFlags, &AudioTimeStamp, AUAudioFrameCount, i64) -> (),
