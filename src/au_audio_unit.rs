@@ -767,6 +767,21 @@ impl AUAudioUnitRef {
         unsafe { msg_send![self, scheduleParameterBlock] }
     }
 
+    #[inline]
+    pub fn schedule_parameter_fn(
+        &self,
+    ) -> impl Fn(AUEventSampleTime, AUAudioFrameCount, AUParameterAddress, AUValue) -> () {
+        let block = self.schedule_parameter_block();
+        move |sample_time, ramp_duration_sample_frames, parameter_address, value| unsafe {
+            block.call((
+                sample_time,
+                ramp_duration_sample_frames,
+                parameter_address,
+                value,
+            ))
+        }
+    }
+
     // /*!	@method		tokenByAddingRenderObserver:
     // 	@brief		Add a block to be called on each render cycle.
     // 	@discussion
@@ -987,18 +1002,11 @@ impl AUAudioUnitRef {
     //  		This is bridged to the v2 API property kAudioUnitProperty_MIDIOutputCallback.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) AUMIDIOutputEventBlock MIDIOutputEventBlock API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
-    pub fn midi_output_event_block(&self) -> Option<&AUMIDIOutputEventBlock> {
-        unsafe {
-            let ptr: *const AUMIDIOutputEventBlock = msg_send![self, MIDIOutputEventBlock];
-            if ptr.is_null() {
-                None
-            } else {
-                ptr.as_ref()
-            }
-        }
+    pub fn midi_output_event_block(&self) -> Option<AUMIDIOutputEventBlock> {
+        unsafe { msg_send![self, MIDIOutputEventBlock] }
     }
 
-    pub fn set_midi_output_event_block(&self, block: Option<&AUMIDIOutputEventBlock>) {
+    pub fn set_midi_output_event_block(&self, block: Option<AUMIDIOutputEventBlock>) {
         todo!()
         // let block = if let Some(block) = block {
         //     block.as_ptr()

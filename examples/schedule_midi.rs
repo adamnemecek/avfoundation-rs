@@ -47,7 +47,7 @@ fn main() {
         Ok(unit) => {
             engine.attach_node(&unit);
             engine.connect_nodes(&unit, engine.output_node(), None);
-            let z = engine.start().unwrap();
+            let _ = engine.start().unwrap();
             let midi_fn = unit.au_audio_unit().schedule_midi_fn().unwrap();
             unit.au_audio_unit().token_by_adding_render_observer_fn(
                 move |flags, ts, frame_count, bus| {

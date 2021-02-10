@@ -110,10 +110,9 @@ impl AVAudioPlayerNodeRef {
         buffer: &AVAudioPCMBufferRef,
         completion_handler: Option<AVAudioNodeCompletionHandler>,
     ) {
-        if let Some(handler) = completion_handler {
-            unsafe { msg_send![self, scheduleBuffer: buffer completionHandler: handler] }
-        } else {
-            unsafe { msg_send![self, scheduleBuffer: buffer completionHandler: nil] }
+        unsafe {
+            msg_send![self, scheduleBuffer: buffer
+                         completionHandler: completion_handler]
         }
     }
     /// @method scheduleBuffer:completionCallbackType:completionHandler:
