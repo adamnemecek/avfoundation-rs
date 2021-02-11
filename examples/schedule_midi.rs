@@ -42,7 +42,12 @@ fn main() {
         let _ = tx.send(result);
     });
 
+    use unsafe_slice::prelude::*;
+
     let res = rx.recv().unwrap();
+    let notes: Vec<u8> = vec![50, 60, 70, 80, 90];
+    let mut i = 0;
+    let slice = notes.unsafe_slice();
     match res {
         Ok(unit) => {
             engine.attach_node(&unit);
@@ -51,10 +56,13 @@ fn main() {
             let midi_fn = unit.au_audio_unit().schedule_midi_fn().unwrap();
             let _token = unit.au_audio_unit().token_by_adding_render_observer_fn(
                 move |flags, ts, frame_count, bus| {
+                    let idx = i % slice.len();
                     if flags.contains(AudioUnitRenderActionFlags::PreRender) {
-                        let bytes = [0x90, 100, 100];
+                        let note = slice[idx];
+                        let bytes = [0x90, note, 100];
                         midi_fn(AUEventSampleTime::immediate(), 0, &bytes);
                     }
+                    i += 1;
                 },
             );
         }

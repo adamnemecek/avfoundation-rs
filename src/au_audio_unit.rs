@@ -762,6 +762,7 @@ impl AUAudioUnitRef {
     }
 
     #[inline]
+    #[must_use]
     pub fn schedule_parameter_fn(
         &self,
     ) -> impl Fn(AUEventSampleTime, AUAudioFrameCount, AUParameterAddress, AUValue) -> () {
@@ -801,9 +802,11 @@ impl AUAudioUnitRef {
     }
 
     #[must_use]
-    pub fn token_by_adding_render_observer_fn<F>(&self, f: F) -> RenderObserverToken
+    #[inline]
+    pub fn token_by_adding_render_observer_fn<F>(&self, mut f: F) -> RenderObserverToken
     where
-        F: 'static + Fn(AudioUnitRenderActionFlags, &AudioTimeStamp, AUAudioFrameCount, i64) -> (),
+        F: 'static
+            + FnMut(AudioUnitRenderActionFlags, &AudioTimeStamp, AUAudioFrameCount, i64) -> (),
     {
         let block = block::ConcreteBlock::new(
             move |flags: AudioUnitRenderActionFlags,
@@ -1245,8 +1248,8 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_PresentPreset.
     // */
     // @property (NS_NONATOMIC_IOSONLY, retain, nullable) AUAudioUnitPreset *currentPreset;
-    pub fn current_preset(&self) -> ! {
-        todo!()
+    pub fn current_preset(&self) -> Option<&AUAudioUnitPresetRef> {
+        unsafe { msg_send![self, currentPreset] }
     }
 
     // /*!	@property	latency

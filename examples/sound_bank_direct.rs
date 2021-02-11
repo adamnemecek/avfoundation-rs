@@ -8,7 +8,7 @@ use avfoundation::{
 
 pub struct Instrument {
     engine: AVAudioEngine,
-    sampler: AVAudioUnitSampler,
+    pub sampler: AVAudioUnitSampler,
 }
 
 impl Instrument {
@@ -44,6 +44,13 @@ fn main() {
     use rand::Rng;
     let instrument = Instrument::new();
     let mut rng = rand::thread_rng();
+
+    // let token = instrument
+    //     .sampler
+    //     .au_audio_unit()
+    //     .token_by_adding_render_observer_fn(move |a, b, c, d| {
+    //         todo!("in callback");
+    //     });
 
     // for i in 0..20000 {
     //     std::thread::sleep(std::time::Duration::from_millis(100));
