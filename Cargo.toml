@@ -30,3 +30,4 @@ features = ["objc_exception"]
 
 [dev-dependencies]
 unsafe_slice = { path = "../unsafe_slice" }
+mach = "*"

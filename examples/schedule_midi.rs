@@ -1,4 +1,6 @@
 use avfoundation::prelude::*;
+use kern_return::KERN_SUCCESS;
+use mach::kern_return;
 // public func midi_scheduler_main() {
 
 //     let engine = AVAudioEngine()
@@ -27,6 +29,25 @@ use avfoundation::prelude::*;
 //     RunLoop.main.run()
 
 // }
+
+struct MachTimebase {
+    inner: mach::mach_time::mach_timebase_info,
+}
+
+impl MachTimebase {
+    pub fn current() -> Self {
+        let mut inner = std::mem::MaybeUninit::<mach::mach_time::mach_timebase_info>::uninit();
+        let res = unsafe { mach::mach_time::mach_timebase_info(inner.as_mut_ptr()) };
+        if res == mach::kern_return::KERN_SUCCESS {
+            Self {
+                inner: unsafe { inner.assume_init() },
+            }
+        } else {
+            todo!()
+        }
+    }
+}
+
 fn main() {
     let engine = AVAudioEngine::new();
     let component = AVAudioUnitComponentManager::shared().components_passing_test(|x| {
