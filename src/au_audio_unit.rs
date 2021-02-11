@@ -831,9 +831,9 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 API AudioUnitRemoveRenderNotify().
     // */
     // - (void)removeRenderObserver:(NSInteger)token;
-    pub fn remove_render_observer(&self, token: NSInteger) {
+    pub fn remove_render_observer(&self, token: RenderObserverToken) {
         unsafe {
-            let _: () = msg_send![self, removeRenderObserver: token];
+            let _: () = msg_send![self, removeRenderObserver: token.inner];
         }
     }
 
