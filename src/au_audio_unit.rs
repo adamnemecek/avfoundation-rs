@@ -877,13 +877,14 @@ impl AUAudioUnitRef {
     // @property (NS_NONATOMIC_IOSONLY, nullable, retain) AUParameterTree *parameterTree;
     pub fn parameter_tree(&self) -> Option<&AUParameterTreeRef> {
         unsafe {
+            msg_send![self, parameterTree]
             // let mut ptr: AUParameterTreeRef = nil;
-            let mut ptr: *mut AUParameterTreeRef = msg_send![self, parameterTree];
-            if ptr.is_null() {
-                None
-            } else {
-                ptr.as_ref()
-            }
+            // let mut ptr: *mut AUParameterTreeRef = msg_send![self, parameterTree];
+            // if ptr.is_null() {
+            //     None
+            // } else {
+            //     ptr.as_ref()
+            // }
         }
     }
 
@@ -918,8 +919,8 @@ impl AUAudioUnitRef {
     // 		device or music effect.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, getter=isMusicDeviceOrEffect) BOOL musicDeviceOrEffect;
-    pub fn music_device_or_effect(&self) -> ! {
-        todo!()
+    pub fn is_music_device_or_effect(&self) -> bool {
+        unsafe { msg_send![self, isMusicDeviceOrEffect] }
     }
 
     // /*!	@property	virtualMIDICableCount
@@ -929,8 +930,8 @@ impl AUAudioUnitRef {
     // 		property expresses the number of cables supported by the audio unit.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) NSInteger virtualMIDICableCount;
-    pub fn virtual_midi_cable_count(&self) -> ! {
-        todo!()
+    pub fn virtual_midi_cable_count(&self) -> NSInteger {
+        unsafe { msg_send![self, virtualMIDICableCount] }
     }
 
     // /*!	@property	scheduleMIDIEventBlock
