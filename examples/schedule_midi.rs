@@ -137,15 +137,17 @@ fn main() {
                         return;
                     }
                     let (start, end) = midi_time_range(ts, frame_count as _);
-                    let idx = i % slice.len();
-                    let note = slice[idx];
-                    let bytes = [0x90, note, 100];
-                    midi_fn(AUEventSampleTime::immediate(), 0, &bytes);
+
+                    loop {
+                        let idx = i;
+                        let note = slice[idx];
+                        let bytes = [0x90, note, 100];
+                        midi_fn(AUEventSampleTime::immediate(), 0, &bytes);
+                    }
+
                     unsafe {
                         *running_ptr = false;
                     }
-
-                    i += 1;
                 },
             );
         }
