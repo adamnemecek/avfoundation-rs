@@ -102,7 +102,7 @@ fn midi_time_range(timestamp: &AudioTimeStamp, frames: f64) -> (f64, f64) {
 // }
 #[derive(Clone, Copy)]
 pub struct TimestampF64 {
-    inner: f64
+    inner: f64,
 }
 
 impl PartialEq for TimestampF64 {
@@ -111,16 +111,13 @@ impl PartialEq for TimestampF64 {
     }
 }
 
-impl Eq for TimestampF64 {
-
-}
+impl Eq for TimestampF64 {}
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct MIDIEvent {
     pub timestamp: TimestampF64,
     pub data: [u8; 3],
 }
-
 
 enum MIDIEventKind {
     On,
@@ -185,16 +182,20 @@ fn main() {
     let mut running = false;
     let mut running_ptr: *mut bool = &mut running;
 
-
-    match res {
+    let token = match res {
         Ok(unit) => {
             engine.attach_node(&unit);
             engine.connect_nodes(&unit, engine.output_node(), None);
             let _ = engine.start().unwrap();
             let midi_fn = unit.au_audio_unit().schedule_midi_fn().unwrap();
-            let _token = unit.au_audio_unit().token_by_adding_render_observer_fn(
+            unit.au_audio_unit().token_by_adding_render_observer_fn(
                 move |flags, ts, frame_count, bus| {
-                    /// 
+                    // if the offset ts is before requested ts, we have to increment the counter
+                    // scheduling events that are in the requested range, until we find
+                    // an event that is past the requested timestamp
+                    // * if the requested timestamp is past the max timestamp, we set the running_ptr
+                    // to false
+                    //
                     if !flags.contains(AudioUnitRenderActionFlags::PreRender) {
                         return;
                     }
@@ -207,7 +208,7 @@ fn main() {
                     loop {
                         let event = &slice[i];
 
-                        // if 
+                        // if
                         unsafe {
                             *running_ptr = false;
                         }
@@ -219,12 +220,12 @@ fn main() {
                         // let bytes = [0x90, note, 100];
                     }
                 },
-            );
+            )
         }
         Err(err) => {
             panic!("{:?}", err)
         }
-    }
+    };
 
     run_main_loop();
 }
