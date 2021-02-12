@@ -1,4 +1,5 @@
 use avfoundation::prelude::*;
+use chromagear::Timestamp;
 use kern_return::KERN_SUCCESS;
 use mach::{
     clock_types::NSEC_PER_SEC,
@@ -99,12 +100,27 @@ fn midi_time_range(timestamp: &AudioTimeStamp, frames: f64) -> (f64, f64) {
 //     error = MusicDeviceMIDIEvent(self.instrumentUnit, command.statusByte, command.dataByte1, command.dataByte2, 0);
 //     if (error) return error;
 // }
+#[derive(Clone, Copy)]
+pub struct TimestampF64 {
+    inner: f64
+}
 
-#[derive(Clone, Copy, PartialEq)]
+impl PartialEq for TimestampF64 {
+    fn eq(&self, other: &Self) -> bool {
+        self.inner == other.inner
+    }
+}
+
+impl Eq for TimestampF64 {
+
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub struct MIDIEvent {
-    pub timestamp: f64,
+    pub timestamp: TimestampF64,
     pub data: [u8; 3],
 }
+
 
 enum MIDIEventKind {
     On,
@@ -161,11 +177,14 @@ fn main() {
 
     let res = rx.recv().unwrap();
     let notes: Vec<MIDIEvent> = vec![];
+
+    // let max_timestamp = notes.iter().max(|x| a.timestamp);
     let mut i = 0;
     let slice = notes.unsafe_slice();
 
     let mut running = false;
     let mut running_ptr: *mut bool = &mut running;
+
 
     match res {
         Ok(unit) => {
@@ -175,6 +194,7 @@ fn main() {
             let midi_fn = unit.au_audio_unit().schedule_midi_fn().unwrap();
             let _token = unit.au_audio_unit().token_by_adding_render_observer_fn(
                 move |flags, ts, frame_count, bus| {
+                    /// 
                     if !flags.contains(AudioUnitRenderActionFlags::PreRender) {
                         return;
                     }
@@ -187,10 +207,11 @@ fn main() {
                     loop {
                         let event = &slice[i];
 
+                        // if 
                         unsafe {
                             *running_ptr = false;
                         }
-                        if event.timestamp > end {
+                        if event.timestamp.inner > end {
                             break;
                         }
                         midi_fn(AUEventSampleTime::immediate(), 0, &event.data);
