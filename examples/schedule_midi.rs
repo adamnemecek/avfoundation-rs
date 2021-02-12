@@ -178,17 +178,24 @@ fn main() {
                     if !flags.contains(AudioUnitRenderActionFlags::PreRender) {
                         return;
                     }
+
+                    if !unsafe { *running_ptr } {
+                        return;
+                    }
                     let (start, end) = midi_time_range(ts, frame_count as _);
 
                     loop {
-                        let idx = i;
-                        let note = &slice[idx];
-                        // let bytes = [0x90, note, 100];
-                        midi_fn(AUEventSampleTime::immediate(), 0, &note.data);
-                    }
+                        let event = &slice[i];
 
-                    unsafe {
-                        *running_ptr = false;
+                        unsafe {
+                            *running_ptr = false;
+                        }
+                        if event.timestamp > end {
+                            break;
+                        }
+                        midi_fn(AUEventSampleTime::immediate(), 0, &event.data);
+                        i += 1;
+                        // let bytes = [0x90, note, 100];
                     }
                 },
             );
