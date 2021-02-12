@@ -100,6 +100,48 @@ fn midi_time_range(timestamp: &AudioTimeStamp, frames: f64) -> (f64, f64) {
 //     if (error) return error;
 // }
 
+#[derive(Clone, Copy, PartialEq)]
+pub struct MIDIEvent {
+    pub timestamp: f64,
+    pub data: [u8; 3],
+}
+
+enum MIDIEventKind {
+    On,
+    Off,
+}
+
+impl MIDIEvent {
+    fn kind(&self) -> MIDIEventKind {
+        if self.data[0] == 0x90 || self.data[2] > 0 {
+            MIDIEventKind::On
+        } else {
+            MIDIEventKind::Off
+        }
+    }
+}
+
+impl std::fmt::Debug for MIDIEvent {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.kind() {
+            MIDIEventKind::On => {
+                write!(
+                    f,
+                    "MIDIEvent {{ kind: On, note: {}, velocity: {}}}",
+                    self.data[1], self.data[2]
+                )
+            }
+            MIDIEventKind::Off => {
+                write!(
+                    f,
+                    "MIDIEvent {{ kind: Off, note: {}, velocity: {}}}",
+                    self.data[1], self.data[2]
+                )
+            }
+        }
+    }
+}
+
 fn main() {
     let engine = AVAudioEngine::new();
     let component = AVAudioUnitComponentManager::shared().components_passing_test(|x| {
@@ -118,7 +160,7 @@ fn main() {
     use unsafe_slice::prelude::*;
 
     let res = rx.recv().unwrap();
-    let notes: Vec<u8> = vec![50, 60, 70, 80, 90];
+    let notes: Vec<MIDIEvent> = vec![];
     let mut i = 0;
     let slice = notes.unsafe_slice();
 
@@ -140,9 +182,9 @@ fn main() {
 
                     loop {
                         let idx = i;
-                        let note = slice[idx];
-                        let bytes = [0x90, note, 100];
-                        midi_fn(AUEventSampleTime::immediate(), 0, &bytes);
+                        let note = &slice[idx];
+                        // let bytes = [0x90, note, 100];
+                        midi_fn(AUEventSampleTime::immediate(), 0, &note.data);
                     }
 
                     unsafe {
