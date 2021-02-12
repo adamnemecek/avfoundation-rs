@@ -1889,7 +1889,7 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly) AVAudioFormat *format;
     pub fn format(&self) -> &AVAudioFormatRef {
-        todo!()
+        unsafe { msg_send![self, format] }
     }
 
     // /*!	@property	setFormat:error:
@@ -1902,7 +1902,11 @@ impl AUAudioUnitBusRef {
     // - (BOOL)setFormat:(AVAudioFormat *)format error:(NSError **)outError;
     #[must_use]
     pub fn set_format(&self, format: &AVAudioFormatRef) -> Result<(), NSError> {
-        todo!()
+        unsafe {
+            try_bool_objc!{ err =>
+                msg_send![self, setFormat: format error:&mut err]
+            }
+        }
     }
 
     // /*! @property	shouldAllocateBuffer
@@ -1925,7 +1929,7 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY) BOOL shouldAllocateBuffer API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
     pub fn should_allocate_buffer(&self) -> bool {
-        todo!()
+        unsafe { msg_send![self, shouldAllocateBuffer] }
     }
 
     // /*!	@property	enabled
