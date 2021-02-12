@@ -1836,14 +1836,26 @@ impl AUAudioUnitBusArrayRef {
     // 	@brief		Add a KVO observer for a property on all busses in the array.
     // */
     // - (void)addObserverToAllBusses:(NSObject *)observer forKeyPath:(NSString *)keyPath options:(NSKeyValueObservingOptions)options context:(void * __nullable)context;
+    pub fn add_observer_to_all_busses(&self) {
+        todo!()
+    }
 
     // /*!	@method		removeObserverFromAllBusses:forKeyPath:context:
     // 	@brief		Remove a KVO observer for a property on all busses in the array.
     // */
     // - (void)removeObserverFromAllBusses:(NSObject *)observer forKeyPath:(NSString *)keyPath context:(void * __nullable)context;
+    pub fn remove_observer_from_all_busses(&self, observer: u32, for_key_path: &str) {
+        // let for_key_path =
+        todo!()
+    }
 
     // /// The audio unit that owns the bus.
     // @property (NS_NONATOMIC_IOSONLY, readonly, assign) AUAudioUnit *ownerAudioUnit;
+    pub fn owner_audio_unit(&self) -> &AUAudioUnitRef {
+        unsafe {
+            msg_send![self, ownerAudioUnit]
+        }
+    }
 
     // /// Which bus array this is (input or output).
     // @property (NS_NONATOMIC_IOSONLY, readonly) AUAudioUnitBusType busType;
@@ -1928,7 +1940,11 @@ impl AUAudioUnitBusRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, getter=isEnabled) BOOL enabled;
     pub fn is_enabled(&self) -> bool {
-        todo!()
+        unsafe { msg_send![self, isEnabled] }
+    }
+
+    pub fn set_enabled(&self, v: bool) {
+        unsafe { msg_send![self, setEnabled: v] }
     }
 
     // /*!	@property	name
