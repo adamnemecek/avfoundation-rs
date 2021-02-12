@@ -65,6 +65,7 @@ impl MachTimebase {
 // const NSEC_PER_SEC: u32 = 1000000000;
 
 // use mach::
+// adapted from mikmidi midi to audio example
 fn midi_time_range(timestamp: &AudioTimeStamp, frames: f64) -> (f64, f64) {
     let nsec_per_sec = NSEC_PER_SEC as f64;
     let sample_rate = 44100.0;

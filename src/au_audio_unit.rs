@@ -879,16 +879,7 @@ impl AUAudioUnitRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, nullable, retain) AUParameterTree *parameterTree;
     pub fn parameter_tree(&self) -> Option<&AUParameterTreeRef> {
-        unsafe {
-            msg_send![self, parameterTree]
-            // let mut ptr: AUParameterTreeRef = nil;
-            // let mut ptr: *mut AUParameterTreeRef = msg_send![self, parameterTree];
-            // if ptr.is_null() {
-            //     None
-            // } else {
-            //     ptr.as_ref()
-            // }
-        }
+        unsafe { msg_send![self, parameterTree] }
     }
 
     // /*!	@method		parametersForOverviewWithCount:
@@ -1123,8 +1114,12 @@ impl AUAudioUnitRef {
     //  */
     // - (BOOL)saveUserPreset:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
     #[must_use]
-    pub fn save_user_preset(&self) -> Result<(), NSError> {
-        todo!()
+    pub fn save_user_preset(&self, user_preset: &AUAudioUnitPresetRef) -> Result<(), NSError> {
+        unsafe {
+            try_bool_objc! { err =>
+                msg_send![self, saveUserPreset: user_preset error: &mut err]
+            }
+        }
     }
 
     // /*!	@method		deleteUserPreset:error
@@ -1151,8 +1146,14 @@ impl AUAudioUnitRef {
     // 		outError.
     // */
     // - (BOOL)deleteUserPreset:(AUAudioUnitPreset *)userPreset error:(NSError **)outError API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0));
-    pub fn delete_user_preset(&self) -> ! {
-        todo!()
+
+    #[must_use]
+    pub fn delete_user_preset(&self, user_preset: &AUAudioUnitPresetRef) -> Result<(), NSError> {
+        unsafe {
+            try_bool_objc! { err =>
+                msg_send![self, deleteUserPreset: user_preset error: &mut err]
+            }
+        }
     }
 
     // /*! @method		presetStateFor:error
