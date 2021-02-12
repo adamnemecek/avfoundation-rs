@@ -1466,7 +1466,7 @@ impl AUAudioUnitRef {
     // 		on this cable.
     // */
     // - (MIDICIProfileState *)profileStateForCable:(uint8_t)cable channel:(MIDIChannelNumber)channel API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
-    pub fn profile_state_for_cable(&self) -> ! {
+    pub fn profile_state_for_cable(&self, cable: u8, channel: MIDIChannelNumber) -> ! {
         todo!()
     }
 
@@ -1489,8 +1489,17 @@ impl AUAudioUnitRef {
     //             onChannel:(MIDIChannelNumber)channel
     //                 error:(NSError **)outError API_AVAILABLE(macos(10.14), ios(12.0)) __WATCHOS_PROHIBITED __TVOS_PROHIBITED;
 
-    pub fn enable_profile(&self) -> ! {
-        todo!()
+    pub fn enable_profile(
+        &self,
+        profile: MIDICIProfile,
+        cable: u8,
+        on_channel: MIDIChannelNumber,
+    ) -> Result<(), NSError> {
+        unsafe {
+            try_bool_objc! { err =>
+                msg_send![self, enableProfile: profile cable: cable onChannel:on_channel error: &mut err]
+            }
+        }
     }
     // /*!	@method		disableProfile:cable:onChannel:error:
     // 	@brief		Disable a MIDI-CI Profile on the specified cable/channel.
@@ -1642,6 +1651,13 @@ impl AUAudioUnitRef {
     // 		Returned in the event of failure.
     // */
     // - (BOOL)setDeviceID:(AUAudioObjectID)deviceID error:(NSError **)outError;
+    pub fn set_device_id(&self, device_id: AUAudioObjectID) -> Result<(), NSError> {
+        unsafe {
+            try_bool_objc! { err =>
+                msg_send![self, setDeviceID: device_id error: &mut err]
+            }
+        }
+    }
 
     // /*!	@property	deviceInputLatency
     // 	@brief		The audio device's input latency, in seconds.
@@ -1771,8 +1787,8 @@ impl AUAudioUnitBusArrayRef {
     // 		The base implementation returns false.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, getter=isCountChangeable) BOOL countChangeable;
-    pub fn count_changeable(&self) -> bool {
-        unsafe { msg_send![self, countChangeable] }
+    pub fn is_count_changeable(&self) -> bool {
+        unsafe { msg_send![self, isCountChangeable] }
     }
 
     // /*!	@property	setBusCount:error:
@@ -1800,7 +1816,7 @@ impl AUAudioUnitBusArrayRef {
     #[must_use]
     pub fn set_bus_count(&self, count: NSUInteger) -> Result<(), NSError> {
         unsafe {
-            try_objc! { err => msg_send![self, setBusCount: count error: &mut err] }
+            try_bool_objc! { err => msg_send![self, setBusCount: count error: &mut err] }
         }
         // unsafe {
         //     let mut err: *mut NSError = std::ptr::null_mut();
