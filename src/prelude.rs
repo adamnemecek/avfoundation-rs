@@ -3,6 +3,7 @@ pub use core_audio_types::AudioTimeStamp;
 pub use crate::run_main_loop;
 
 pub use crate::{
+    AUAudioFrameCount,
     AUAudioUnit,
     AUAudioUnitBus,
     AUAudioUnitBusArray,
@@ -11,6 +12,7 @@ pub use crate::{
     AUAudioUnitPreset,
     AUAudioUnitPresetRef,
     AUAudioUnitRef,
+    AUAudioUnitStatus,
     AUAudioUnitViewConfiguration,
     AUAudioUnitViewConfigurationRef,
     AUEventSampleTime,

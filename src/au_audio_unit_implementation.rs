@@ -1,21 +1,16 @@
-use crate::prelude::{
-    AUAudioUnitBusRef,
-    AUAudioUnitRef,
-    AUParameterAddress,
-    AUValue,
-    AVAudioFormatRef,
-};
+// use crate::p
 
 use core_audio_types::AudioTimeStamp;
 
-use crate::{
-    AUAudioFrameCount,
-    AUAudioUnitStatus,
-    AUEventSampleTime,
-    AudioBufferList,
-    // AudioTimeStamp,
-    AudioUnitRenderActionFlags,
-};
+use crate::prelude::*;
+
+//     AUAudioFrameCount,
+//     AUAudioUnitStatus,
+//     AUEventSampleTime,
+//     AudioBufferList,
+//     // AudioTimeStamp,
+//     AudioUnitRenderActionFlags,
+// };
 // #if (defined(__USE_PUBLIC_HEADERS__) && __USE_PUBLIC_HEADERS__) || (defined(USE_AUDIOTOOLBOX_PUBLIC_HEADERS) && USE_AUDIOTOOLBOX_PUBLIC_HEADERS) || !__has_include(<AudioToolboxCore/AUAudioUnitImplementation.h>)
 // /*!
 // 	@file		AUAudioUnitImplementation.h
@@ -204,6 +199,7 @@ pub struct AUParameterEvent {
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct AUMIDIEvent {
+    pub next: *const AURenderEvent,
     pub event_sample_time: AUEventSampleTime,
     pub event_type: AURenderEventType,
     pub reserved: u8,
@@ -295,6 +291,9 @@ impl AUAudioUnitRef {
     // @property (nonatomic, readonly) AURenderContextObserver renderContextObserver
     // 	API_AVAILABLE(macos(11.0), ios(14.0), watchos(7.0), tvos(14.0))
     // 	__SWIFT_UNAVAILABLE_MSG("Swift is not supported for use with audio realtime threads");
+    // pub fn AURenderContextObserver(&self) -> AURenderContextObserver {
+    //     todo!()
+    // }
 
     // /*! @property	MIDIOutputBufferSizeHint
     // 	@brief		Hint to control the size of the allocated buffer for outgoing MIDI events.
@@ -345,9 +344,13 @@ impl AUAudioUnitRef {
     //         If allocateRenderResourcesAndReturnError: should fail in a subclass, subclassers must use this method to set renderResourcesAllocated to NO.
     // */
     // - (void)setRenderResourcesAllocated:(BOOL)flag;
+    pub fn set_render_resources_allocated(&self, flag: bool) {
+        unsafe { msg_send![self, setRenderResourcesAllocated: flag] }
+    }
+}
+// @end
 
-    // @end
-
+impl AUAudioUnitBus {
     // // =================================================================================================
 
     // /// Aspects of AUAudioUnitBus of interest only to the implementation of v3 AUs.
@@ -359,7 +362,12 @@ impl AUAudioUnitRef {
     // 	@param outError	An error if the format is unsupported for the bus.
     // */
     // - (nullable instancetype)initWithFormat:(AVAudioFormat *)format error:(NSError **)outError;
+    pub fn new_with_format(format: &AVAudioFormatRef) -> Result<Self, NSError> {
+        todo!()
+    }
+}
 
+impl AUAudioUnitBusRef {
     // /*!	@property	supportedChannelCounts
     // 	@brief		An array of numbers giving the supported numbers of channels for this bus.
     // 	@discussion
@@ -379,7 +387,8 @@ impl AUAudioUnitRef {
     // @property (nonatomic) AUAudioChannelCount maximumChannelCount;
 
     // @end
-
+}
+impl AUAudioUnitBusArrayRef {
     // // =================================================================================================
 
     // /// Aspects of AUAudioUnitBusArray of interest only to subclassers.
