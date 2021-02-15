@@ -553,40 +553,49 @@ impl AUParameterNodeRef {
     // 		Hosts should not access this class; it will be instantiated when needed when creating an
     // 		AUAudioUnit.
     // */
-    // API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
-    // @interface AUAudioUnitV2Bridge : AUAudioUnit
-    // @end
-
-    // // =================================================================================================
-
-    // /*!	@brief	Protocol to which principal classes of v3 audio units (extensions) must conform.
-    // 	@discussion
-    // 		The principal class of a non-UI v3 audio unit extension will generally derive from NSObject
-    // 		and implement this protocol.
-
-    // 		The principal class of a UI v3 audio unit extension must derive from AUViewController and
-    // 		implement this protocol.
-    // */
-    // @protocol AUAudioUnitFactory <NSExtensionRequestHandling>
-
-    // /*!	@brief	Create an instance of an extension's AUAudioUnit.
-    // 	@discussion
-    // 		This method should create and return an instance of its audio unit.
-
-    // 		This method will be called only once per instance of the factory.
-
-    // 		Note that in non-ARC code, "create" methods return unretained objects (unlike "create"
-    // 		C functions); the implementor should return an object with reference count 1 but
-    // 		autoreleased.
-    // */
-    // - (nullable AUAudioUnit *)createAudioUnitWithComponentDescription:(AudioComponentDescription)desc error:(NSError **)error;
-    // @end
-
-    // NS_ASSUME_NONNULL_END
-
-    // #endif // __OBJC2__
-    // #endif // AudioToolbox_AUAudioUnitImplementation_h
-    // #else
-    // #include <AudioToolboxCore/AUAudioUnitImplementation.h>
-    // #endif
 }
+// API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
+// @interface AUAudioUnitV2Bridge : AUAudioUnit
+// @end
+
+pub enum AUAudioUnitV2BridgeFFI {}
+
+foreign_obj_type! {
+    type CType = AUAudioUnitV2BridgeFFI;
+    pub struct AUAudioUnitV2Bridge;
+    pub struct AUAudioUnitV2BridgeRef;
+    type ParentType = AUAudioUnitRef;
+}
+
+// // =================================================================================================
+
+// /*!	@brief	Protocol to which principal classes of v3 audio units (extensions) must conform.
+// 	@discussion
+// 		The principal class of a non-UI v3 audio unit extension will generally derive from NSObject
+// 		and implement this protocol.
+
+// 		The principal class of a UI v3 audio unit extension must derive from AUViewController and
+// 		implement this protocol.
+// */
+// @protocol AUAudioUnitFactory <NSExtensionRequestHandling>
+
+// /*!	@brief	Create an instance of an extension's AUAudioUnit.
+// 	@discussion
+// 		This method should create and return an instance of its audio unit.
+
+// 		This method will be called only once per instance of the factory.
+
+// 		Note that in non-ARC code, "create" methods return unretained objects (unlike "create"
+// 		C functions); the implementor should return an object with reference count 1 but
+// 		autoreleased.
+// */
+// - (nullable AUAudioUnit *)createAudioUnitWithComponentDescription:(AudioComponentDescription)desc error:(NSError **)error;
+// @end
+
+// NS_ASSUME_NONNULL_END
+
+// #endif // __OBJC2__
+// #endif // AudioToolbox_AUAudioUnitImplementation_h
+// #else
+// #include <AudioToolboxCore/AUAudioUnitImplementation.h>
+// #endif
