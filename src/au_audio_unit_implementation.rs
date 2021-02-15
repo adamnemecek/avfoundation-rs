@@ -2,7 +2,11 @@
 
 use core_audio_types::AudioTimeStamp;
 
-use crate::prelude::*;
+use crate::{
+    prelude::*,
+    AUAudioChannelCount,
+    AudioUnitParameterUnit,
+};
 
 //     AUAudioFrameCount,
 //     AUAudioUnitStatus,
@@ -276,9 +280,15 @@ impl AUAudioUnitRef {
     // 		<AVFoundation/AVAudioUnitEffect.h>).
     // */
     // + (void)registerSubclass:(Class)cls asComponentDescription:(AudioComponentDescription)componentDescription name:(NSString *)name version:(UInt32)version;
+    pub fn register_subclass() {
+        todo!()
+    }
 
-    // /// Block which subclassers must provide (via a getter) to implement rendering.
+    /// Block which subclassers must provide (via a getter) to implement rendering.
     // @property (nonatomic, readonly) AUInternalRenderBlock internalRenderBlock;
+    pub fn au_internal_render_block(&self) -> AUInternalRenderBlock {
+        unsafe { msg_send![self, AUInternalRenderBlock] }
+    }
 
     // /*!	@property	renderContextObserver
     // 	@brief		Block called by the OS when the rendering context changes.
@@ -385,6 +395,13 @@ impl AUAudioUnitBusRef {
     // 		nil. The default value is UINT_MAX.
     // */
     // @property (nonatomic) AUAudioChannelCount maximumChannelCount;
+    pub fn maximum_channel_count(&self) -> AUAudioChannelCount {
+        unsafe { msg_send![self, maximumChannelCount] }
+    }
+
+    pub fn set_maximum_channel_count(&self, maximum_channel_count: AUAudioChannelCount) {
+        unsafe { msg_send![self, setMaximumChannelCount: maximum_channel_count] }
+    }
 
     // @end
 }
@@ -407,10 +424,23 @@ impl AUAudioUnitBusArrayRef {
     // 	C functions); the caller should generally retain them.
     // */
     // @interface AUParameterTree (Factory)
+}
 
+impl AUParameterTreeRef {
     // ///	Create an AUParameter.
     // /// See AUParameter's properties for descriptions of the arguments.
     // + (AUParameter *)createParameterWithIdentifier:(NSString *)identifier name:(NSString *)name address:(AUParameterAddress)address min:(AUValue)min max:(AUValue)max unit:(AudioUnitParameterUnit)unit unitName:(NSString * __nullable)unitName flags:(AudioUnitParameterOptions)flags valueStrings:(NSArray<NSString *> *__nullable)valueStrings dependentParameters:(NSArray<NSNumber *> *__nullable)dependentParameters;
+    pub fn createParameterWithIdentifier(
+        identifier: &str,
+        name: &str,
+        address: AUParameterAddress,
+        min: AUValue,
+        max: AUValue,
+        unit: AudioUnitParameterUnit,
+        unit_name: &str, /*flags: AudioUnitParameterOptions*/
+    ) -> Self {
+        todo!()
+    }
 
     // /*!	@brief	Create an AUParameterGroup.
     // 	@param identifier	An identifier for the group (non-localized, persistent).
@@ -444,24 +474,25 @@ impl AUAudioUnitBusArrayRef {
     // + (AUParameterTree *)createTreeWithChildren:(NSArray<AUParameterNode *> *)children;
 
     // @end
+}
+// // =================================================================================================
 
-    // // =================================================================================================
+// /// A block called to notify the AUAudioUnit implementation of changes to AUParameter values.
+// typedef void (^AUImplementorValueObserver)(AUParameter *param, AUValue value);
 
-    // /// A block called to notify the AUAudioUnit implementation of changes to AUParameter values.
-    // typedef void (^AUImplementorValueObserver)(AUParameter *param, AUValue value);
+// /// A block called to fetch an AUParameter's current value from the AUAudioUnit implementation.
+// typedef AUValue (^AUImplementorValueProvider)(AUParameter *param);
 
-    // /// A block called to fetch an AUParameter's current value from the AUAudioUnit implementation.
-    // typedef AUValue (^AUImplementorValueProvider)(AUParameter *param);
+// /// A block called to convert an AUParameter's value to a string.
+// typedef NSString *__nonnull (^AUImplementorStringFromValueCallback)(AUParameter *param, const AUValue *__nullable value);
 
-    // /// A block called to convert an AUParameter's value to a string.
-    // typedef NSString *__nonnull (^AUImplementorStringFromValueCallback)(AUParameter *param, const AUValue *__nullable value);
+// /// A block called to convert a string to an AUParameter's value.
+// typedef AUValue (^AUImplementorValueFromStringCallback)(AUParameter *param, NSString *string);
 
-    // /// A block called to convert a string to an AUParameter's value.
-    // typedef AUValue (^AUImplementorValueFromStringCallback)(AUParameter *param, NSString *string);
+// /// A block called to return a group or parameter's localized display name, abbreviated to the requested length.
+// typedef NSString *__nonnull (^AUImplementorDisplayNameWithLengthCallback)(AUParameterNode *node, NSInteger desiredLength);
 
-    // /// A block called to return a group or parameter's localized display name, abbreviated to the requested length.
-    // typedef NSString *__nonnull (^AUImplementorDisplayNameWithLengthCallback)(AUParameterNode *node, NSInteger desiredLength);
-
+impl AUParameterNodeRef {
     // /// Aspects of AUParameterNode of interest only to AUAudioUnit subclassers.
     // @interface AUParameterNode (AUParameterNodeImplementation)
     // /*!	@brief		Called when a parameter changes value.
