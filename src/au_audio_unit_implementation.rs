@@ -8,6 +8,10 @@ use crate::{
     AudioUnitParameterUnit,
 };
 
+use cocoa_foundation::base::{
+    id,
+};
+
 //     AUAudioFrameCount,
 //     AUAudioUnitStatus,
 //     AUEventSampleTime,
@@ -491,9 +495,11 @@ pub type AUImplementorStringFromValueCallback = block::Block<AUParameter, AUValu
 
 // /// A block called to convert a string to an AUParameter's value.
 // typedef AUValue (^AUImplementorValueFromStringCallback)(AUParameter *param, NSString *string);
+pub type AUImplementorValueFromStringCallback = block::Block<(AUParameter, id), AUValue>;
 
 // /// A block called to return a group or parameter's localized display name, abbreviated to the requested length.
 // typedef NSString *__nonnull (^AUImplementorDisplayNameWithLengthCallback)(AUParameterNode *node, NSInteger desiredLength);
+pub type AUImplementorDisplayNameWithLengthCallback = block::Block<(AUParameterNode, NSInteger), id>;
 
 impl AUParameterNodeRef {
     // /// Aspects of AUParameterNode of interest only to AUAudioUnit subclassers.
@@ -531,12 +537,33 @@ impl AUParameterNodeRef {
     // ///	Called to provide string representations of parameter values.
     // ///	If value is nil, the callback uses the current value of the parameter.
     // @property (NS_NONATOMIC_IOSONLY, copy) AUImplementorStringFromValueCallback implementorStringFromValueCallback;
+    pub fn implementor_string_from_value_callback(&self) -> AUImplementorStringFromValueCallback {
+        unsafe { msg_send![self, implementorStringFromValueCallback] }
+    }
+
+    pub fn set_implementor_string_from_value_callback(&self, implementor: AUImplementorStringFromValueCallback) {
+        unsafe { msg_send![self, setImplementorStringFromValueCallback: implementor] }
+    }
 
     // /// Called to convert string to numeric representations of parameter values.
     // @property (NS_NONATOMIC_IOSONLY, copy) AUImplementorValueFromStringCallback implementorValueFromStringCallback;
+    pub fn implementor_value_from_string_callback(&self) -> AUImplementorValueFromStringCallback {
+        unsafe { msg_send![self, implementorValueFromStringCallback] }
+    }
+
+    pub fn set_implementor_value_from_string_callback(&self, implementor: AUImplementorValueFromStringCallback) {
+        unsafe { msg_send![self, setImplementorValueFromStringCallback: implementor] }
+    }
 
     // /// Called to obtain an abbreviated version of a parameter or group name.
     // @property (NS_NONATOMIC_IOSONLY, copy) AUImplementorDisplayNameWithLengthCallback implementorDisplayNameWithLengthCallback;
+    pub fn implementor_display_name_with_length_callback(&self) -> AUImplementorDisplayNameWithLengthCallback {
+        unsafe { msg_send![self, implementorDisplayNameWithLengthCallback] }
+    }
+
+    pub fn set_implementor_display_name_with_length_callback(&self, implementor: AUImplementorDisplayNameWithLengthCallback) {
+        unsafe { msg_send![self, setImplementorDisplayNameWithLengthCallback: implementor] }
+    }
     // @end
 
     // // =================================================================================================
