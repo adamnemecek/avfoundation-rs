@@ -1,3 +1,7 @@
+use crate::prelude::{
+    AUParameterAddress,
+    AUValue,
+};
 use core_audio_types::AudioTimeStamp;
 
 use crate::{
@@ -169,7 +173,14 @@ pub struct AURenderEventHeader {
 // 												///	the new value.
 // } AUParameterEvent;
 #[derive(Clone, Copy)]
-struct AUParameterEvent {}
+struct AUParameterEvent {
+    pub event_sample_time: AUEventSampleTime,
+    pub event_type: AURenderEventType,
+    pub reserved: [u8; 3],
+    pub ramp_duration_sample_frames: AUAudioFrameCount,
+    pub parameter_address: AUParameterAddress,
+    pub value: AUValue,
+}
 
 // /// Describes a single scheduled MIDI event.
 // typedef struct AUMIDIEvent {

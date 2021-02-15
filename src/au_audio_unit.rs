@@ -1852,9 +1852,7 @@ impl AUAudioUnitBusArrayRef {
     // /// The audio unit that owns the bus.
     // @property (NS_NONATOMIC_IOSONLY, readonly, assign) AUAudioUnit *ownerAudioUnit;
     pub fn owner_audio_unit(&self) -> &AUAudioUnitRef {
-        unsafe {
-            msg_send![self, ownerAudioUnit]
-        }
+        unsafe { msg_send![self, ownerAudioUnit] }
     }
 
     // /// Which bus array this is (input or output).
@@ -1903,7 +1901,7 @@ impl AUAudioUnitBusRef {
     #[must_use]
     pub fn set_format(&self, format: &AVAudioFormatRef) -> Result<(), NSError> {
         unsafe {
-            try_bool_objc!{ err =>
+            try_bool_objc! { err =>
                 msg_send![self, setFormat: format error:&mut err]
             }
         }
@@ -1957,6 +1955,10 @@ impl AUAudioUnitBusRef {
     // @property (NS_NONATOMIC_IOSONLY, copy, nullable) NSString *name;
     pub fn name(&self) -> Option<&str> {
         unsafe { crate::opt_nsstring_as_str![msg_send![self, name]] }
+    }
+
+    pub fn set_name(&self) -> ! {
+        todo!()
     }
 
     // /*! @property   index
