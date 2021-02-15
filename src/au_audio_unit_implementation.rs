@@ -8,9 +8,7 @@ use crate::{
     AudioUnitParameterUnit,
 };
 
-use cocoa_foundation::base::{
-    id,
-};
+use cocoa_foundation::base::id;
 
 //     AUAudioFrameCount,
 //     AUAudioUnitStatus,
@@ -499,7 +497,8 @@ pub type AUImplementorValueFromStringCallback = block::Block<(AUParameter, id), 
 
 // /// A block called to return a group or parameter's localized display name, abbreviated to the requested length.
 // typedef NSString *__nonnull (^AUImplementorDisplayNameWithLengthCallback)(AUParameterNode *node, NSInteger desiredLength);
-pub type AUImplementorDisplayNameWithLengthCallback = block::Block<(AUParameterNode, NSInteger), id>;
+pub type AUImplementorDisplayNameWithLengthCallback =
+    block::Block<(AUParameterNode, NSInteger), id>;
 
 impl AUParameterNodeRef {
     // /// Aspects of AUParameterNode of interest only to AUAudioUnit subclassers.
@@ -541,7 +540,10 @@ impl AUParameterNodeRef {
         unsafe { msg_send![self, implementorStringFromValueCallback] }
     }
 
-    pub fn set_implementor_string_from_value_callback(&self, implementor: AUImplementorStringFromValueCallback) {
+    pub fn set_implementor_string_from_value_callback(
+        &self,
+        implementor: AUImplementorStringFromValueCallback,
+    ) {
         unsafe { msg_send![self, setImplementorStringFromValueCallback: implementor] }
     }
 
@@ -551,36 +553,48 @@ impl AUParameterNodeRef {
         unsafe { msg_send![self, implementorValueFromStringCallback] }
     }
 
-    pub fn set_implementor_value_from_string_callback(&self, implementor: AUImplementorValueFromStringCallback) {
+    pub fn set_implementor_value_from_string_callback(
+        &self,
+        implementor: AUImplementorValueFromStringCallback,
+    ) {
         unsafe { msg_send![self, setImplementorValueFromStringCallback: implementor] }
     }
 
     // /// Called to obtain an abbreviated version of a parameter or group name.
     // @property (NS_NONATOMIC_IOSONLY, copy) AUImplementorDisplayNameWithLengthCallback implementorDisplayNameWithLengthCallback;
-    pub fn implementor_display_name_with_length_callback(&self) -> AUImplementorDisplayNameWithLengthCallback {
+    pub fn implementor_display_name_with_length_callback(
+        &self,
+    ) -> AUImplementorDisplayNameWithLengthCallback {
         unsafe { msg_send![self, implementorDisplayNameWithLengthCallback] }
     }
 
-    pub fn set_implementor_display_name_with_length_callback(&self, implementor: AUImplementorDisplayNameWithLengthCallback) {
-        unsafe { msg_send![self, setImplementorDisplayNameWithLengthCallback: implementor] }
+    pub fn set_implementor_display_name_with_length_callback(
+        &self,
+        implementor: AUImplementorDisplayNameWithLengthCallback,
+    ) {
+        unsafe {
+            msg_send![
+                self,
+                setImplementorDisplayNameWithLengthCallback: implementor
+            ]
+        }
     }
     // @end
-
-    // // =================================================================================================
-
-    // /*!	@brief	Wraps a v2 audio unit in an AUAudioUnit subclass.
-    // 	@discussion
-    // 		Implementors of version 3 audio units may derive their implementations from
-    // 		AUAudioUnitV2Bridge. It expects the component description with which it is initialized to
-    // 		refer to a registered component with a v2 implementation using an
-    // 		AudioComponentFactoryFunction. The bridge will instantiate the v2 audio unit via the factory
-    // 		function and communicate it with it using the v2 AudioUnit API's (AudioUnitSetProperty,
-    // 		etc.)
-
-    // 		Hosts should not access this class; it will be instantiated when needed when creating an
-    // 		AUAudioUnit.
-    // */
 }
+// // =================================================================================================
+
+// /*!	@brief	Wraps a v2 audio unit in an AUAudioUnit subclass.
+// 	@discussion
+// 		Implementors of version 3 audio units may derive their implementations from
+// 		AUAudioUnitV2Bridge. It expects the component description with which it is initialized to
+// 		refer to a registered component with a v2 implementation using an
+// 		AudioComponentFactoryFunction. The bridge will instantiate the v2 audio unit via the factory
+// 		function and communicate it with it using the v2 AudioUnit API's (AudioUnitSetProperty,
+// 		etc.)
+
+// 		Hosts should not access this class; it will be instantiated when needed when creating an
+// 		AUAudioUnit.
+// */
 // API_AVAILABLE(macos(10.11), ios(9.0), watchos(2.0), tvos(9.0))
 // @interface AUAudioUnitV2Bridge : AUAudioUnit
 // @end
