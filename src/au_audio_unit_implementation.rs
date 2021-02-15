@@ -432,7 +432,7 @@ impl AUParameterTreeRef {
     // ///	Create an AUParameter.
     // /// See AUParameter's properties for descriptions of the arguments.
     // + (AUParameter *)createParameterWithIdentifier:(NSString *)identifier name:(NSString *)name address:(AUParameterAddress)address min:(AUValue)min max:(AUValue)max unit:(AudioUnitParameterUnit)unit unitName:(NSString * __nullable)unitName flags:(AudioUnitParameterOptions)flags valueStrings:(NSArray<NSString *> *__nullable)valueStrings dependentParameters:(NSArray<NSNumber *> *__nullable)dependentParameters;
-    pub fn createParameterWithIdentifier(
+    pub fn create_parameter_with_identifier(
         identifier: &str,
         name: &str,
         address: AUParameterAddress,
@@ -443,14 +443,20 @@ impl AUParameterTreeRef {
     ) -> Self {
         todo!()
     }
-
+}
+impl AUParameterGroup {
     // /*!	@brief	Create an AUParameterGroup.
     // 	@param identifier	An identifier for the group (non-localized, persistent).
     // 	@param name			The group's human-readable name (localized).
     // 	@param children		The group's child nodes.
     // */
     // + (AUParameterGroup *)createGroupWithIdentifier:(NSString *)identifier name:(NSString *)name children:(NSArray<AUParameterNode *> *)children;
+    pub fn create_group_with_identifier() -> AUParameterGroup {
+        todo!()
+    }
+}
 
+impl AUParameterTreeRef {
     // /*!	@brief		Create a template group which may be used as a prototype for further group instances.
 
     // 	@discussion
