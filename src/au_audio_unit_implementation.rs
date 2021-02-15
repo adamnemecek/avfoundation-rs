@@ -1,7 +1,9 @@
 use crate::prelude::{
+    AUAudioUnitBusRef,
     AUAudioUnitRef,
     AUParameterAddress,
     AUValue,
+    AVAudioFormatRef,
 };
 
 use core_audio_types::AudioTimeStamp;
@@ -257,6 +259,7 @@ pub type AUInternalRenderBlock = block::RcBlock<
         AUAudioFrameCount, // framecount
         NSInteger,         // output bus number
         *const AudioBufferList,
+        *const AURenderEvent,
     ),
     (AUAudioUnitStatus),
 >;
@@ -311,6 +314,9 @@ impl AUAudioUnitRef {
     //         This only provides a recommendation to the framework.
     // */
     // @property (NS_NONATOMIC_IOSONLY) NSInteger MIDIOutputBufferSizeHint API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0));
+    pub fn midi_output_buffer_size_hint(&self) -> NSInteger {
+        unsafe { msg_send![self, MIDIOutputBufferSizeHint] }
+    }
 
     // /*!	@method	shouldChangeToFormat:forBus:
     //     @param format
@@ -325,6 +331,13 @@ impl AUAudioUnitRef {
     //         The default implementation returns NO if the unit has renderResourcesAllocated, otherwise it results YES.
     // */
     // - (BOOL)shouldChangeToFormat:(AVAudioFormat *)format forBus:(AUAudioUnitBus *)bus;
+    pub fn should_change_to_format(
+        &self,
+        format: &AVAudioFormatRef,
+        bus: &AUAudioUnitBusRef,
+    ) -> bool {
+        unsafe { msg_send![self, shouldChangeToFormat: format forBus: bus] }
+    }
 
     // /*!	@method	setRenderResourcesAllocated:
     //     @param flag
