@@ -479,12 +479,15 @@ impl AUParameterTreeRef {
 
 // /// A block called to notify the AUAudioUnit implementation of changes to AUParameter values.
 // typedef void (^AUImplementorValueObserver)(AUParameter *param, AUValue value);
+pub type AUImplementorValueObserver = block::Block<(AUParameter, AUValue), ()>;
 
 // /// A block called to fetch an AUParameter's current value from the AUAudioUnit implementation.
 // typedef AUValue (^AUImplementorValueProvider)(AUParameter *param);
+pub type AUImplementorValueProvider = block::Block<AUParameter, AUValue>;
 
 // /// A block called to convert an AUParameter's value to a string.
 // typedef NSString *__nonnull (^AUImplementorStringFromValueCallback)(AUParameter *param, const AUValue *__nullable value);
+pub type AUImplementorStringFromValueCallback = block::Block<AUParameter, AUValue>;
 
 // /// A block called to convert a string to an AUParameter's value.
 // typedef AUValue (^AUImplementorValueFromStringCallback)(AUParameter *param, NSString *string);
@@ -502,6 +505,13 @@ impl AUParameterNodeRef {
     // 		state (assuming that that state is separate from the AUParameter object).
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy) AUImplementorValueObserver implementorValueObserver;
+    pub fn implementor_value_observer(&self) -> AUImplementorValueObserver {
+        unsafe { msg_send![self, AUImplementorValueObserver] }
+    }
+
+    pub fn set_implementor_value_observer(&self, observer: AUImplementorValueObserver) {
+        unsafe { msg_send![self, setImplementorValueObserver: observer] }
+    }
 
     // /*!	@brief		Called when a value of a parameter in the tree is known to have a stale value
     // 				needing to be refreshed.
@@ -510,6 +520,13 @@ impl AUParameterNodeRef {
     // 		store the value.
     // */
     // @property (NS_NONATOMIC_IOSONLY, copy) AUImplementorValueProvider implementorValueProvider;
+    pub fn implementor_value_provider(&self) -> AUImplementorValueProvider {
+        unsafe { msg_send![self, implementorValueProvider] }
+    }
+
+    pub fn set_implementor_value_provider(&self, provider: AUImplementorValueProvider) {
+        unsafe { msg_send![self, setImplementorValueProvider: provider] }
+    }
 
     // ///	Called to provide string representations of parameter values.
     // ///	If value is nil, the callback uses the current value of the parameter.
