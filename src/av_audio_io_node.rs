@@ -70,7 +70,7 @@ pub type AVAudioIONodeInputBlock = block::RcBlock<(), ()>;
 pub enum AVAudioInputNodeFFI {}
 
 foreign_obj_type! {
-    type CType = AVAudioInputNode;
+    type CType = AVAudioInputNodeFFI;
     pub struct AVAudioInputNode;
     pub struct AVAudioInputNodeRef;
     type ParentType = AVAudioNodeRef;
