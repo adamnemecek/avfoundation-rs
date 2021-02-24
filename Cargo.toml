@@ -29,5 +29,5 @@ version = "0.2.4"
 features = ["objc_exception"]
 
 [dev-dependencies]
-unsafe_slice = { path = "../unsafe_slice" }
+unsafe_ref = { path = "../unsafe_ref" }
 mach = "*"

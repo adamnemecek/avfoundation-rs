@@ -171,7 +171,7 @@ fn main() {
         let _ = tx.send(result);
     });
 
-    use unsafe_slice::prelude::*;
+    use unsafe_ref::prelude::*;
 
     let res = rx.recv().unwrap();
     let notes: Vec<MIDIEvent> = vec![];
