@@ -40,26 +40,27 @@ impl Instrument {
     }
 
 
-    pub fn start_note1(&self, note: u8, channel: u8) {
+    pub fn start_note1(&self, note: u8, velocity: u8) {
         unsafe {
             avfoundation::MusicDeviceMIDIEvent(
                 self.sampler.audio_unit(),
                 0x90,
                 note as _,
-                channel as _,
+                velocity as _,
                 0,
             );
         }
     }
+
 
     pub fn stop_note1(&self, note: u8, channel: u8) {
         // self.sampler.stop_note(note, channel)
         unsafe {
             avfoundation::MusicDeviceMIDIEvent(
                 self.sampler.audio_unit(),
-                0x80,
+                0x90,
                 note as _,
-                channel as _,
+                0,
                 0,
             );
         }
