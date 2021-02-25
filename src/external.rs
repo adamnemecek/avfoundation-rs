@@ -6,7 +6,7 @@ use crate::{
 /// this file contains functions that should eventually be moved to a crate
 
 #[repr(transparent)]
-pub struct AudioUnit(std::ffi::c_void);
+pub struct AudioUnit(*const std::ffi::c_void);
 
 // extern "C" {
 
@@ -32,6 +32,7 @@ pub struct MusicDeviceNoteParams {
 #[link(name = "AudioToolbox", kind = "framework")]
 extern "C" {
     pub fn MusicDeviceMIDIEvent(
+        // in_unit: AudioUnit,
         in_unit: AudioUnit,
         in_status: u32,
         in_data1: u32,
@@ -39,12 +40,32 @@ extern "C" {
         in_offset_sample_frame: u32,
     ) -> OSStatus;
 
-    pub fn MusicDeviceStartNote(
-        in_unit: AudioUnit,
-        in_instrument: MusicDeviceInstrumentID,
-        in_group_id: MusicDeviceGroupID,
-        out_note_instance_id: *const NoteInstanceID,
-        in_offset_sample_frame: u32,
-        in_params: *const MusicDeviceNoteParams,
-    ) -> OSStatus;
+    // fn MusicDeviceStartNote(
+    //     in_unit: AudioUnit,
+    //     in_instrument: MusicDeviceInstrumentID,
+    //     in_group_id: MusicDeviceGroupID,
+    //     out_note_instance_id: *const NoteInstanceID,
+    //     in_offset_sample_frame: u32,
+    //     in_params: *const MusicDeviceNoteParams,
+    // ) -> OSStatus;
 }
+
+// impl AudioUnit {
+//     pub fn midi_event(
+//         &self,
+//         in_status: u32,
+//         in_data1: u32,
+//         in_data2: u32,
+//         in_offset_sample_frame: u32,
+//     ) -> OSStatus {
+//         unsafe {
+//             MusicDeviceMIDIEvent(
+//                 self.0,
+//                 in_status,
+//                 in_data1,
+//                 in_data2,
+//                 in_offset_sample_frame,
+//             )
+//         }
+//     }
+// }

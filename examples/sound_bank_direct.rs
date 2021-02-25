@@ -39,7 +39,6 @@ impl Instrument {
         self.sampler.stop_note(note, channel)
     }
 
-
     pub fn start_note1(&self, note: u8, velocity: u8) {
         unsafe {
             avfoundation::MusicDeviceMIDIEvent(
@@ -52,17 +51,10 @@ impl Instrument {
         }
     }
 
-
     pub fn stop_note1(&self, note: u8, channel: u8) {
         // self.sampler.stop_note(note, channel)
         unsafe {
-            avfoundation::MusicDeviceMIDIEvent(
-                self.sampler.audio_unit(),
-                0x90,
-                note as _,
-                0,
-                0,
-            );
+            avfoundation::MusicDeviceMIDIEvent(self.sampler.audio_unit(), 0x90, note as _, 0, 0);
         }
     }
 }
@@ -104,13 +96,13 @@ fn main() {
         // println!("chord {:?}", chord.names());
 
         for p in chord.iter() {
-            instrument.play_note(Pitch::new(p, 5).into(), loudness, channel);
-            // instrument.start_note1(Pitch::new(p, 5).into(), loudness);
+            // instrument.play_note(Pitch::new(p, 5).into(), loudness, channel);
+            instrument.start_note1(Pitch::new(p, 5).into(), loudness);
         }
         std::thread::sleep(std::time::Duration::from_millis(1000));
         for p in chord.iter() {
-            instrument.stop_note(Pitch::new(p, 5).into(), channel);
-            // instrument.stop_note1(Pitch::new(p, 5).into(), 0);
+            // instrument.stop_note(Pitch::new(p, 5).into(), channel);
+            instrument.stop_note1(Pitch::new(p, 5).into(), 0);
         }
     }
 
