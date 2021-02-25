@@ -949,7 +949,7 @@ impl AUAudioUnitRef {
     }
 
     #[inline]
-    pub fn schedule_midi_fn(&self) -> Option<impl Fn(AUEventSampleTime, u8, &[u8]) -> ()> {
+    pub fn schedule_midi_event_fn(&self) -> Option<impl Fn(AUEventSampleTime, u8, &[u8]) -> ()> {
         self.schedule_midi_event_block().map(|block| {
             move |timestamp, cable, slice: &[u8]| unsafe {
                 block.call((timestamp, cable, slice.len() as _, slice.as_ptr()))

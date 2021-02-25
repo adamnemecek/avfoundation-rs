@@ -188,7 +188,7 @@ fn main() {
             engine.attach_node(&unit);
             engine.connect_nodes(&unit, engine.output_node(), None);
             let _ = engine.start().unwrap();
-            let midi_fn = unit.au_audio_unit().schedule_midi_fn().unwrap();
+            let midi_fn = unit.au_audio_unit().schedule_midi_event_fn().unwrap();
             unit.au_audio_unit().token_by_adding_render_observer_fn(
                 move |flags, ts, frame_count, bus| {
                     // if the offset ts is before requested ts, we have to increment the counter
