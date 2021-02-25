@@ -15,11 +15,12 @@ pub type MusicDeviceInstrumentID = u32;
 pub type MusicDeviceGroupID = u32;
 pub type NoteInstanceID = u32;
 pub type AudioUnitParameterValue = f32;
-
+#[repr(C)]
 pub struct NoteParamsControlValue {
     pub m_id: AudioUnitParameterID,
     pub m_value: AudioUnitParameterValue,
 }
+#[repr(C)]
 
 pub struct MusicDeviceNoteParams {
     pub arg_count: u32,
@@ -30,7 +31,7 @@ pub struct MusicDeviceNoteParams {
 
 #[link(name = "AudioToolbox", kind = "framework")]
 extern "C" {
-    fn MusicDeviceMIDIEvent(
+    pub fn MusicDeviceMIDIEvent(
         in_unit: AudioUnit,
         in_status: u32,
         in_data1: u32,
@@ -38,7 +39,7 @@ extern "C" {
         in_offset_sample_frame: u32,
     ) -> OSStatus;
 
-    fn MusicDeviceStartNote(
+    pub fn MusicDeviceStartNote(
         in_unit: AudioUnit,
         in_instrument: MusicDeviceInstrumentID,
         in_group_id: MusicDeviceGroupID,

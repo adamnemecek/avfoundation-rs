@@ -1,6 +1,8 @@
 use core_audio_types::AudioTimeStamp;
 
-pub struct OSStatus {}
+#[repr(transparent)]
+
+pub struct OSStatus(u32);
 pub struct AudioBufferList {}
 
 // pub type OSStatus = u32;

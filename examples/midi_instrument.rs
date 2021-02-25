@@ -45,15 +45,15 @@ impl Instrument {
         Self { engine, sampler }
     }
 
-    pub fn play_note(&self, note: u8, loudness: u8, channel: u8) {
-        self.sampler.start_note(note, loudness, channel)
-    }
+    // pub fn play_note(&self, note: u8, loudness: u8, channel: u8) {
+    //     self.sampler.start_note(note, loudness, channel)
+    // }
 
-    // pub fn play_chord(&self, )
+    // // pub fn play_chord(&self, )
 
-    pub fn stop_note(&self, note: u8, channel: u8) {
-        self.sampler.stop_note(note, channel)
-    }
+    // pub fn stop_note(&self, note: u8, channel: u8) {
+    //     self.sampler.stop_note(note, channel)
+    // }
 
     // pub fn start(&self) {
     //     self.engine.start_and_return_error();

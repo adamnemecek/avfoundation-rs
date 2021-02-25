@@ -118,7 +118,7 @@ impl AVAudioTimeRef {
     // */
     // @property (nonatomic, readonly) AVAudioFramePosition sampleTime;
 
-    pub fn sampleTime(&self) -> AVAudioFramePosition {
+    pub fn sample_time(&self) -> AVAudioFramePosition {
         unsafe { msg_send![self, sampleTime] }
     }
 
