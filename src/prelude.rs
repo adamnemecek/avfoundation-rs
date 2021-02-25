@@ -104,6 +104,7 @@ pub use crate::{
     AVMusicTrackRef,
     AudioBufferList,
     AudioBufferListRef,
+    AudioUnit,
     AudioUnitParameterID,
     AudioUnitRenderActionFlags,
     NSError,

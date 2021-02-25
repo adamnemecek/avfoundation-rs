@@ -4,6 +4,7 @@ use crate::{
     AUAudioUnitRef,
     AVAudioNodeRef,
     AudioComponentDescription,
+    AudioUnit,
     NSError,
     NSErrorRef,
 };
@@ -126,9 +127,9 @@ impl AVAudioUnitRef {
     // */
     // @property (nonatomic, readonly) AudioUnit audioUnit;
 
-    // pub fn audio_unit(&self) -> AudioUnit {
-    //  unsafe { msg_send![self, audioUnit] }
-    // }
+    pub fn audio_unit(&self) -> AudioUnit {
+        unsafe { msg_send![self, audioUnit] }
+    }
 
     // #ifdef __OBJC2__
     // /*! @property AUAudioUnit
