@@ -116,3 +116,10 @@ pub use crate::{
     RequestAUAudioUnitViewController,
     ShouldStop,
 };
+
+pub use crate::{
+    AudioUnitParameterValue,
+    MusicDeviceGroupID,
+    MusicDeviceInstrumentID,
+    NoteInstanceID,
+};
