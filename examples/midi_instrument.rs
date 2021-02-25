@@ -58,6 +58,31 @@ impl Instrument {
     // pub fn start(&self) {
     //     self.engine.start_and_return_error();
     // }
+
+    pub fn start(&self, note: u8, channel: u8) {
+        unsafe {
+            avfoundation::MusicDeviceMIDIEvent(
+                self.sampler.audio_unit(),
+                0x90,
+                note as _,
+                channel as _,
+                0,
+            );
+        }
+    }
+
+    pub fn stop_note(&self, note: u8, channel: u8) {
+        // self.sampler.stop_note(note, channel)
+        unsafe {
+            avfoundation::MusicDeviceMIDIEvent(
+                self.sampler.audio_unit(),
+                0x80,
+                note as _,
+                channel as _,
+                0,
+            );
+        }
+    }
 }
 
 pub fn sleep(s: u64) {
