@@ -198,7 +198,7 @@ impl AVAudioUnitComponentManagerRef {
 
     pub fn components_passing_test(
         &self,
-        test: fn(&AVAudioUnitComponentRef) -> (bool, ShouldStop),
+        mut test: impl FnMut(&AVAudioUnitComponentRef) -> (bool, ShouldStop) + 'static,
     ) -> Vec<AVAudioUnitComponent> {
         let block = block::ConcreteBlock::new(
             move |component: &AVAudioUnitComponentRef, stop: *mut BOOL| -> BOOL {

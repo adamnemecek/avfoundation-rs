@@ -52,7 +52,6 @@ impl Instrument {
     }
 
     pub fn stop_note1(&self, note: u8, channel: u8) {
-        // self.sampler.stop_note(note, channel)
         unsafe {
             avfoundation::MusicDeviceMIDIEvent(self.sampler.audio_unit(), 0x90, note as _, 0, 0);
         }

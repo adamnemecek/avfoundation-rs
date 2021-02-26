@@ -194,9 +194,9 @@ impl AUParameterNodeRef {
     /// - (AUParameterObserverToken)tokenByAddingParameterObserver:(AUParameterObserver)observer;
     #[must_use]
     #[inline]
-    pub fn token_by_adding_parameter_observer<F>(&self, observer: F) -> AUParameterObserverToken
+    pub fn token_by_adding_parameter_observer<F>(&self, mut observer: F) -> AUParameterObserverToken
     where
-        F: Fn(AUParameterAddress, AUValue) -> () + 'static,
+        F: FnMut(AUParameterAddress, AUValue) -> () + 'static,
     {
         let block =
             block::ConcreteBlock::new(move |address: AUParameterAddress, value: AUValue| {
@@ -219,10 +219,10 @@ impl AUParameterNodeRef {
     #[inline]
     pub fn token_by_adding_parameter_recording_observer<F>(
         &self,
-        observer: F,
+        mut observer: F,
     ) -> AUParameterObserverToken
     where
-        F: Fn(&[AURecordedParameterEvent]) -> () + 'static,
+        F: FnMut(&[AURecordedParameterEvent]) -> () + 'static,
     {
         let block = block::ConcreteBlock::new(
             move |len: NSInteger, data: *const AURecordedParameterEvent| {
