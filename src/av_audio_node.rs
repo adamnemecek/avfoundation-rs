@@ -213,6 +213,7 @@ impl AVAudioNodeKind {
     fn new(s: &str) -> Self {
         match s {
             "AVAudioNode" => Self::AudioNode,
+            "AVAudioUnit" => Self::AudioUnit,
             "AVAudioUnitSampler" => Self::Sampler,
             "AVAudioIONode" => Self::IO,
             "AVAudioInputNode" => Self::Input,
@@ -226,7 +227,6 @@ impl AVAudioNodeKind {
             "AVAudioUnitTimeEffect" => Self::TimeEffect,
             "AVAudioUnitTimePitch" => Self::TimePitch,
             "AVAudioUnitVarispeed" => Self::Varispeed,
-            "AVAudioUnit" => Self::AudioUnit,
             _ => todo!(),
         }
     }
