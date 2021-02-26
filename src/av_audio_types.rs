@@ -6,6 +6,7 @@ pub type AVAudioChannelCount = u32;
 
 pub type AVAudioNodeCompletionHandler = block::RcBlock<(), ()>;
 
+#[repr(transparent)]
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct AVAudioNodeBus {
     pub(crate) inner: u64,

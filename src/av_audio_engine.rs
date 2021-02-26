@@ -269,10 +269,10 @@ impl AVAudioEngineRef {
         format: Option<&AVAudioFormatRef>,
     ) {
         // let format = format.map
-        use cocoa_foundation::base::nil;
-        assert!(format.is_none());
+        // use cocoa_foundation::base::nil;
+        // assert!(format.is_none());
         unsafe {
-            let _: () = msg_send![self, connect: node1 to: node2 format: nil];
+            let _: () = msg_send![self, connect: node1 to: node2 format: format];
         }
         // unsafe {
         //     to_nil! { format => {

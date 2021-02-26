@@ -6,6 +6,7 @@ use avfoundation::{
     AVAudioUnitSampler,
 };
 
+
 pub struct Instrument {
     engine: AVAudioEngine,
     pub sampler: AVAudioUnitSampler,
@@ -22,7 +23,7 @@ impl Instrument {
         engine.start();
         let bank = 121;
         let url = std::path::Path::new("/Users/adamnemecek/Downloads/FatBoy-v0.790.sf2");
-
+        // println!("avfoundation {:?}", avfoundation::cls_name(&sampler));
         // println!("before load");
         sampler.load_bank_instrument_at_url(url.to_path_buf(), 100, bank, 0);
         println!("after load");
