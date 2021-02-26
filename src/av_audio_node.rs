@@ -152,7 +152,7 @@ impl AVAudioNodeRef {
     }
 
     /// /*!	@property latency
-    /// 	@abstract The processing latency of the node, in seconds.
+    /// 	@abstract The processing latency of the  in seconds.
     /// 	@discussion
     /// 		This property reflects the delay between when an impulse in the audio stream arrives at the
     /// 		input vs. output of the node. This should reflect the delay due to signal processing
@@ -164,7 +164,7 @@ impl AVAudioNodeRef {
     }
 
     /// /*!	@property outputPresentationLatency
-    /// 	@abstract The maximum render pipeline latency downstream of the node, in seconds.
+    /// 	@abstract The maximum render pipeline latency downstream of the  in seconds.
     /// 	@discussion
     /// 		This describes the maximum time it will take for the audio at the output of a node to be
     /// 		presented.
@@ -192,33 +192,35 @@ impl AVAudioNodeRef {
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum AVAudioNodeKind {
-    IONode,
+    AudioNode,
+    AudioUnit,
+    IO,
     Sampler,
-    InputNode,
-    OutputNode,
-    MixerNode,
-    PlayerNode,
-    SinkNode,
-    SourceNode,
+    Input,
+    Output,
+    Mixer,
+    Player,
+    Sink,
+    Source,
     Generator,
     MIDIInstrument,
     TimeEffect,
     TimePitch,
     Varispeed,
-    AudioUnit,
 }
 
 impl AVAudioNodeKind {
     fn new(s: &str) -> Self {
         match s {
+            "AVAudioNode" => Self::AudioNode,
             "AVAudioUnitSampler" => Self::Sampler,
-            "AVAudioIONode" => Self::IONode,
-            "AVAudioInputNode" => Self::InputNode,
-            "AVAudioOutputNode" => Self::OutputNode,
-            "AVAudioMixerNode" => Self::MixerNode,
-            "AVAudioPlayerNode" => Self::PlayerNode,
-            "AVAudioSinkNode" => Self::SinkNode,
-            "AVAudioSourceNode" => Self::SourceNode,
+            "AVAudioIONode" => Self::IO,
+            "AVAudioInputNode" => Self::Input,
+            "AVAudioOutputNode" => Self::Output,
+            "AVAudioMixerNode" => Self::Mixer,
+            "AVAudioPlayerNode" => Self::Player,
+            "AVAudioSinkNode" => Self::Sink,
+            "AVAudioSourceNode" => Self::Source,
             "AVAudioUnitGenerator" => Self::Generator,
             "AVAudioUnitMIDIInstrument" => Self::MIDIInstrument,
             "AVAudioUnitTimeEffect" => Self::TimeEffect,
