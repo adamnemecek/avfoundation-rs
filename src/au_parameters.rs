@@ -113,6 +113,7 @@ pub type AUParameterAutomationObserver =
 ///                or AUParameterAutomationObserver.
 
 // typedef void *AUParameterObserverToken;
+#[repr(transparent)]
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct AUParameterObserverToken(*const std::ffi::c_void);
 

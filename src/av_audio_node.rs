@@ -66,23 +66,23 @@ impl AVAudioNodeRef {
     }
 
     pub fn input_format_for_bus(&self, bus: AVAudioNodeBus) -> &AVAudioFormatRef {
-        unsafe { msg_send![self, inputFormatForBus: bus.inner] }
+        unsafe { msg_send![self, inputFormatForBus: bus] }
     }
 
     pub fn output_format_for_bus(&self, bus: AVAudioNodeBus) -> &AVAudioFormatRef {
-        unsafe { msg_send![self, outputFormatForBus: bus.inner] }
+        unsafe { msg_send![self, outputFormatForBus: bus] }
     }
 
     pub fn name_for_input_bus(&self, input_bus: AVAudioNodeBus) -> &str {
         unsafe {
-            let name = msg_send![self, nameForInputBus: input_bus.inner];
+            let name = msg_send![self, nameForInputBus: input_bus];
             crate::nsstring_as_str(name)
         }
     }
 
     pub fn name_for_output_bus(&self, output_bus: AVAudioNodeBus) -> &str {
         unsafe {
-            let name = msg_send![self, nameForOutputBus: output_bus.inner];
+            let name = msg_send![self, nameForOutputBus: output_bus];
             crate::nsstring_as_str(name)
         }
     }
@@ -106,12 +106,12 @@ impl AVAudioNodeRef {
         .copy();
 
         unsafe {
-            msg_send![self, installTapOnBus: bus.inner bufferSize: buffer_size format: format block: block]
+            msg_send![self, installTapOnBus: bus bufferSize: buffer_size format: format block: block]
         }
     }
 
     pub fn remove_tap(&self, bus: AVAudioNodeBus) {
-        unsafe { msg_send![self, removeTap: bus.inner] }
+        unsafe { msg_send![self, removeTap: bus] }
     }
 
     pub fn engine(&self) -> &AVAudioEngineRef {

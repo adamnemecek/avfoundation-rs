@@ -8,13 +8,11 @@ pub type AVAudioNodeCompletionHandler = block::RcBlock<(), ()>;
 
 #[repr(transparent)]
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
-pub struct AVAudioNodeBus {
-    pub(crate) inner: u64,
-}
+pub struct AVAudioNodeBus(u64);
 
 impl AVAudioNodeBus {
     pub fn new(inner: u64) -> Self {
-        Self { inner }
+        Self(inner)
     }
 }
 

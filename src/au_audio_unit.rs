@@ -513,14 +513,13 @@ foreign_obj_type! {
     pub struct AUAudioUnitRef;
 }
 
+#[repr(transparent)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub struct RenderObserverToken {
-    inner: NSInteger,
-}
+pub struct RenderObserverToken(NSInteger);
 
 impl From<NSInteger> for RenderObserverToken {
     fn from(inner: NSInteger) -> Self {
-        Self { inner }
+        Self(inner)
     }
 }
 
@@ -836,7 +835,7 @@ impl AUAudioUnitRef {
     // - (void)removeRenderObserver:(NSInteger)token;
     pub fn remove_render_observer(&self, token: RenderObserverToken) {
         unsafe {
-            let _: () = msg_send![self, removeRenderObserver: token.inner];
+            let _: () = msg_send![self, removeRenderObserver: token];
         }
     }
 
