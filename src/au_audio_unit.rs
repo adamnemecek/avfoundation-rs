@@ -524,8 +524,6 @@ impl From<NSInteger> for RenderObserverToken {
     }
 }
 
-
-
 impl AUAudioUnit {
     // - (instancetype)init NS_UNAVAILABLE;
 
@@ -946,6 +944,7 @@ impl AUAudioUnitRef {
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, nullable) AUScheduleMIDIEventBlock scheduleMIDIEventBlock;
     // todo: should this be adding a reference?
+    #[inline]
     pub fn schedule_midi_event_block(&self) -> Option<AUScheduleMIDIEventBlock> {
         unsafe { msg_send![self, scheduleMIDIEventBlock] }
     }

@@ -189,3 +189,49 @@ impl AVAudioNodeRef {
         unsafe { msg_send![self, outputPresentationLatency] }
     }
 }
+
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum AVAudioNodeKind {
+    IONode,
+    Sampler,
+    InputNode,
+    OutputNode,
+    MixerNode,
+    PlayerNode,
+    SinkNode,
+    SourceNode,
+    Generator,
+    MIDIInstrument,
+    TimeEffect,
+    TimePitch,
+    Varispeed,
+    AudioUnit,
+}
+
+impl AVAudioNodeKind {
+    fn new(s: &str) -> Self {
+        match s {
+            "AVAudioUnitSampler" => Self::Sampler,
+            "AVAudioIONode" => Self::IONode,
+            "AVAudioInputNode" => Self::InputNode,
+            "AVAudioOutputNode" => Self::OutputNode,
+            "AVAudioMixerNode" => Self::MixerNode,
+            "AVAudioPlayerNode" => Self::PlayerNode,
+            "AVAudioSinkNode" => Self::SinkNode,
+            "AVAudioSourceNode" => Self::SourceNode,
+            "AVAudioUnitGenerator" => Self::Generator,
+            "AVAudioUnitMIDIInstrument" => Self::MIDIInstrument,
+            "AVAudioUnitTimeEffect" => Self::TimeEffect,
+            "AVAudioUnitTimePitch" => Self::TimePitch,
+            "AVAudioUnitVarispeed" => Self::Varispeed,
+            "AVAudioUnit" => Self::AudioUnit,
+            _ => todo!(),
+        }
+    }
+}
+
+impl AVAudioNodeRef {
+    pub fn kind(&self) -> AVAudioNodeKind {
+        AVAudioNodeKind::new(crate::cls_name(self))
+    }
+}

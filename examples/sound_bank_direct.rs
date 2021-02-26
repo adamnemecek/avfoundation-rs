@@ -6,7 +6,6 @@ use avfoundation::{
     AVAudioUnitSampler,
 };
 
-
 pub struct Instrument {
     engine: AVAudioEngine,
     pub sampler: AVAudioUnitSampler,
@@ -17,6 +16,7 @@ impl Instrument {
         let engine = AVAudioEngine::new();
 
         let sampler = AVAudioUnitSampler::new();
+        println!("kind {:?}", sampler.kind());
         engine.attach_node(&sampler);
         let output = engine.output_node();
         engine.connect_nodes(&sampler, output, None);

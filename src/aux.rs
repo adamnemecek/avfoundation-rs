@@ -11,15 +11,12 @@ pub fn run_main_loop() {
     };
 }
 
-
-pub fn class_name(r: &objc::runtime::Object)  -> &str {
-    let cls= r.class();
+pub fn class_name(r: &objc::runtime::Object) -> &str {
+    let cls = r.class();
     cls.name()
 }
 
-pub fn cls_name(a: &crate::AVAudioUnitRef) -> &str {
+pub fn cls_name(a: &crate::AVAudioNodeRef) -> &str {
     let r: *const objc::runtime::Object = a.as_ptr() as _;
-    unsafe {
-        class_name(r.as_ref().unwrap())
-    }
+    unsafe { class_name(r.as_ref().unwrap()) }
 }

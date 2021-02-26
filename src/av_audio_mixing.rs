@@ -48,7 +48,6 @@ foreign_obj_type! {
     type CType = AVAudioMixingDestinationFFI;
     pub struct AVAudioMixingDestination;
     pub struct AVAudioMixingDestinationRef;
-    // type ParentType = AUParameterNodeRef;
 }
 
 impl AVAudioStereoMixing for AVAudioMixingDestinationRef {}
