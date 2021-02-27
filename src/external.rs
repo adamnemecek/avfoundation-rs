@@ -21,7 +21,6 @@ pub struct NoteParamsControlValue {
     pub m_value: AudioUnitParameterValue,
 }
 #[repr(C)]
-
 pub struct MusicDeviceNoteParams {
     pub arg_count: u32,
     pub m_pitch: f32,
@@ -32,12 +31,11 @@ pub struct MusicDeviceNoteParams {
 #[link(name = "AudioToolbox", kind = "framework")]
 extern "C" {
     pub fn MusicDeviceMIDIEvent(
-        // in_unit: AudioUnit,
-        in_unit: AudioUnit,
-        in_status: u32,
-        in_data1: u32,
-        in_data2: u32,
-        in_offset_sample_frame: u32,
+        unit: AudioUnit,
+        status: u32,
+        data1: u32,
+        data2: u32,
+        offset_sample_frame: u32,
     ) -> OSStatus;
 
     // fn MusicDeviceStartNote(
