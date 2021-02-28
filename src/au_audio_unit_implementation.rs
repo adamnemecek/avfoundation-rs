@@ -292,7 +292,15 @@ impl AUAudioUnitRef {
         name: &str,
         version: u32,
     ) {
-        todo!()
+        unsafe {
+            let class = class!(AVAudioMixerNode);
+            let name = crate::nsstring_from_str(name);
+
+            msg_send![class, registerSubclass: cls
+                       asComponentDescription: component_description
+                                         name: name
+                                      version: version]
+        }
     }
 
     /// Block which subclassers must provide (via a getter) to implement rendering.
