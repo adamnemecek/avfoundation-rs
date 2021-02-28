@@ -27,6 +27,7 @@ pub use crate::{
     AUParameterRef,
     AUParameterTree,
     AUParameterTreeRef,
+    AURenderEvent,
     AURenderPullInputBlock,
     AUScheduleMIDIEventBlock,
     AUValue,
@@ -126,3 +127,5 @@ pub use crate::{
     NoteInstanceID,
     NSEC_PER_SEC,
 };
+
+pub use cocoa_foundation::foundation::NSInteger;
