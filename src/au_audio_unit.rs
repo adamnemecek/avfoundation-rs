@@ -1002,12 +1002,7 @@ impl AUAudioUnitRef {
     }
 
     pub fn set_midi_output_event_block(&self, block: Option<AUMIDIOutputEventBlock>) {
-        todo!()
-        // let block = if let Some(block) = block {
-        //     block.as_ptr()
-        // } else {
-        //     nil
-        // };
+        unsafe { msg_send![self, setMIDIOutputEventBlock: block] }
     }
 
     // /*!	@property	fullState

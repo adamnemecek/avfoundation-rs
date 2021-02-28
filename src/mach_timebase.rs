@@ -1,8 +1,5 @@
 // use kern_return::KERN_SUCCESS;
-use mach::{
-    clock_types::NSEC_PER_SEC,
-    kern_return,
-};
+use mach::kern_return;
 
 use core_audio_types::AudioTimeStamp;
 
@@ -26,7 +23,7 @@ impl MachTimebase {
 
     pub fn zero() -> Self {
         Self {
-            inner: Default::default()
+            inner: Default::default(),
         }
     }
 
@@ -46,6 +43,7 @@ impl MachTimebase {
 }
 
 // const NSEC_PER_SEC: u32 = 1000000000;
+pub const NSEC_PER_SEC: u64 = mach::clock_types::NSEC_PER_SEC;
 
 // use mach::
 // adapted from mikmidi midi to audio example

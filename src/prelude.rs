@@ -123,4 +123,5 @@ pub use crate::{
     MusicDeviceGroupID,
     MusicDeviceInstrumentID,
     NoteInstanceID,
+    NSEC_PER_SEC,
 };

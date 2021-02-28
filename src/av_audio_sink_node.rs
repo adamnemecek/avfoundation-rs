@@ -1,8 +1,18 @@
 use core_audio_types::AudioTimeStamp;
 
 #[repr(transparent)]
-
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub struct OSStatus(u32);
+
+impl OSStatus {
+    pub fn success() -> Self {
+        Self(0)
+    }
+
+    pub fn is_success(&self) -> bool {
+        self == &Self::success()
+    }
+}
 pub struct AudioBufferList {}
 
 // pub type OSStatus = u32;
