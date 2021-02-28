@@ -27,6 +27,7 @@ pub use crate::{
     AUParameterRef,
     AUParameterTree,
     AUParameterTreeRef,
+    AURenderPullInputBlock,
     AUScheduleMIDIEventBlock,
     AUValue,
     AUViewController,

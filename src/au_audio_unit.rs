@@ -173,6 +173,17 @@ pub enum AUAudioUnitBusType {
 // 		to be invalid.
 // */
 // typedef AUAudioUnitStatus (^AURenderPullInputBlock)(AudioUnitRenderActionFlags *actionFlags, const AudioTimeStamp *timestamp, AUAudioFrameCount frameCount, NSInteger inputBusNumber, AudioBufferList *inputData);
+pub type AURenderPullInputBlock = block::RcBlock<
+    (
+        *const AudioUnitRenderActionFlags, //actionFlags,
+        *const AudioTimeStamp,             // *timestamp,
+        AUAudioFrameCount,                 // frameCount,
+        NSInteger,                         // inputBusNumber,
+        *const AudioBufferList,            // *inputData
+    ),
+    AUAudioUnitStatus,
+>;
+
 use cocoa_foundation::foundation::{
     NSInteger,
     NSIntegerMax,
@@ -207,17 +218,6 @@ bitflags! {
         const DoNotCheckRenderArgs	            = (1 << 9);
     }
 }
-
-pub type AURenderPullInputBlock = block::RcBlock<
-    (
-        AudioUnitRenderActionFlags,
-        *const AudioTimeStamp,
-        AUAudioFrameCount,
-        NSInteger,
-        *const AudioBufferList,
-    ),
-    AUAudioUnitStatus,
->;
 
 // /*!	@typedef	AURenderBlock
 // 	@brief		Block to render the audio unit.

@@ -5,6 +5,7 @@ use core_audio_types::AudioTimeStamp;
 use crate::{
     prelude::*,
     AUAudioChannelCount,
+    AudioComponentDescription,
     AudioUnitParameterUnit,
 };
 
@@ -253,6 +254,8 @@ pub union AURenderEvent {
 // 	AudioBufferList *										outputData,
 // 	const AURenderEvent *__nullable 						realtimeEventListHead,
 // 	AURenderPullInputBlock __nullable __unsafe_unretained	pullInputBlock);
+//todo
+
 use cocoa_foundation::foundation::NSInteger;
 pub type AUInternalRenderBlock = block::RcBlock<
     (
@@ -262,8 +265,9 @@ pub type AUInternalRenderBlock = block::RcBlock<
         NSInteger,         // output bus number
         *const AudioBufferList,
         *const AURenderEvent,
+        Option<AURenderPullInputBlock>,
     ),
-    (AUAudioUnitStatus),
+    AUAudioUnitStatus,
 >;
 
 // // =================================================================================================
@@ -282,7 +286,12 @@ impl AUAudioUnitRef {
     // 		<AVFoundation/AVAudioUnitEffect.h>).
     // */
     // + (void)registerSubclass:(Class)cls asComponentDescription:(AudioComponentDescription)componentDescription name:(NSString *)name version:(UInt32)version;
-    pub fn register_subclass() {
+    pub fn register_subclass(
+        cls: *const objc::runtime::Class,
+        component_description: AudioComponentDescription,
+        name: &str,
+        version: u32,
+    ) {
         todo!()
     }
 
