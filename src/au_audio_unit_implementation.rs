@@ -320,7 +320,7 @@ impl AUAudioUnitRef {
     // @property (nonatomic, readonly) AURenderContextObserver renderContextObserver
     // 	API_AVAILABLE(macos(11.0), ios(14.0), watchos(7.0), tvos(14.0))
     // 	__SWIFT_UNAVAILABLE_MSG("Swift is not supported for use with audio realtime threads");
-    // pub fn AURenderContextObserver(&self) -> AURenderContextObserver {
+    // pub fn render_context_observer(&self) -> AURenderContextObserver {
     //     todo!()
     // }
 
@@ -456,8 +456,12 @@ impl AUParameterTreeRef {
         min: AUValue,
         max: AUValue,
         unit: AudioUnitParameterUnit,
-        unit_name: &str, /*flags: AudioUnitParameterOptions*/
+        unit_name: &str,
+        // flags: AudioUnitParameterOptions,
     ) -> Self {
+        // unsafe {
+
+        // }
         todo!()
     }
 }
