@@ -458,6 +458,8 @@ impl AUParameterTreeRef {
         unit: AudioUnitParameterUnit,
         unit_name: &str,
         // flags: AudioUnitParameterOptions,
+//         valueStrings:(NSArray<NSString *> *__nullable)valueStrings
+//  dependentParameters:(NSArray<NSNumber *> *__nullable)dependentParameters;
     ) -> Self {
         // unsafe {
 
