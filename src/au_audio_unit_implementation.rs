@@ -294,7 +294,7 @@ impl AUAudioUnit {
         version: u32,
     ) {
         unsafe {
-            let class = class!(AVAudioMixerNode);
+            let class = class!(AUAudioUnit);
             let name = crate::nsstring_from_str(name);
 
             msg_send![class, registerSubclass: cls
