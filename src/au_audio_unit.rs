@@ -208,14 +208,14 @@ bitflags! {
     // };
 
     pub struct AudioUnitRenderActionFlags: u32 {
-        const PreRender			                = (1 << 2);
-        const PostRender			            = (1 << 3);
-        const OutputIsSilence		            = (1 << 4);
-        const OfflineActionPreflight		    = (1 << 5);
-        const OfflineUnitRenderActionRender		= (1 << 6);
-        const OfflineUnitRenderActionComplete	= (1 << 7);
-        const PostRenderError		            = (1 << 8);
-        const DoNotCheckRenderArgs	            = (1 << 9);
+        const PRE_RENDER                            = (1 << 2);
+        const POST_RENDER                           = (1 << 3);
+        const OUTPUT_IS_SILENCE                     = (1 << 4);
+        const OFFLINE_ACTION_PREFLIGHT              = (1 << 5);
+        const OFFLINE_UNIT_RENDER_ACTION_RENDER     = (1 << 6);
+        const OFFLINE_UNIT_RENDER_ACTION_COMPLETE   = (1 << 7);
+        const POST_RENDER_ERROR                     = (1 << 8);
+        const DO_NOT_CHECK_RENDER_ARGS              = (1 << 9);
     }
 }
 
