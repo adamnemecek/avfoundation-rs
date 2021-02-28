@@ -40,6 +40,11 @@ impl MachTimebase {
     pub fn denom(&self) -> u32 {
         self.inner.denom
     }
+
+    #[inline]
+    pub fn as_f64(&self) -> f64 {
+        (self.denom() as f64) / (self.numer() as f64)
+    }
 }
 
 // const NSEC_PER_SEC: u32 = 1000000000;
