@@ -119,6 +119,7 @@ pub use crate::{
 
 pub use crate::{
     AudioUnitParameterValue,
+    MachTimebase,
     MusicDeviceGroupID,
     MusicDeviceInstrumentID,
     NoteInstanceID,

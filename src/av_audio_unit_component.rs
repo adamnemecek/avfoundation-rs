@@ -5,7 +5,7 @@ use objc::runtime::{
     YES,
 };
 
-fn u32_to_string(a: u32) -> String {
+fn fourcc(a: u32) -> String {
     let mut s: [char; 4] = [' ', ' ', ' ', ' '];
     s[0] = ((a >> 24) as u8) as char;
     s[1] = ((a >> 16) as u8) as char;
@@ -29,19 +29,19 @@ impl std::fmt::Debug for AudioComponentDescription {
         // write!(f, "hello");
         f.write_str(&format!(
             "component_type: {}\n",
-            u32_to_string(self.component_type)
+            fourcc(self.component_type)
         ))?;
         f.write_str(&format!(
             "component_sub_type: {}\n",
-            u32_to_string(self.component_sub_type)
+            fourcc(self.component_sub_type)
         ))?;
         f.write_str(&format!(
             "component_manufacturer: {}\n",
-            u32_to_string(self.component_manufacturer)
+            fourcc(self.component_manufacturer)
         ))?;
         f.write_str(&format!(
             "component_flags: {}\n",
-            u32_to_string(self.component_flags)
+            fourcc(self.component_flags)
         ))?;
         f.write_str(&format!(
             "component_flags_mask: {}",
