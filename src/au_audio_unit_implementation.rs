@@ -273,7 +273,8 @@ pub type AUInternalRenderBlock = block::RcBlock<
 // // =================================================================================================
 
 // /// Aspects of AUAudioUnit of interest only to subclassers.
-impl AUAudioUnitRef {
+
+impl AUAudioUnit {
     // @interface AUAudioUnit (AUAudioUnitImplementation)
 
     // /*!	@brief	Register an audio unit component implemented as an AUAudioUnit subclass.
@@ -302,7 +303,9 @@ impl AUAudioUnitRef {
                                       version: version]
         }
     }
+}
 
+impl AUAudioUnitRef {
     /// Block which subclassers must provide (via a getter) to implement rendering.
     // @property (nonatomic, readonly) AUInternalRenderBlock internalRenderBlock;
     pub fn au_internal_render_block(&self) -> AUInternalRenderBlock {
