@@ -1053,7 +1053,7 @@ impl AUAudioUnitRef {
     // 		Bridged to the v2 property kAudioUnitProperty_FactoryPresets.
     // */
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSArray<AUAudioUnitPreset *> *factoryPresets;
-    pub fn factory_presets(&self) -> ! {
+    pub fn factory_presets(&self) -> Vec<AUAudioUnitPreset> {
         todo!()
     }
 

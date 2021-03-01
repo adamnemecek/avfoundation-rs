@@ -354,6 +354,9 @@ pub use av_speech_synthesis::*;
 mod au_view_controller;
 pub use au_view_controller::*;
 
+mod dispatch_queue;
+pub use dispatch_queue::*;
+
 mod external;
 pub use external::*;
 
