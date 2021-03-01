@@ -1,7 +1,6 @@
 use avfoundation::DispatchQueue;
 
 fn main() {
-
     let queue = DispatchQueue::new("label");
     queue.dispatch_async(|| {
         println!("async dispatched");
