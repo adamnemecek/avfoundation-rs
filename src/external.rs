@@ -6,7 +6,11 @@ use crate::{
 /// this file contains functions that should eventually be moved to a crate
 
 #[repr(transparent)]
+#[derive(Clone, Copy)]
 pub struct AudioUnit(*const std::ffi::c_void);
+
+unsafe impl Send for AudioUnit { }
+unsafe impl Sync for AudioUnit { }
 
 // extern "C" {
 

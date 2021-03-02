@@ -19,13 +19,17 @@ impl DispatchTime {
     pub fn now() -> Self {
         Self(0)
     }
-}
 
-impl From<std::time::Duration> for DispatchTime {
-    fn from(t: std::time::Duration) -> Self {
-        Self(t.as_nanos() as u64)
+    pub fn new(t: u64) -> Self {
+        Self(t)
     }
 }
+
+// impl From<std::time::Duration> for DispatchTime {
+//     fn from(t: std::time::Duration) -> Self {
+//         Self(t.as_nanos() as u64)
+//     }
+// }
 
 // use block::Block;
 // use std::libc::sleep;
