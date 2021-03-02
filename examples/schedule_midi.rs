@@ -197,7 +197,7 @@ fn main() {
                     // * if the requested timestamp is past the max timestamp, we set the running_ptr
                     // to false
                     //
-                    if !flags.contains(AudioUnitRenderActionFlags::PreRender) {
+                    if !flags.contains(AudioUnitRenderActionFlags::PRE_RENDER) {
                         return;
                     }
 

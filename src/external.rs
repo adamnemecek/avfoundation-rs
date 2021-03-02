@@ -9,8 +9,8 @@ use crate::{
 #[derive(Clone, Copy)]
 pub struct AudioUnit(*const std::ffi::c_void);
 
-unsafe impl Send for AudioUnit { }
-unsafe impl Sync for AudioUnit { }
+unsafe impl Send for AudioUnit {}
+unsafe impl Sync for AudioUnit {}
 
 // extern "C" {
 

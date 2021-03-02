@@ -53,9 +53,7 @@ impl DispatchQueue {
 
     pub fn dispatch_after(&self, after: DispatchTime, f: impl Fn() -> () + 'static) {
         let block = block::ConcreteBlock::new(move || f()).copy();
-        unsafe {
-            dispatch_after(after, *self, &block)
-        }
+        unsafe { dispatch_after(after, *self, &block) }
     }
 
     pub fn dispatch_async(&self, f: impl Fn() -> () + 'static) {

@@ -57,12 +57,41 @@ impl Instrument {
             avfoundation::MusicDeviceMIDIEvent(self.sampler.audio_unit(), 0x90, note as _, 0, 0);
         }
     }
+
+    pub fn playback(&self) {
+        use rand::Rng;
+        let mut rng = rand::thread_rng();
+        use chromagear::prelude::*;
+        let d_major = Scale::new(PC::C, &[0, 2, 4, 5, 7, 9, 11]);
+
+        let channel = 0;
+        let loudness = 100;
+        for degree in 0..8 {
+            // let degree = rng.gen_range(0..6);
+            println!("degree {}", degree);
+
+            let chord = d_major.function(degree % 7);
+            // println!("chord {:?}", chord.names());
+
+            for p in chord.iter() {
+                // instrument.play_note(Pitch::new(p, 5).into(), loudness, channel);
+                self.start_note1(Pitch::new(p, 5).into(), loudness);
+            }
+            std::thread::sleep(std::time::Duration::from_millis(1000));
+            for p in chord.iter() {
+                // instrument.stop_note(Pitch::new(p, 5).into(), channel);
+                self.stop_note1(Pitch::new(p, 5).into(), 0);
+            }
+        }
+    }
 }
 
 fn main() {
-    use rand::Rng;
+    
     let instrument = Instrument::new();
-    let mut rng = rand::thread_rng();
+    // let instrument2 = Instrument::new();
+    instrument.playback();
+    // instrument2.playback();
 
     // let token = instrument
     //     .sampler
@@ -82,29 +111,6 @@ fn main() {
     //     let pitch = rng.gen_range(0..127);
     //     instrument.play_note(pitch, 100, 0);
     // }
-
-    use chromagear::prelude::*;
-    let d_major = Scale::new(PC::C, &[0, 2, 4, 5, 7, 9, 11]);
-
-    let channel = 0;
-    let loudness = 100;
-    for degree in 0..8 {
-        // let degree = rng.gen_range(0..6);
-        println!("degree {}", degree);
-
-        let chord = d_major.function(degree % 7);
-        // println!("chord {:?}", chord.names());
-
-        for p in chord.iter() {
-            // instrument.play_note(Pitch::new(p, 5).into(), loudness, channel);
-            instrument.start_note1(Pitch::new(p, 5).into(), loudness);
-        }
-        std::thread::sleep(std::time::Duration::from_millis(1000));
-        for p in chord.iter() {
-            // instrument.stop_note(Pitch::new(p, 5).into(), channel);
-            instrument.stop_note1(Pitch::new(p, 5).into(), 0);
-        }
-    }
 
     // std::thread::sleep(std::time::Duration::from_secs(1));
 }

@@ -1,4 +1,7 @@
-use avfoundation::{DispatchTime, DispatchQueue};
+use avfoundation::{
+    DispatchQueue,
+    DispatchTime,
+};
 
 fn main() {
     let queue = DispatchQueue::new("label");
