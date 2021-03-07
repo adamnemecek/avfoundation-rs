@@ -102,21 +102,20 @@ use mach::{
 //     if (error) return error;
 // }
 #[derive(Clone, Copy)]
-pub struct TimestampF64 {
-    inner: f64,
-}
+#[repr(transparent)]
+pub struct F64(f64);
 
-impl PartialEq for TimestampF64 {
+impl PartialEq for F64 {
     fn eq(&self, other: &Self) -> bool {
-        self.inner == other.inner
+        self.0 == other.0
     }
 }
 
-impl Eq for TimestampF64 {}
+impl Eq for F64 {}
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct MIDIEvent {
-    pub timestamp: TimestampF64,
+    pub timestamp: F64,
     pub data: [u8; 3],
 }
 
