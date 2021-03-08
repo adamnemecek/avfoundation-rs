@@ -220,10 +220,12 @@ bitflags! {
 }
 
 impl AudioUnitRenderActionFlags {
+    #[inline]
     pub fn is_pre_render(&self) -> bool {
         self.contains(Self::PRE_RENDER)
     }
 
+    #[inline]
     pub fn is_post_render(&self) -> bool {
         self.contains(Self::POST_RENDER)
     }
