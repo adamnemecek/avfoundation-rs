@@ -408,8 +408,8 @@ impl AUParameterRef {
 
     /// A localized name for the parameter's unit. Supplied by the AU if kAudioUnitParameterUnit_CustomUnit; else by the framework.
     // @property (NS_NONATOMIC_IOSONLY, readonly, copy, nullable) NSString *unitName;
-    pub fn unit_name(&self) -> AUValue {
-        todo!()
+    pub fn unit_name(&self) -> Option<&str> {
+        unsafe { crate::opt_nsstring_as_str!(msg_send![self, unitName]) }
     }
 
     /// Various details of the parameter.
@@ -458,7 +458,7 @@ impl AUParameterRef {
             msg_send![
                 self,
                 setValue: value
-                originator: originator.0
+                originator: originator
             ]
         }
     }

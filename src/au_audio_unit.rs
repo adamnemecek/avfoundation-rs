@@ -805,13 +805,13 @@ impl AUAudioUnitRef {
     pub fn token_by_adding_render_observer_fn<F>(&self, mut f: F) -> RenderObserverToken
     where
         F: 'static
-            + FnMut(AudioUnitRenderActionFlags, &AudioTimeStamp, AUAudioFrameCount, i64) -> (),
+            + FnMut(AudioUnitRenderActionFlags, &AudioTimeStamp, AUAudioFrameCount, NSInteger) -> (),
     {
         let block = block::ConcreteBlock::new(
             move |flags: AudioUnitRenderActionFlags,
                   timestamp: *const AudioTimeStamp,
                   frame_count: AUAudioFrameCount,
-                  bus: i64| {
+                  bus: NSInteger| {
                 f(
                     flags,
                     unsafe { timestamp.as_ref().unwrap() },

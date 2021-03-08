@@ -37,12 +37,12 @@ pub fn nsstring_as_str(nsstr: &objc::runtime::Object) -> &str {
 macro_rules! opt_nsstring_as_str {
     ($expr: expr) => {{
         #[allow(unused_assignments)]
-        let mut s: *mut Object = std::ptr::null_mut();
+        let mut s: *mut objc::runtime::Object = std::ptr::null_mut();
         s = $expr;
         if s.is_null() {
             None
         } else {
-            Some(nsstring_as_str(s.as_ref().unwrap()))
+            Some(crate::nsstring_as_str(s.as_ref().unwrap()))
         }
     }};
 }
