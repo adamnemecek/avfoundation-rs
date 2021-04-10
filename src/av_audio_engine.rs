@@ -268,17 +268,9 @@ impl AVAudioEngineRef {
         node2: &AVAudioNodeRef,
         format: Option<&AVAudioFormatRef>,
     ) {
-        // let format = format.map
-        // use cocoa_foundation::base::nil;
-        // assert!(format.is_none());
         unsafe {
-            let _: () = msg_send![self, connect: node1 to: node2 format: format];
+            msg_send![self, connect: node1 to: node2 format: format]
         }
-        // unsafe {
-        //     to_nil! { format => {
-        //         msg_send![self, connect: node1 to: node2 format: nil]
-        //     }};
-        // }
     }
 
     ///    @method connect:toConnectionPoints:fromBus:format:
