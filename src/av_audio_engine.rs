@@ -268,9 +268,7 @@ impl AVAudioEngineRef {
         node2: &AVAudioNodeRef,
         format: Option<&AVAudioFormatRef>,
     ) {
-        unsafe {
-            msg_send![self, connect: node1 to: node2 format: format]
-        }
+        unsafe { msg_send![self, connect: node1 to: node2 format: format] }
     }
 
     ///    @method connect:toConnectionPoints:fromBus:format:

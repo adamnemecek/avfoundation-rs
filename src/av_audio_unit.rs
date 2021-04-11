@@ -62,7 +62,34 @@ impl AVAudioUnit {
     // 		according to the component's type.
     // */
     // + (void)instantiateWithComponentDescription:(AudioComponentDescription)audioComponentDescription options:(AudioComponentInstantiationOptions)options completionHandler:(void (^)(__kindof AVAudioUnit * __nullable audioUnit, NSError * __nullable error))completionHandler API_AVAILABLE(macos(10.11), ios(9.0), tvos(9.0));
-    pub fn new_with_component_description<F>(
+    pub fn new_with_component_description(
+        desc: AudioComponentDescription,
+        options: AudioComponentInstantiationOptions,
+        // completion_handler: block::RcBlock<Result<AVAudioUnit, NSError>, ()>,
+        completion_handler: block::RcBlock<(*mut AVAudioUnitRef, *mut NSErrorRef), ()>,
+    ) -> Self {
+        unsafe {
+            let block = block::ConcreteBlock::new(
+                move |unit: *mut AVAudioUnitRef, error: *mut NSErrorRef| {
+                    // let res = if error.is_null() {
+                    //     let a = unit.as_ref().unwrap().to_owned();
+                    //     Ok(a)
+                    // } else {
+                    //     Err(error.as_ref().unwrap().to_owned())
+                    // };
+                    // completion_handler.call(res);
+                    completion_handler.call((unit, error));
+                },
+            )
+            .copy();
+            let self_: Self = msg_send![class!(AVAudioUnit), instantiateWithComponentDescription: desc
+                                                                                         options: options
+                                                                               completionHandler: block];
+            self_
+        }
+    }
+
+    pub fn new_with_component_description_fn<F>(
         desc: AudioComponentDescription,
         options: AudioComponentInstantiationOptions,
         completion_handler: F,

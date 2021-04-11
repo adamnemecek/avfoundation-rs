@@ -107,6 +107,10 @@ foreign_obj_type! {
 
 pub type RequestAUAudioUnitViewController<'a> = block::RcBlock<(&'a NSViewControllerRef,), ()>;
 
+pub enum AVFoundationEvent {
+    RequestViewController(Option<NSViewController>),
+}
+
 impl AUAudioUnitRef {
     // API_AVAILABLE(macos(10.12), ios(9.0)) API_UNAVAILABLE(watchos)
     // @interface AUAudioUnit (AUAudioUnit_ViewController)
@@ -129,6 +133,26 @@ impl AUAudioUnitRef {
         .copy();
         self.request_view_controller(block);
     }
+
+    // pub fn request_view_controller_event(&self, tx: std::sync::mpsc::Sender<AVFoundationEvent>) {
+    //     let block = block::ConcreteBlock::new(
+    //         move |vc: Option<&crate::NSViewControllerRef>| {
+    //             // let res = unsafe {
+    //             //     // if vc.is_null() {
+    //             //     //     None
+    //             //     // } else {
+    //             //     //     let a = vc.as_ref().unwrap().to_owned();
+    //             //     //     Some(a)
+    //             //     }
+    //             // };
+    //             let vc = vc.map(|x| x.to_owned());
+    //             let _ = tx.send(AVFoundationEvent::RequestViewController(vc));
+    //         },
+    //     )
+    //     .copy();
+
+    //     self.request_view_controller(block);        
+    // }
 
     // /*!	@method		supportedViewConfigurations
     // 	@param		availableViewConfigurations
