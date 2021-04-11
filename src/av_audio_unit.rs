@@ -117,12 +117,12 @@ impl AVAudioUnit {
         }
     }
 
-
-    pub fn new_with_component_description_event<F>(
+    pub fn new_with_component_description_tx(
         desc: AudioComponentDescription,
         options: AudioComponentInstantiationOptions,
-        tx: std::sync::mpsc::Sender<crate::AVFoundationEvent>,
+        tx: &std::sync::mpsc::Sender<crate::AVFoundationEvent>,
     ) -> Self {
+        let tx = tx.clone();
         unsafe {
             let block = block::ConcreteBlock::new(
                 move |unit: *mut AVAudioUnitRef, error: *mut NSErrorRef| {
@@ -132,7 +132,8 @@ impl AVAudioUnit {
                     } else {
                         Err(error.as_ref().unwrap().to_owned())
                     };
-                    let _ = tx.send(crate::AVFoundationEvent::AVAudioUnitHandler(res));
+                    let r = tx.send(crate::AVFoundationEvent::AVAudioUnitHandler(res));
+                    println!("{:?}", r);
                 },
             )
             .copy();

@@ -108,6 +108,7 @@ foreign_obj_type! {
 pub type RequestAUAudioUnitViewController<'a> =
     block::RcBlock<(Option<&'a NSViewControllerRef>,), ()>;
 
+#[derive(Debug)]
 pub enum AVFoundationEvent {
     AVAudioUnitHandler(Result<crate::AVAudioUnit, crate::NSError>),
     RequestViewController(Option<NSViewController>),
@@ -136,19 +137,12 @@ impl AUAudioUnitRef {
         self.request_view_controller(block);
     }
 
-    pub fn request_view_controller_event(&self, tx: std::sync::mpsc::Sender<AVFoundationEvent>) {
+    pub fn request_view_controller_tx(&self, tx: &std::sync::mpsc::Sender<AVFoundationEvent>) {
+        let tx = tx.clone();
         let block = block::ConcreteBlock::new(move |vc: Option<&crate::NSViewControllerRef>| {
-            // let res = unsafe {
-            //     // if vc.is_null() {
-            //     //     None
-            //     // } else {
-            //     //     let a = vc.as_ref().unwrap().to_owned();
-            //     //     Some(a)
-            //     }
-            // };
-            // let vc = vc.map(|x| x.to_owned());
             let vc = vc.map(|x| x.to_owned());
-            let _ = tx.send(AVFoundationEvent::RequestViewController(vc));
+            let r = tx.send(AVFoundationEvent::RequestViewController(vc));
+            println!("{:?}", r);
         })
         .copy();
 

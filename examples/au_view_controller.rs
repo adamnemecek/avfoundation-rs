@@ -47,65 +47,67 @@ fn main() {
 
     // let midi = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
 
+    // let (tx, rx) = std::sync::mpsc::channel();
     let (tx, rx) = std::sync::mpsc::channel();
-    // let (tx1, rx1) = std::sync::mpsc::channel();
 
-    let block =
-        block::ConcreteBlock::new(move |unit: *mut AVAudioUnitRef, error: *mut NSErrorRef| {
-            let tx1 = tx.clone();
-            println!("here");
-            let res = unsafe {
-                if error.is_null() {
-                    let a = unit.as_ref().unwrap().to_owned();
-                    Ok(a)
-                } else {
-                    Err(error.as_ref().unwrap().to_owned())
-                }
-            };
+    // let block =
+    //     block::ConcreteBlock::new(move |unit: *mut AVAudioUnitRef, error: *mut NSErrorRef| {
+    //         let tx1 = tx.clone();
+    //         println!("here");
+    //         let res = unsafe {
+    //             if error.is_null() {
+    //                 let a = unit.as_ref().unwrap().to_owned();
+    //                 Ok(a)
+    //             } else {
+    //                 Err(error.as_ref().unwrap().to_owned())
+    //             }
+    //         };
 
-            match res {
-                Ok(unit) => {
-                    let ui_block = block::ConcreteBlock::new(
-                        move |id: Option<&avfoundation::NSViewControllerRef>| {
-                            // println!("ui block");
-                            let vc = id.map(|x| x.to_owned());
-                            let _ = tx1.send(vc);
-                        },
-                    )
-                    .copy();
+    //         match res {
+    //             Ok(unit) => {
+    //                 let ui_block = block::ConcreteBlock::new(
+    //                     move |id: Option<&avfoundation::NSViewControllerRef>| {
+    //                         // println!("ui block");
+    //                         let vc = id.map(|x| x.to_owned());
+    //                         let _ = tx1.send(vc);
+    //                     },
+    //                 )
+    //                 .copy();
 
-                    unit.au_audio_unit().request_view_controller(ui_block);
-                }
-                Err(e) => {}
-            }
+    //                 unit.au_audio_unit().request_view_controller(ui_block);
+    //             }
+    //             Err(e) => {}
+    //         }
 
-            // match res {
-            //     Ok(unit) => {
-            //         unit.au_audio_unit().request_view_controller(
-            //             block::ConcreteBlock::new(move |a| {
-            //                 tx1.send(1);
-            //             })
-            //             .copy(),
-            //         );
-            //     }
-            //     Err(_) => todo!(),
-            // }
-            //     let desc = unsafe {
-            //         let cls: id = msg_send![unit, class];
-            //         let desc: id = msg_send![cls, description];
-            //         nsstring_as_str(desc.as_ref().unwrap())
-            //     };
-            //     println!("callback {:?} {:?}", desc, err.localized_description());
-            //     let ui_block =
-            //         block::ConcreteBlock::new(move |id: &avfoundation::NSViewControllerRef| {
-            //             println!("ui block");
-            //         })
-            //         .copy();
-            //     unit.au_audio_unit().request_view_controller(ui_block);
-        })
-        .copy();
+    //         // match res {
+    //         //     Ok(unit) => {
+    //         //         unit.au_audio_unit().request_view_controller(
+    //         //             block::ConcreteBlock::new(move |a| {
+    //         //                 tx1.send(1);
+    //         //             })
+    //         //             .copy(),
+    //         //         );
+    //         //     }
+    //         //     Err(_) => todo!(),
+    //         // }
+    //         //     let desc = unsafe {
+    //         //         let cls: id = msg_send![unit, class];
+    //         //         let desc: id = msg_send![cls, description];
+    //         //         nsstring_as_str(desc.as_ref().unwrap())
+    //         //     };
+    //         //     println!("callback {:?} {:?}", desc, err.localized_description());
+    //         //     let ui_block =
+    //         //         block::ConcreteBlock::new(move |id: &avfoundation::NSViewControllerRef| {
+    //         //             println!("ui block");
+    //         //         })
+    //         //         .copy();
+    //         //     unit.au_audio_unit().request_view_controller(ui_block);
+    //     })
+    //     .copy();
 
-    let unit = AVAudioUnit::new_with_component_description(desc, Default::default(), block);
+    // let unit = AVAudioUnit::new_with_component_description(desc, Default::default(), block);
+
+    let unit = AVAudioUnit::new_with_component_description_tx(desc, Default::default(), &tx);
     // let unit =
     //     AVAudioUnit::new_with_component_description_fn(desc, Default::default(), |a| match a {
     //         Ok(unit) => {
@@ -114,8 +116,29 @@ fn main() {
     //         Err(_) => {}
     //     });
 
-    let a = rx.recv().unwrap();
-    println!("received {:?}", a);
+    use avfoundation::AVFoundationEvent;
+    loop {
+        std::thread::sleep(std::time::Duration::from_millis(100));
+        for e in rx.recv() {
+            println!("here");
+            match e {
+                AVFoundationEvent::AVAudioUnitHandler(unit) => match unit {
+                    Ok(unit) => {
+                        unit.au_audio_unit().request_view_controller_tx(&tx);
+                    }
+                    Err(_) => {
+                        todo!()
+                    }
+                },
+                AVFoundationEvent::RequestViewController(vc) => {
+                    println!("vc {:?}", vc);
+                }
+            }
+        }
+    }
+
+
+    // println!("received {:?}", a);
     // let f = ;
     // let unit = AVAudioUnit::new_with_component_description(
     //     desc,
@@ -130,5 +153,5 @@ fn main() {
     //     },
     // );
 
-    // run_main_loop();
+    
 }
