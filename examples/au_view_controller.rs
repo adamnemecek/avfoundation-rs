@@ -66,9 +66,9 @@ fn main() {
             match res {
                 Ok(unit) => {
                     let ui_block =
-                        block::ConcreteBlock::new(move |id: &avfoundation::NSViewControllerRef| {
+                        block::ConcreteBlock::new(move |id: Option<&avfoundation::NSViewControllerRef>| {
                             // println!("ui block");
-                            let vc = id.to_owned();
+                            let vc = id.map(|x| x.to_owned());
                             let _ = tx1.send(vc);
                         })
                         .copy();

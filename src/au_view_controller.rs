@@ -105,7 +105,8 @@ foreign_obj_type! {
     pub struct NSViewControllerRef;
 }
 
-pub type RequestAUAudioUnitViewController<'a> = block::RcBlock<(&'a NSViewControllerRef,), ()>;
+pub type RequestAUAudioUnitViewController<'a> =
+    block::RcBlock<(Option<&'a NSViewControllerRef>,), ()>;
 
 pub enum AVFoundationEvent {
     RequestViewController(Option<NSViewController>),
@@ -126,33 +127,32 @@ impl AUAudioUnitRef {
         unsafe { msg_send![self, requestViewControllerWithCompletionHandler: block] }
     }
 
-    pub fn request_view_controller_fn(&self, f: impl Fn(NSViewController) + 'static) {
-        let block = block::ConcreteBlock::new(move |controller: &NSViewControllerRef| {
-            f(controller.to_owned())
+    pub fn request_view_controller_fn(&self, f: impl Fn(Option<NSViewController>) + 'static) {
+        let block = block::ConcreteBlock::new(move |controller: Option<&NSViewControllerRef>| {
+            f(controller.map(|x| x.to_owned()))
         })
         .copy();
         self.request_view_controller(block);
     }
 
-    // pub fn request_view_controller_event(&self, tx: std::sync::mpsc::Sender<AVFoundationEvent>) {
-    //     let block = block::ConcreteBlock::new(
-    //         move |vc: Option<&crate::NSViewControllerRef>| {
-    //             // let res = unsafe {
-    //             //     // if vc.is_null() {
-    //             //     //     None
-    //             //     // } else {
-    //             //     //     let a = vc.as_ref().unwrap().to_owned();
-    //             //     //     Some(a)
-    //             //     }
-    //             // };
-    //             let vc = vc.map(|x| x.to_owned());
-    //             let _ = tx.send(AVFoundationEvent::RequestViewController(vc));
-    //         },
-    //     )
-    //     .copy();
+    pub fn request_view_controller_event(&self, tx: std::sync::mpsc::Sender<AVFoundationEvent>) {
+        let block = block::ConcreteBlock::new(move |vc: Option<&crate::NSViewControllerRef>| {
+            // let res = unsafe {
+            //     // if vc.is_null() {
+            //     //     None
+            //     // } else {
+            //     //     let a = vc.as_ref().unwrap().to_owned();
+            //     //     Some(a)
+            //     }
+            // };
+            // let vc = vc.map(|x| x.to_owned());
+            let vc = vc.map(|x|x.to_owned());
+            let _ = tx.send(AVFoundationEvent::RequestViewController(vc));
+        })
+        .copy();
 
-    //     self.request_view_controller(block);        
-    // }
+        self.request_view_controller(block);
+    }
 
     // /*!	@method		supportedViewConfigurations
     // 	@param		availableViewConfigurations
