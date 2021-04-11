@@ -109,6 +109,7 @@ pub type RequestAUAudioUnitViewController<'a> =
     block::RcBlock<(Option<&'a NSViewControllerRef>,), ()>;
 
 pub enum AVFoundationEvent {
+    AVAudioUnitHandler(Result<crate::AVAudioUnit, crate::NSError>),
     RequestViewController(Option<NSViewController>),
 }
 
@@ -146,7 +147,7 @@ impl AUAudioUnitRef {
             //     }
             // };
             // let vc = vc.map(|x| x.to_owned());
-            let vc = vc.map(|x|x.to_owned());
+            let vc = vc.map(|x| x.to_owned());
             let _ = tx.send(AVFoundationEvent::RequestViewController(vc));
         })
         .copy();

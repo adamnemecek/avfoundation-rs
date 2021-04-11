@@ -65,13 +65,14 @@ fn main() {
 
             match res {
                 Ok(unit) => {
-                    let ui_block =
-                        block::ConcreteBlock::new(move |id: Option<&avfoundation::NSViewControllerRef>| {
+                    let ui_block = block::ConcreteBlock::new(
+                        move |id: Option<&avfoundation::NSViewControllerRef>| {
                             // println!("ui block");
                             let vc = id.map(|x| x.to_owned());
                             let _ = tx1.send(vc);
-                        })
-                        .copy();
+                        },
+                    )
+                    .copy();
 
                     unit.au_audio_unit().request_view_controller(ui_block);
                 }
