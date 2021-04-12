@@ -10,9 +10,13 @@ fn main() {
     // });
     let start = std::time::Instant::now();
     let after = DispatchTime::new(3 * 1_0000_000_000);
-    queue.dispatch_after(after, move || {
-        let end = std::time::Instant::now();
-        println!("async dispatched after {:?}", end - start);
+    // queue.dispatch_after(after, move || {
+    //     let end = std::time::Instant::now();
+    //     println!("async dispatched after {:?}", end - start);
+    // });
+
+    queue.dispatch_async(move || {
+        println!("async");
     });
 
     loop {

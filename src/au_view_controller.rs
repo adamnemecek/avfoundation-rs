@@ -1,4 +1,4 @@
-use crate::AUAudioUnitRef;
+use crate::{AUAudioUnitRef, DispatchQueue};
 // //
 // //  AUViewController.h
 // //	Framework: CoreAudioKit
@@ -139,10 +139,14 @@ impl AUAudioUnitRef {
 
     pub fn request_view_controller_tx(&self, tx: &std::sync::mpsc::Sender<AVFoundationEvent>) {
         let tx = tx.clone();
-        let block = block::ConcreteBlock::new(move |vc: Option<&crate::NSViewControllerRef>| {
-            let vc = vc.map(|x| x.to_owned());
-            let r = tx.send(AVFoundationEvent::RequestViewController(vc));
-            println!("{:?}", r);
+
+        let block = block::ConcreteBlock::new(move |vc: Option<&NSViewControllerRef>| {
+            // queue.dispatch_async(move || {
+                let vc = vc.map(|x| x.to_owned());
+                let r = tx.send(AVFoundationEvent::RequestViewController(vc));
+                println!("view controller tx {:?}", r);
+    
+            // });
         })
         .copy();
 

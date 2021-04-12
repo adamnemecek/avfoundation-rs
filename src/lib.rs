@@ -194,6 +194,25 @@ macro_rules! try_objc {
 //     }
 // }
 
+// macro_rules! try_objc {
+//     {
+//         $err_name: ident => $body:expr
+//     } => {
+//         {
+//             let mut $err_name: *mut ::objc::runtime::Object = ::std::ptr::null_mut();
+//             let value = $body;
+//             if !$err_name.is_null() {
+//                 let desc: *mut Object = msg_send![$err_name, localizedDescription];
+//                 let compile_error: *const std::os::raw::c_char = msg_send![desc, UTF8String];
+//                 let message = CStr::from_ptr(compile_error).to_string_lossy().into_owned();
+//                 let () = msg_send![$err_name, release];
+//                 return Err(message);
+//             }
+//             value
+//         }
+//     };
+// }
+
 /// some functions have the following signature
 /// -(bool)method:(Arg)arg error:(NSError**)error;
 /// this is a wrapper for those functions
@@ -203,8 +222,10 @@ macro_rules! try_bool_objc {
     } => {
         {
             let mut $err: *mut NSError = ::std::ptr::null_mut();
+            
             let res: bool = $body;
             if !$err.is_null() {
+                println!("here");
                 assert!(!res);
                 // let desc: *mut Object = msg_send![$err_name, localizedDescription];
                 // let compile_error: *const std::os::raw::c_char = msg_send![desc, UTF8String];

@@ -87,9 +87,12 @@ impl Instrument {
 }
 
 fn main() {
-    let instrument = Instrument::new();
+    // let instrument = Instrument::new();
     // let instrument2 = Instrument::new();
-    instrument.playback();
+    // instrument.playback();
+
+    let engine = AVAudioEngine::new();
+    engine.start();
     // instrument2.playback();
 
     // let token = instrument

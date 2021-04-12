@@ -62,4 +62,10 @@ impl DispatchQueue {
             dispatch_async(*self, &block);
         }
     }
+
+    pub fn dispatch_async_block(&self, block: &block::RcBlock<(), ()>) {
+        unsafe {
+            dispatch_async(*self, block);
+        }
+    }
 }

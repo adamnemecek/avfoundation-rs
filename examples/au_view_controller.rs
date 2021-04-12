@@ -31,13 +31,20 @@ extern crate objc;
 fn main() {
     let manager = AVAudioUnitComponentManager::shared();
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
-    let components = manager.components_passing_test(|unit| {
-        if unit.name().contains("DLS") {
+    let s = true;
+    let name = if s {
+        "Sylenth"
+    } else {
+        "DLS"
+    };
+    let components = manager.components_passing_test(move |unit| {
+        if unit.name().contains(name) {
             (true, ShouldStop::Stop)
         } else {
             (false, ShouldStop::Continue)
         }
     });
+    assert!(components.len() == 1);
 
     let desc = components.first().unwrap().audio_component_description();
 
@@ -48,7 +55,7 @@ fn main() {
     // let midi = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
 
     // let (tx, rx) = std::sync::mpsc::channel();
-    let (tx, rx) = std::sync::mpsc::channel();
+    // let (tx, rx) = std::sync::mpsc::channel();
 
     // let block =
     //     block::ConcreteBlock::new(move |unit: *mut AVAudioUnitRef, error: *mut NSErrorRef| {
@@ -107,7 +114,14 @@ fn main() {
 
     // let unit = AVAudioUnit::new_with_component_description(desc, Default::default(), block);
 
-    let unit = AVAudioUnit::new_with_component_description_tx(desc, Default::default(), &tx);
+    // let unit = AVAudioUnit::new_with_component_description_tx(desc, Default::default(), &tx);
+    let unit = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
+    // unit.au_audio_unit().request_view_controller_tx(&tx);
+    unit.au_audio_unit().request_view_controller_fn(move |vc| {
+        // let z = tx.send(avfoundation::AVFoundationEvent::RequestViewController(vc));
+        println!("request view controller");
+    });
+    // println!("here");
     // let unit =
     //     AVAudioUnit::new_with_component_description_fn(desc, Default::default(), |a| match a {
     //         Ok(unit) => {
@@ -116,26 +130,30 @@ fn main() {
     //         Err(_) => {}
     //     });
 
-    use avfoundation::AVFoundationEvent;
-    loop {
-        std::thread::sleep(std::time::Duration::from_millis(100));
-        for e in rx.recv() {
-            println!("here");
-            match e {
-                AVFoundationEvent::AVAudioUnitHandler(unit) => match unit {
-                    Ok(unit) => {
-                        unit.au_audio_unit().request_view_controller_tx(&tx);
-                    }
-                    Err(_) => {
-                        todo!()
-                    }
-                },
-                AVFoundationEvent::RequestViewController(vc) => {
-                    println!("vc {:?}", vc);
-                }
-            }
-        }
-    }
+    // use avfoundation::AVFoundationEvent;
+    // loop {
+        // std::thread::sleep(std::time::Duration::from_millis(100));
+    //     for e in rx.try_recv() {
+    //         println!("here");
+    //         match e {
+    //             AVFoundationEvent::AVAudioUnitHandler(unit) => match unit {
+    //                 Ok(unit) => {
+
+    //                     // engine.attach_node(&unit);
+    //                     unit.au_audio_unit().request_view_controller_tx(&tx);
+    //                 }
+    //                 Err(_) => {
+    //                     todo!()
+    //                 }
+    //             },
+    //             AVFoundationEvent::RequestViewController(vc) => {
+    //                 println!("vc {:?}", vc);
+    //             }
+    //         }
+    //     }
+    // }
+    run_main_loop();
+    
 
 
     // println!("received {:?}", a);
