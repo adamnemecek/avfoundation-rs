@@ -123,25 +123,28 @@ impl AVAudioUnit {
         tx: &std::sync::mpsc::Sender<crate::AVFoundationEvent>,
     ) -> Self {
         let tx = tx.clone();
-        unsafe {
-            let block = block::ConcreteBlock::new(
-                move |unit: *mut AVAudioUnitRef, error: *mut NSErrorRef| {
-                    let res = if error.is_null() {
-                        let a = unit.as_ref().unwrap().to_owned();
-                        Ok(a)
-                    } else {
-                        Err(error.as_ref().unwrap().to_owned())
-                    };
-                    let r = tx.send(crate::AVFoundationEvent::AVAudioUnitHandler(res));
-                    println!("{:?}", r);
-                },
-            )
-            .copy();
-            let self_: Self = msg_send![class!(AVAudioUnit), instantiateWithComponentDescription: desc
-                                                                                         options: options
-                                                                               completionHandler: block];
-            self_
-        }
+        // unsafe {
+        //     let block = block::ConcreteBlock::new(
+        //         move |unit: *mut AVAudioUnitRef, error: *mut NSErrorRef| {
+        //             let res = if error.is_null() {
+        //                 let a = unit.as_ref().unwrap().to_owned();
+        //                 Ok(a)
+        //             } else {
+        //                 Err(error.as_ref().unwrap().to_owned())
+        //             };
+        //             let r = tx.send(crate::AVFoundationEvent::AVAudioUnitHandler(res));
+        //             println!("{:?}", r);
+        //         },
+        //     )
+        //     .copy();
+        //     let self_: Self = msg_send![class!(AVAudioUnit), instantiateWithComponentDescription: desc
+        //                                                                                  options: options
+        //                                                                        completionHandler: block];
+        //     self_
+        // }
+        Self::new_with_component_description_fn(desc, options, move |res| {
+            let _ = tx.send(crate::AVFoundationEvent::AVAudioUnitHandler(res));
+        })
     }
 }
 

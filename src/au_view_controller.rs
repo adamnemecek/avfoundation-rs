@@ -1,4 +1,7 @@
-use crate::{AUAudioUnitRef, DispatchQueue};
+use crate::{
+    AUAudioUnitRef,
+    DispatchQueue,
+};
 // //
 // //  AUViewController.h
 // //	Framework: CoreAudioKit
@@ -97,6 +100,34 @@ use cocoa_foundation::base::{
     nil,
 };
 
+// struct Dispatcher {
+//     queue: DispatchQueue
+// }
+
+// impl Dispatcher {
+//     pub fn new() -> Self {
+//         Self {
+//             queue: DispatchQueue::new("dispatcher")
+//         }
+//     }
+
+//     pub fn async_fn() {
+
+//     }
+// }
+
+// use std::sync::Once;
+
+// static DISPATCHER: Once = Once::new();
+// fn get_dispatcher() -> Dispatcher
+
+struct SyncController {
+    inner: *mut NSViewControllerFFI,
+}
+
+unsafe impl Send for SyncController {}
+unsafe impl Sync for SyncController {}
+
 pub enum NSViewControllerFFI {}
 
 foreign_obj_type! {
@@ -104,6 +135,15 @@ foreign_obj_type! {
     pub struct NSViewController;
     pub struct NSViewControllerRef;
 }
+
+// unsafe impl Send for NSViewControllerFFI {}
+// unsafe impl Sync for NSViewControllerFFI {}
+
+// unsafe impl Send for NSViewController {}
+// unsafe impl Sync for NSViewController {}
+
+// unsafe impl Send for NSViewControllerRef {}
+// unsafe impl Sync for NSViewControllerRef {}
 
 pub type RequestAUAudioUnitViewController<'a> =
     block::RcBlock<(Option<&'a NSViewControllerRef>,), ()>;
@@ -113,6 +153,60 @@ pub enum AVFoundationEvent {
     AVAudioUnitHandler(Result<crate::AVAudioUnit, crate::NSError>),
     RequestViewController(Option<NSViewController>),
 }
+
+// struct CB<F: FnOnce(Option<NSViewController>) + 'static + Send> {
+//     f: F
+// }
+
+// impl<F: FnOnce(Option<NSViewController>) + 'static + Send> Clone for CB<F> {
+//     fn clone(&self) -> Self {
+//         todo!()
+//     }
+// }
+
+// impl<F: FnOnce(Option<NSViewController>) + 'static + Send> CB<F> {
+//     pub fn new(f: F) -> Self {
+//         Self {
+//             f
+//         }
+//     }
+// }
+
+// impl<F: FnOnce(Option<NSViewController>) + 'static + Send> FnOnce<(f32,)> for CB<F> {
+//     type Output = i32;
+//     extern "rust-call" fn call_once(self, args: (f32, )) -> Self::Output {
+//         todo!()
+//     }
+// }
+
+// impl<F: FnOnce(Option<NSViewController>) + 'static + Send> FnMut<(f32,)> for CB<F> {
+
+//     extern "rust-call" fn call_mut(&mut self, args: (f32, )) -> Self::Output {
+//         todo!()
+//     }
+// }
+
+// struct MainTreadSafe<T>(pub T);
+
+// unsafe impl<T> Send for MainTreadSafe<T> {}
+
+// impl<T> std::ops::Deref for MainTreadSafe<T> {
+//     type Target = T;
+//     fn deref(&self) -> &T {
+//         &self.0
+//     }
+// }
+
+// static A: u32 = 0;
+// struct Dispatcher {}
+
+// impl Dispatcher {
+//     fn send(&self, e: Option<&NSViewControllerRef>) {}
+// }
+
+// static DISPATCHER: Dispatcher = Dispatcher {};
+
+// pub fn register(tx: std::sync::mpsc::Sender<AVFoundationEvent>) {}
 
 impl AUAudioUnitRef {
     // API_AVAILABLE(macos(10.12), ios(9.0)) API_UNAVAILABLE(watchos)
@@ -137,15 +231,108 @@ impl AUAudioUnitRef {
         self.request_view_controller(block);
     }
 
+    pub fn request_view_controller_fn1(&self, f: impl Fn(Option<&NSViewControllerRef>) + 'static) {
+        let block = block::ConcreteBlock::new(move |controller: Option<&NSViewControllerRef>| {
+            // f(controller.map(|x| x.to_owned()))
+            f(controller)
+        })
+        .copy();
+        self.request_view_controller(block);
+    }
+
+    pub fn request_view_controller_async_fn(
+        &self,
+        f: impl FnOnce(Option<&NSViewControllerRef>) + 'static,
+    ) {
+        // let queue = DispatchQueue::new("hello");
+        // let cb = move |controller: Option<&NSViewControllerRef>| {
+        //     let vc = controller.map(|x| x.to_owned());
+        //     DispatchQueue::current().dispatch_async(move || {
+        //         f(vc);
+        //     });
+        //     // queue.dispatch_async(move || {
+        //         // f(vc);
+        //     // });
+        // };
+        // let block = block::ConcreteBlock::new(move |controller: Option<&NSViewControllerRef>| {
+
+        //     DispatchQueue::current().dispatch_async(move || {
+        //         let vc = controller.map(|x| x.to_owned());
+        //         f(vc);
+        //     });
+        //     cb(controller);
+
+        // })
+        // .copy();
+        // unsafe { msg_send![self, requestViewControllerWithCompletionHandler: block] }
+
+        // self.request_view_controller_fn1(|vc| {
+
+        //     DispatchQueue::current().dispatch_async(move || {
+        //         f(vc);
+        //     });
+        // });
+
+        // fn fn_async(f: impl Fn() + Send) {
+        //     dispatch::Queue::main().exec_async(|| {
+        //         f()
+        //     })
+
+        // }
+        // let cb = CB::new(f);
+
+        // let ff = MainTreadSafe(f);
+        // let queue = dispatch::Queue::main();
+        // let queue = DispatchQueue::main();
+
+        // self.request_view_controller_fn1(move |vc| {
+        //     // let z = vc.map(|x| x.to_owned()).unwrap();
+
+        //     queue.dispatch_async(move || {
+        //         // let z = A;
+        //         DISPATCHER.send(vc);
+        //         // cb.call_once((10.0,));
+        //         // ff(Some(&z));
+        //     });
+        // });
+        // queue.exec_async(work)
+        // self.request_view_controller_fn(move |vc| {
+        // let queue = dispatch::Queue::main();
+        // let cb = CB::new();
+
+        // queue.exec_async(|| {
+        //     cb.call_once((10.0,));
+        // });
+        // queue.exec_async(|| {
+        //         f(vc);
+        // });
+        // });
+    }
+    pub fn request_view_controller_tx1(&self, tx: &std::sync::mpsc::Sender<AVFoundationEvent>) {
+        // let tx = tx.clone();
+
+        // // let block = block::ConcreteBlock::new(move |vc: Option<&NSViewControllerRef>| {
+        // //     DispatchQueue::current().dispatch_async(move || {
+        // //         let vc = vc.map(|x| x.to_owned());
+        // //         let r = tx.send(AVFoundationEvent::RequestViewController(vc));
+        // //         println!("view controller tx {:?}", r);
+
+        // //     });
+        // // })
+        // // .copy();
+
+        // self.request_view_controller(block);
+    }
+
     pub fn request_view_controller_tx(&self, tx: &std::sync::mpsc::Sender<AVFoundationEvent>) {
         let tx = tx.clone();
 
         let block = block::ConcreteBlock::new(move |vc: Option<&NSViewControllerRef>| {
             // queue.dispatch_async(move || {
-                let vc = vc.map(|x| x.to_owned());
-                let r = tx.send(AVFoundationEvent::RequestViewController(vc));
-                println!("view controller tx {:?}", r);
-    
+            let vc = vc.map(|x| x.to_owned());
+            let r = tx.send(AVFoundationEvent::RequestViewController(vc));
+            println!("view controller tx {:?}", r);
+
             // });
         })
         .copy();

@@ -222,7 +222,7 @@ macro_rules! try_bool_objc {
     } => {
         {
             let mut $err: *mut NSError = ::std::ptr::null_mut();
-            
+
             let res: bool = $body;
             if !$err.is_null() {
                 println!("here");

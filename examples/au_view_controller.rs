@@ -32,11 +32,7 @@ fn main() {
     let manager = AVAudioUnitComponentManager::shared();
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
     let s = true;
-    let name = if s {
-        "Sylenth"
-    } else {
-        "DLS"
-    };
+    let name = if s { "Sylenth" } else { "DLS" };
     let components = manager.components_passing_test(move |unit| {
         if unit.name().contains(name) {
             (true, ShouldStop::Stop)
@@ -116,6 +112,7 @@ fn main() {
 
     // let unit = AVAudioUnit::new_with_component_description_tx(desc, Default::default(), &tx);
     let unit = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
+
     // unit.au_audio_unit().request_view_controller_tx(&tx);
     unit.au_audio_unit().request_view_controller_fn(move |vc| {
         // let z = tx.send(avfoundation::AVFoundationEvent::RequestViewController(vc));
@@ -132,7 +129,7 @@ fn main() {
 
     // use avfoundation::AVFoundationEvent;
     // loop {
-        // std::thread::sleep(std::time::Duration::from_millis(100));
+    // std::thread::sleep(std::time::Duration::from_millis(100));
     //     for e in rx.try_recv() {
     //         println!("here");
     //         match e {
@@ -153,8 +150,6 @@ fn main() {
     //     }
     // }
     run_main_loop();
-    
-
 
     // println!("received {:?}", a);
     // let f = ;
@@ -170,6 +165,4 @@ fn main() {
     //         Err(_) => todo!(),
     //     },
     // );
-
-    
 }
