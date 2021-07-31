@@ -2,6 +2,11 @@
 #![link(name = "AVFoundation", kind = "framework")]
 #![link(name = "CoreAudioKit", kind = "framework")]
 #![deny(unused_must_use)]
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+#![allow(non_snake_case)]
+#![allow(improper_ctypes)]
 
 #[macro_use]
 extern crate bitflags;
@@ -11,6 +16,7 @@ extern crate bitflags;
 extern crate objc;
 #[macro_use]
 extern crate foreign_types;
+
 
 // use std::borrow::{Borrow, ToOwned};
 // use std::marker::PhantomData;
