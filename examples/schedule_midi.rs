@@ -178,6 +178,7 @@ pub struct MIDINote {
 
 impl MIDINote {
     pub fn new(pitch: u8, start: f64, len: f64) -> Self {
+        assert!(pitch < 128);
         Self {
             pitch,
             start,
@@ -232,7 +233,7 @@ fn main() {
     let mut notes = vec![];
     let mut ts = 0.0;
     let mut pitch = 40;
-    for e in 0..2 {
+    for e in 0..60 {
         notes.push(MIDINote::new(pitch, ts, 1.0));
         pitch += 1;
         ts += 0.5;
@@ -255,53 +256,76 @@ fn main() {
     let mut running_ptr: *mut bool = &mut running;
 
     println!("{:?}", events);
-    return;
 
+    // let mut
+
+    // unit.au_audio_unit().token_by_adding_render_observer_fn(
+    //     move |flags, ts, frame_count, bus| {
+    //         // if the offset ts is before requested ts, we have to increment the counter
+    //         // scheduling events that are in the requested range, until we find
+    //         // an event that is past the requested timestamp
+    //         // * if the requested timestamp is past the max timestamp, we set the running_ptr
+    //         // to false
+    //         //
+    //         if !flags.contains(AudioUnitRenderActionFlags::PRE_RENDER) {
+    //             return;
+    //         }
+
+    //         if !unsafe { *running_ptr } {
+    //             return;
+    //         }
+    //         // let (start, end) = midi_time_range(ts, frame_count as _);
+
+    //         loop {
+    //             let event = &slice[i];
+
+    //             // if
+    //             unsafe {
+    //                 *running_ptr = false;
+    //             }
+    //             if event.timestamp.inner > end {
+    //                 break;
+    //             }
+    //             midi_fn(AUEventSampleTime::immediate(), 0, &event.data);
+    //             i += 1;
+    //             // let bytes = [0x90, note, 100];
+    //         }
+    //     },
+    // )
+
+    let mut i = 0;
     let token = match res {
         Ok(unit) => {
             engine.attach_node(&unit);
             engine.connect_nodes(&unit, engine.output_node(), None);
             let _ = engine.start().unwrap();
             let midi_fn = unit.au_audio_unit().schedule_midi_event_fn().unwrap();
-            // unit.au_audio_unit().token_by_adding_render_observer_fn(
-            //     move |flags, ts, frame_count, bus| {
-            //         // if the offset ts is before requested ts, we have to increment the counter
-            //         // scheduling events that are in the requested range, until we find
-            //         // an event that is past the requested timestamp
-            //         // * if the requested timestamp is past the max timestamp, we set the running_ptr
-            //         // to false
-            //         //
-            //         if !flags.contains(AudioUnitRenderActionFlags::PRE_RENDER) {
-            //             return;
-            //         }
 
-            //         if !unsafe { *running_ptr } {
-            //             return;
-            //         }
-            //         // let (start, end) = midi_time_range(ts, frame_count as _);
-
-            //         loop {
-            //             let event = &slice[i];
-
-            //             // if
-            //             unsafe {
-            //                 *running_ptr = false;
-            //             }
-            //             if event.timestamp.inner > end {
-            //                 break;
-            //             }
-            //             midi_fn(AUEventSampleTime::immediate(), 0, &event.data);
-            //             i += 1;
-            //             // let bytes = [0x90, note, 100];
-            //         }
-            //     },
-            // )
             unit.au_audio_unit().token_by_adding_render_observer_fn(
                 move |flags, ts, frame_count, bus| {
                     if !flags.contains(AudioUnitRenderActionFlags::PRE_RENDER) {
                         return;
                     }
 
+                    let end = ts.m_sample_time;
+
+                    println!("ts {:?} i {:?}", ts, i);
+
+                    if i < events.len() {
+                        let iter = &mut events[i..].iter();
+
+                        loop {
+                            if let Some(e) = iter.next() {
+                                if e.sample_ts > end {
+                                    break;
+                                }
+                                midi_fn(AUEventSampleTime::immediate(), 0, &e.data);
+                                i += 1;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
                     // if the offset ts is before requested ts, we have to increment the counter
                     // scheduling events that are in the requested range, until we find
                     // an event that is past the requested timestamp
