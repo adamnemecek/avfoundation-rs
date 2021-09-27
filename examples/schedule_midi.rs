@@ -155,7 +155,7 @@ impl std::fmt::Debug for MIDIEvent {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct ScheduledEvent {
     // in sapmle time
     sample_ts: f64,
@@ -232,7 +232,7 @@ fn main() {
     let mut notes = vec![];
     let mut ts = 0.0;
     let mut pitch = 40;
-    for e in 0..50 {
+    for e in 0..2 {
         notes.push(MIDINote::new(pitch, ts, 1.0));
         pitch += 1;
         ts += 0.5;
@@ -245,7 +245,7 @@ fn main() {
         events.push(note.off());
     }
 
-    events.sort_by(|a, b| a.sample_ts.partial_cmp(&b.sample_ts).unwrap() );
+    events.sort_by(|a, b| a.sample_ts.partial_cmp(&b.sample_ts).unwrap());
 
     // let max_timestamp = notes.iter().max(|x| a.timestamp);
     let mut i = 0;
@@ -253,6 +253,9 @@ fn main() {
 
     let mut running = false;
     let mut running_ptr: *mut bool = &mut running;
+
+    println!("{:?}", events);
+    return;
 
     let token = match res {
         Ok(unit) => {
@@ -295,7 +298,10 @@ fn main() {
             // )
             unit.au_audio_unit().token_by_adding_render_observer_fn(
                 move |flags, ts, frame_count, bus| {
-                    println!("ts {:?}", ts);
+                    if !flags.contains(AudioUnitRenderActionFlags::PRE_RENDER) {
+                        return;
+                    }
+
                     // if the offset ts is before requested ts, we have to increment the counter
                     // scheduling events that are in the requested range, until we find
                     // an event that is past the requested timestamp
