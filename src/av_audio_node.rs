@@ -22,6 +22,7 @@ use crate::{
 
 pub type AVAudioNodeTapBlock<'a> =
     block::RcBlock<(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef), ()>;
+
 pub type AVAudioNodeTapFn<'a> =
     std::rc::Rc<dyn Fn(&'a AVAudioPCMBufferRef, &'a AVAudioTimeRef) -> ()>;
 

@@ -155,6 +155,59 @@ impl std::fmt::Debug for MIDIEvent {
     }
 }
 
+#[derive(Clone, Copy)]
+pub struct ScheduledEvent {
+    // in sapmle time
+    ts: i64,
+    data: [u8; 3],
+}
+
+fn beats_to_sample(b: f32) -> i64 {
+    let tempo = 120.0;
+    // return (int)(beat / settings.tempo * 60 * sampleRate);
+    (b / tempo * 60.0 * 44100.0) as _
+}
+
+#[derive(Clone, Copy, PartialEq)]
+pub struct MIDINote {
+    pitch: u8,
+    // in beats
+    start: f32,
+    end: f32,
+}
+
+impl MIDINote {
+    pub fn new(pitch: u8, start: f32, len: f32) -> Self {
+        Self {
+            pitch,
+            start,
+            end: start + len,
+        }
+    }
+
+    fn on(&self) -> ScheduledEvent {
+        // let data = [0x90 | channel, note, velocity];
+        let data = [0x90, self.pitch, 100];
+        ScheduledEvent {
+            ts: beats_to_sample(self.start),
+            data,
+        }
+    }
+
+    fn off(&self) -> ScheduledEvent {
+        // let data = [0x80 | channel, note, velocity];
+        let data = [0x80, self.pitch, 0];
+        ScheduledEvent {
+            ts: beats_to_sample(self.end),
+            data,
+        }
+    }
+}
+
+fn push(v: &mut Vec<ScheduledEvent>, e: MIDINote) {
+    let on = e.on();
+}
+
 fn main() {
     let engine = AVAudioEngine::new();
     let component = AVAudioUnitComponentManager::shared().components_passing_test(|x| {
@@ -166,14 +219,24 @@ fn main() {
     });
     let desc = component.first().unwrap().audio_component_description();
     let (tx, rx) = std::sync::mpsc::channel();
-    AVAudioUnit::new_with_component_description(desc, Default::default(), move |result| {
+    AVAudioUnit::new_with_component_description_fn(desc, Default::default(), move |result| {
         let _ = tx.send(result);
     });
 
     use unsafe_ref::prelude::*;
 
     let res = rx.recv().unwrap();
-    let notes: Vec<MIDIEvent> = vec![];
+    // let notes: Vec<MIDIEvent> = vec![];
+
+    // let notes = vec![MIDINote::new(30, 1.0, 1.0), MIDINote::new(50, 2.0, 1.0), ]
+    let mut notes = vec![];
+    let mut ts = 0.0;
+    let mut pitch = 40;
+    for e in 0..50 {
+        notes.push(MIDINote::new(pitch, ts, 1.0));
+        pitch += 2;
+        ts += 0.5;
+    }
 
     // let max_timestamp = notes.iter().max(|x| a.timestamp);
     let mut i = 0;
@@ -188,6 +251,39 @@ fn main() {
             engine.connect_nodes(&unit, engine.output_node(), None);
             let _ = engine.start().unwrap();
             let midi_fn = unit.au_audio_unit().schedule_midi_event_fn().unwrap();
+            // unit.au_audio_unit().token_by_adding_render_observer_fn(
+            //     move |flags, ts, frame_count, bus| {
+            //         // if the offset ts is before requested ts, we have to increment the counter
+            //         // scheduling events that are in the requested range, until we find
+            //         // an event that is past the requested timestamp
+            //         // * if the requested timestamp is past the max timestamp, we set the running_ptr
+            //         // to false
+            //         //
+            //         if !flags.contains(AudioUnitRenderActionFlags::PRE_RENDER) {
+            //             return;
+            //         }
+
+            //         if !unsafe { *running_ptr } {
+            //             return;
+            //         }
+            //         // let (start, end) = midi_time_range(ts, frame_count as _);
+
+            //         loop {
+            //             let event = &slice[i];
+
+            //             // if
+            //             unsafe {
+            //                 *running_ptr = false;
+            //             }
+            //             if event.timestamp.inner > end {
+            //                 break;
+            //             }
+            //             midi_fn(AUEventSampleTime::immediate(), 0, &event.data);
+            //             i += 1;
+            //             // let bytes = [0x90, note, 100];
+            //         }
+            //     },
+            // )
             unit.au_audio_unit().token_by_adding_render_observer_fn(
                 move |flags, ts, frame_count, bus| {
                     // if the offset ts is before requested ts, we have to increment the counter
@@ -196,29 +292,29 @@ fn main() {
                     // * if the requested timestamp is past the max timestamp, we set the running_ptr
                     // to false
                     //
-                    if !flags.contains(AudioUnitRenderActionFlags::PRE_RENDER) {
-                        return;
-                    }
+                    // if !flags.contains(AudioUnitRenderActionFlags::PRE_RENDER) {
+                    //     return;
+                    // }
 
-                    if !unsafe { *running_ptr } {
-                        return;
-                    }
-                    let (start, end) = midi_time_range(ts, frame_count as _);
+                    // if !unsafe { *running_ptr } {
+                    //     return;
+                    // }
+                    // // let (start, end) = midi_time_range(ts, frame_count as _);
 
-                    loop {
-                        let event = &slice[i];
+                    // loop {
+                    //     let event = &slice[i];
 
-                        // if
-                        unsafe {
-                            *running_ptr = false;
-                        }
-                        if event.timestamp.inner > end {
-                            break;
-                        }
-                        midi_fn(AUEventSampleTime::immediate(), 0, &event.data);
-                        i += 1;
-                        // let bytes = [0x90, note, 100];
-                    }
+                    //     // if
+                    //     unsafe {
+                    //         *running_ptr = false;
+                    //     }
+                    //     if event.timestamp.inner > end {
+                    //         break;
+                    //     }
+                    //     midi_fn(AUEventSampleTime::immediate(), 0, &event.data);
+                    //     i += 1;
+                    //     // let bytes = [0x90, note, 100];
+                    // }
                 },
             )
         }
