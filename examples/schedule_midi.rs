@@ -163,9 +163,10 @@ pub struct ScheduledEvent {
 }
 
 fn beats_to_sample(b: f64) -> f64 {
-    let tempo: f64 = 120.0;
+    let bpm: f64 = 120.0;
+    let sample_rate = 44100.0;
     // return (int)(beat / settings.tempo * 60 * sampleRate);
-    b / tempo * 60.0 * 44100.0
+    b / bpm * 60.0 * sample_rate
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -208,6 +209,17 @@ impl MIDINote {
 fn push(v: &mut Vec<ScheduledEvent>, e: MIDINote) {
     let on = e.on();
 }
+
+// struct TimeSliceIterator<'a> {
+//     start: usize,
+//     inner: &'a [ScheduledEvent]
+// }
+
+// impl<'a> TimeSliceIterator<'a> {
+//     pub fn new(start: usize, inner: &'a [ScheduledEvent], range: std::ops::Range<>) -> Self {
+//         todo!()
+//     }
+// }
 
 fn main() {
     let engine = AVAudioEngine::new();
@@ -313,7 +325,7 @@ fn main() {
                     let end = start + (frame_count as f64);
 
                     // println!("ts {:?} i {:?}", ts, i);
-                    println!("start {} end {}", start, end);
+                    // println!("start {} end {}", start, end);
 
                     if i < events.len() {
                         let iter = &mut events[i..].iter();
