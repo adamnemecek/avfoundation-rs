@@ -158,26 +158,26 @@ impl std::fmt::Debug for MIDIEvent {
 #[derive(Clone, Copy)]
 pub struct ScheduledEvent {
     // in sapmle time
-    ts: i64,
+    sample_ts: f64,
     data: [u8; 3],
 }
 
-fn beats_to_sample(b: f32) -> i64 {
-    let tempo = 120.0;
+fn beats_to_sample(b: f64) -> f64 {
+    let tempo: f64 = 120.0;
     // return (int)(beat / settings.tempo * 60 * sampleRate);
-    (b / tempo * 60.0 * 44100.0) as _
+    b / tempo * 60.0 * 44100.0
 }
 
 #[derive(Clone, Copy, PartialEq)]
 pub struct MIDINote {
     pitch: u8,
     // in beats
-    start: f32,
-    end: f32,
+    start: f64,
+    end: f64,
 }
 
 impl MIDINote {
-    pub fn new(pitch: u8, start: f32, len: f32) -> Self {
+    pub fn new(pitch: u8, start: f64, len: f64) -> Self {
         Self {
             pitch,
             start,
@@ -189,7 +189,7 @@ impl MIDINote {
         // let data = [0x90 | channel, note, velocity];
         let data = [0x90, self.pitch, 100];
         ScheduledEvent {
-            ts: beats_to_sample(self.start),
+            sample_ts: beats_to_sample(self.start),
             data,
         }
     }
@@ -198,7 +198,7 @@ impl MIDINote {
         // let data = [0x80 | channel, note, velocity];
         let data = [0x80, self.pitch, 0];
         ScheduledEvent {
-            ts: beats_to_sample(self.end),
+            sample_ts: beats_to_sample(self.end),
             data,
         }
     }
@@ -234,13 +234,22 @@ fn main() {
     let mut pitch = 40;
     for e in 0..50 {
         notes.push(MIDINote::new(pitch, ts, 1.0));
-        pitch += 2;
+        pitch += 1;
         ts += 0.5;
     }
 
+    let mut events = vec![];
+
+    for note in notes {
+        events.push(note.on());
+        events.push(note.off());
+    }
+
+    events.sort_by(|a, b| a.sample_ts.partial_cmp(&b.sample_ts).unwrap() );
+
     // let max_timestamp = notes.iter().max(|x| a.timestamp);
     let mut i = 0;
-    let slice = notes.unsafe_slice();
+    // let slice = notes.unsafe_slice();
 
     let mut running = false;
     let mut running_ptr: *mut bool = &mut running;
@@ -286,6 +295,7 @@ fn main() {
             // )
             unit.au_audio_unit().token_by_adding_render_observer_fn(
                 move |flags, ts, frame_count, bus| {
+                    println!("ts {:?}", ts);
                     // if the offset ts is before requested ts, we have to increment the counter
                     // scheduling events that are in the requested range, until we find
                     // an event that is past the requested timestamp
