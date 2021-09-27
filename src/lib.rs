@@ -230,7 +230,7 @@ macro_rules! try_bool_objc {
 
             let res: bool = $body;
             if !$err.is_null() {
-                println!("here");
+                // println!("here");
                 assert!(!res);
                 // let desc: *mut Object = msg_send![$err_name, localizedDescription];
                 // let compile_error: *const std::os::raw::c_char = msg_send![desc, UTF8String];

@@ -6,7 +6,9 @@ use crate::{
 ///    @typedef    AUValue
 ///    @brief      A value of an audio unit parameter.
 
-pub type AUValue = f32;
+#[repr(transparent)]
+#[derive(Clone, Copy, PartialEq, PartialOrd, Debug)]
+pub struct AUValue(f32);
 
 ///    @typedef    AUParameterAddress
 ///    @brief        Numeric identifier for audio unit parameter.
@@ -15,7 +17,9 @@ pub type AUValue = f32;
 ///        unit documents a promise to maintain its addressing scheme. Hosts should bind to parameters'
 ///        key paths.
 
-pub type AUParameterAddress = u64;
+#[repr(transparent)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+pub struct AUParameterAddress(u64);
 
 ///    @enum        AUParameterAutomationEventType
 ///    @brief       Identifies the different types of parameter automation events.

@@ -122,7 +122,9 @@ impl AUEventSampleTime {
 // 		and C AudioUnit API's, as well as `AVAudioFrameCount`.
 // */
 // typedef uint32_t AUAudioFrameCount;
-pub type AUAudioFrameCount = u32;
+#[repr(transparent)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+pub struct AUAudioFrameCount(u32);
 
 // /*!	@typedef	AUAudioChannelCount
 // 	@brief		A number of audio channels.
@@ -131,7 +133,9 @@ pub type AUAudioFrameCount = u32;
 // 		and C AudioUnit API's, as well as `AVAudioChannelCount`.
 // */
 // typedef uint32_t AUAudioChannelCount;
-pub type AUAudioChannelCount = u32;
+#[repr(transparent)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+pub struct AUAudioChannelCount(u32);
 
 // // =================================================================================================
 

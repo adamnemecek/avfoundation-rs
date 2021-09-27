@@ -310,10 +310,12 @@ fn main() {
         Ok(unit) => {
             engine.attach_node(&unit);
             engine.connect_nodes(&unit, engine.output_node(), None);
-            let _ = engine.start().unwrap();
-            let midi_fn = unit.au_audio_unit().schedule_midi_event_fn().unwrap();
 
-            unit.au_audio_unit().token_by_adding_render_observer_fn(
+            let midi_fn = unit.au_audio_unit().schedule_midi_event_fn().unwrap();
+            // for scheduling
+            let param_fn = unit.au_audio_unit().schedule_parameter_fn();
+
+            let token = unit.au_audio_unit().token_by_adding_render_observer_fn(
                 move |flags, ts, frame_count, bus| {
                     if !flags.contains(AudioUnitRenderActionFlags::PRE_RENDER) {
                         return;
@@ -324,7 +326,7 @@ fn main() {
                     // let end = start + frame_count;
                     let end = start + (frame_count as f64);
 
-                    // println!("ts {:?} i {:?}", ts, i);
+                    println!("ts {:?}", ts);
                     // println!("start {} end {}", start, end);
 
                     if i < events.len() {
@@ -375,7 +377,9 @@ fn main() {
                     //     // let bytes = [0x90, note, 100];
                     // }
                 },
-            )
+            );
+
+            let _ = engine.start().unwrap();
         }
         Err(err) => {
             panic!("{:?}", err)
