@@ -307,9 +307,13 @@ fn main() {
                         return;
                     }
 
-                    let end = ts.m_sample_time;
+                    // these are in sample time
+                    let start = ts.m_sample_time;
+                    // let end = start + frame_count;
+                    let end = start + (frame_count as f64);
 
-                    println!("ts {:?} i {:?}", ts, i);
+                    // println!("ts {:?} i {:?}", ts, i);
+                    println!("start {} end {}", start, end);
 
                     if i < events.len() {
                         let iter = &mut events[i..].iter();
@@ -319,13 +323,16 @@ fn main() {
                                 if e.sample_ts > end {
                                     break;
                                 }
+                                // let delta = 
                                 midi_fn(AUEventSampleTime::immediate(), 0, &e.data);
                                 i += 1;
                             } else {
                                 break;
                             }
                         }
-                    }
+                    } else {
+                        ()
+                    };
                     // if the offset ts is before requested ts, we have to increment the counter
                     // scheduling events that are in the requested range, until we find
                     // an event that is past the requested timestamp

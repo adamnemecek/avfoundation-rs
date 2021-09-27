@@ -73,18 +73,20 @@ pub type AUAudioUnitStatus = OSStatus;
 // 		units, and HAL sample times can be small negative numbers.
 // */
 // typedef int64_t AUEventSampleTime;
-pub type AUEventSampleTime = i64;
+#[repr(transparent)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+pub struct AUEventSampleTime(i64);
 
-pub trait AUEventSampleTimeExt {
-    fn immediate() -> Self;
-}
+// pub trait AUEventSampleTimeExt {
+//     fn immediate() -> Self;
+// }
 
 #[allow(non_upper_case_globals, overflowing_literals)]
-pub const AUEventSampleTimeImmediate: i64 = 0xffffffff00000000;
+const AUEventSampleTimeImmediate: i64 = 0xffffffff00000000;
 
-impl AUEventSampleTimeExt for AUEventSampleTime {
-    fn immediate() -> Self {
-        AUEventSampleTimeImmediate
+impl AUEventSampleTime {
+    pub fn immediate() -> Self {
+        Self(AUEventSampleTimeImmediate)
     }
 }
 
