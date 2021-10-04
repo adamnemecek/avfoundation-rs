@@ -8,13 +8,17 @@ fn main() {
     let manager = AVAudioUnitComponentManager::shared();
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
     let components = manager.components_passing_test(|unit| {
-        // if unit.name().contains("Serum") {
-        //     (true, ShouldStop::Stop)
-        // } else {
-        //     (false, ShouldStop::Continue)
-        // }
-        (true, ShouldStop::Continue)
+        if unit.name().contains("Surge") {
+            (true, ShouldStop::Stop)
+        } else {
+            (false, ShouldStop::Continue)
+        }
+        // (true, ShouldStop::Continue)
     });
+
+    for e in components {
+        println!("{:?}", e.name());
+    }
     // let serum = components.first().unwrap();
     // println!("serum {:?}", serum);
 

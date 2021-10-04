@@ -32,6 +32,14 @@ pub struct MusicDeviceNoteParams {
     pub m_controls: [NoteParamsControlValue; 1], /* arbitrary length */
 }
 
+// use cocoa::string::CFStringRef;
+
+struct AudioUnitCocoaViewInfo {
+	// CFURLRef	mCocoaAUViewBundleLocation;
+    // bundle: CFStringRef,
+	// CFStringRef	__nonnull mCocoaAUViewClass[1];
+}
+
 #[link(name = "AudioToolbox", kind = "framework")]
 extern "C" {
     pub fn MusicDeviceMIDIEvent(
@@ -41,6 +49,12 @@ extern "C" {
         data2: u32,
         offset_sample_frame: u32,
     ) -> OSStatus;
+
+    pub fn AudioComponentCopyConfigurationInfo(
+
+    ) -> OSStatus;
+
+    // pub fn AudioUnitGet
 
     // fn MusicDeviceStartNote(
     //     in_unit: AudioUnit,
