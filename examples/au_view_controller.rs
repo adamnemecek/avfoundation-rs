@@ -13,7 +13,10 @@ use avfoundation::{
 };
 
 use block::ConcreteBlock;
-use cocoa_foundation::base::id;
+use cocoa_foundation::{
+    base::id,
+    foundation::NSRect,
+};
 use objc::runtime::Object;
 #[macro_use]
 extern crate objc;
@@ -117,18 +120,50 @@ fn main() {
         tx.send(x);
     });
 
-    let a = rx.recv();
-    println!("{:?}", a);
+    let unit = rx.recv().unwrap().unwrap();
+    println!("{:?}", unit);
 
     // let unit = AVAudioUnit::new_with_component_description(desc, Default::default(), block);
 
     // let unit = AVAudioUnit::new_with_component_description_tx(desc, Default::default(), &tx);
     // let unit = AVAudioUnitMIDIInstrument::new_with_audio_component_description(desc);
 
+    use cocoa_foundation::foundation::{
+        NSPoint,
+        NSSize,
+    };
+
+    fn describe(rect: NSRect) -> String {
+        let NSRect {
+            origin: NSPoint { x, y },
+            size: NSSize { width, height },
+        } = rect;
+        format!(
+            "NSRect {{ x: {:?}, y: {:?}, w: {:?}, h: {:?}}}",
+            x, y, width, height
+        )
+    }
+    let (tx, rx) = std::sync::mpsc::channel();
+
+    unit.au_audio_unit().request_view_controller_tx(&tx);
+
+    let unit = rx.recv().unwrap();
+    println!("{:?}", unit);
+
     // // unit.au_audio_unit().request_view_controller_tx(&tx);
-    // unit.au_audio_unit().request_view_controller_fn(move |vc| {
+    // unit.au_audio_unit().request_view_controller_tx(move |vc| {
     //     // let z = tx.send(avfoundation::AVFoundationEvent::RequestViewController(vc));
-    //     println!("request view controller");
+    //     // let vc = vc.unwrap();
+
+    //     // let view: id = unsafe { msg_send![vc, view] };
+    //     // let frame: NSRect = unsafe { msg_send![view, frame] };
+    //     // let bounds: NSRect = unsafe { msg_send![view, bounds] };
+
+    //     // println!(
+    //     //     "request view controller bounds {:?} frame {:?}",
+    //     //     describe(bounds),
+    //     //     describe(frame)
+    //     // );
     // });
     // println!("here");
     // let unit =

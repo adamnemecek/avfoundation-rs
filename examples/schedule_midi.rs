@@ -324,7 +324,7 @@ fn main() {
                     // these are in sample time
                     let start = ts.m_sample_time;
                     // let end = start + frame_count;
-                    let end = start + (frame_count as f64);
+                    let end = start + (frame_count.0 as f64);
 
                     println!("ts {:?}", ts);
                     // println!("start {} end {}", start, end);
@@ -337,7 +337,7 @@ fn main() {
                                 if e.sample_ts > end {
                                     break;
                                 }
-                                // let delta = 
+                                // let delta =
                                 midi_fn(AUEventSampleTime::immediate(), 0, &e.data);
                                 i += 1;
                             } else {

@@ -4,6 +4,8 @@ use avfoundation::{
     ShouldStop,
 };
 
+extern 
+
 fn main() {
     let manager = AVAudioUnitComponentManager::shared();
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
@@ -19,6 +21,7 @@ fn main() {
     for e in components {
         println!("{:?}", e.name());
     }
+    
     // let serum = components.first().unwrap();
     // println!("serum {:?}", serum);
 

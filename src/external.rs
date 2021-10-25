@@ -35,9 +35,9 @@ pub struct MusicDeviceNoteParams {
 // use cocoa::string::CFStringRef;
 
 struct AudioUnitCocoaViewInfo {
-	// CFURLRef	mCocoaAUViewBundleLocation;
-    // bundle: CFStringRef,
-	// CFStringRef	__nonnull mCocoaAUViewClass[1];
+    // CFURLRef	mCocoaAUViewBundleLocation;
+// bundle: CFStringRef,
+// CFStringRef	__nonnull mCocoaAUViewClass[1];
 }
 
 #[link(name = "AudioToolbox", kind = "framework")]
@@ -50,9 +50,7 @@ extern "C" {
         offset_sample_frame: u32,
     ) -> OSStatus;
 
-    pub fn AudioComponentCopyConfigurationInfo(
-
-    ) -> OSStatus;
+    pub fn AudioComponentCopyConfigurationInfo() -> OSStatus;
 
     // pub fn AudioUnitGet
 
