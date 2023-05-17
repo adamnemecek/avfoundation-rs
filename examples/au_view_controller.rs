@@ -36,20 +36,22 @@ fn main() {
     // let components = manager.components_passing_test(|unit| (true, ShouldStop::Continue));
     let s = true;
     // let name = if s { "Sylenth" } else { "DLS" };
-    let name = "Surge";
+    let name = "Helm";
     let components = manager.components_passing_test(move |unit| {
-        if unit.name().contains(name) {
-            (true, ShouldStop::Continue)
-        } else {
-            (false, ShouldStop::Continue)
-        }
+        // if unit.name().contains(name) {
+        //     (true, ShouldStop::Continue)
+        // } else {
+        //     (false, ShouldStop::Continue)
+        // }
+        (unit.name().contains(name), ShouldStop::Continue)
     });
     // assert!(components.len() == 1);
     // for e in components.iter() {
     //     println!("{:?}", e.name());
     // }
 
-    let desc = components[1].audio_component_description();
+    println!("{:?}", components.iter().map(|x| x.name()).collect::<Vec<_>>());
+    let desc = components[0].audio_component_description();
 
     let engine = AVAudioEngine::new();
 
